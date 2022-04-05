@@ -25,6 +25,8 @@ public class ErsDriver {
           printOptions();
       }
     }
+
+    quit();
   }
 
   static void login(){
@@ -40,7 +42,12 @@ public class ErsDriver {
 
   static void printOptions(){
     System.out.println("Press 1 to login");
-    System.out.println("press 2 to quit");
+    System.out.println("press 0 to quit");
+  }
+
+  static void quit(){
+    System.out.println("Thank for using ERS");
+    System.out.println("Good Bye");
   }
 
 
