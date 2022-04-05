@@ -14,7 +14,7 @@ public class ErsDriver {
     while (!quit) {
       printOptions();
       int choice = scanner.nextInt();
-      switch (choice){
+      switch (choice) {
         case 1:
           login();
           break;
@@ -29,7 +29,7 @@ public class ErsDriver {
     quit();
   }
 
-  static void login(){
+  static void login() {
     System.out.println("Please Enter your email:");
     scanner.nextLine();
     String email = scanner.nextLine();
@@ -37,17 +37,24 @@ public class ErsDriver {
     System.out.println("Please Enter your password: ");
     String password = scanner.nextLine();
     System.out.println("Your password is: " + password);
-    System.out.println("Checking your password...");
+    loginWithEmailAndPassword(email, password);
   }
 
-  static void printOptions(){
+  static void printOptions() {
     System.out.println("Press 1 to login");
     System.out.println("press 0 to quit");
   }
 
-  static void quit(){
+  static void quit() {
     System.out.println("Thank for using ERS");
     System.out.println("Good Bye");
+  }
+
+  static void loginWithEmailAndPassword(String email, String password) {
+    System.out.println("Logging with email: " + email);
+    // TODO
+    // Authentication
+    System.out.println("....");
   }
 
 
