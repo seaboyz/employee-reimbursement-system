@@ -9,8 +9,16 @@
 ### Rest api handle http request
 
 - login (POST)
-  - /api/users/login
+  - /api/user/login
 - register (POST)
-  - /api/users
+  - /api/user
 - profile (GET/PUT)
-  - /api/users/profile
+  - /api/user/profile
+
+### Login flow
+@desc Auth user & get token
+@route Post /api/user/login
+@body username/email password
+@access public
+<img src="./login-flowchart.svg" width=400>
+
