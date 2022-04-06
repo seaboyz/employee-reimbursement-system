@@ -74,7 +74,7 @@ public class Console {
     // HttpClient POST http://localhost:8080/login
     // https://hc.apache.org/httpcomponents-client-5.1.x/index.html
     CloseableHttpClient client = HttpClients.createDefault();
-    HttpPost httpPost = new HttpPost("http://localhost:8080/login");
+    HttpPost httpPost = new HttpPost("http://localhost:8080/api/user");
     List<NameValuePair> params = new ArrayList<>();
     params.add((new BasicNameValuePair("email", email)));
     params.add((new BasicNameValuePair("password", password)));
