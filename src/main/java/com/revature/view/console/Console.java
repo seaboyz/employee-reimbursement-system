@@ -1,5 +1,17 @@
 package com.revature.view.console;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Console {
@@ -48,11 +60,27 @@ public class Console {
     System.out.println("Good Bye");
   }
 
-  private void loginWithEmailAndPassword(String email, String password) {
+  private void loginWithEmailAndPassword(String email, String password)
+          throws UnsupportedEncodingException, IOException {
     System.out.println("Logging with email: " + email);
     // TODO
-    // Authentication
-    System.out.println("....");
+    // HttpClient POST http://localhost:8080/login
+    // https://hc.apache.org/httpcomponents-client-5.1.x/index.html
+    CloseableHttpClient client = HttpClients.createDefault();
+    HttpPost httpPost = new HttpPost("http://localhost:8080/login");
+    List<NameValuePair> params = new ArrayList<>();
+    params.add((new BasicNameValuePair("email",email)));
+    params.add((new BasicNameValuePair("password",password)));
+    httpPost.setEntity(new UrlEncodedFormEntity(params));
+    CloseableHttpResponse response = client.execute(httpPost);
+    if(response.getStatusLine().getStatusCode()==200){
+      System.out.println("_______________________________");
+      System.out.println("|           Welcome           |");
+      System.out.println("|          User Menu          |");
+      System.out.println("|_____________________________|");
+    }else if(response.getStatusLine().getStatusCode()==403){
+      System.out.println("The email and password was wrong, please try again.");
+    }
   }
 
 }
