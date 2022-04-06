@@ -1,6 +1,6 @@
 package com.revature;
 
-import com.revature.view.Console;
+import com.revature.view.console.Console;
 
 import java.util.Scanner;
 
