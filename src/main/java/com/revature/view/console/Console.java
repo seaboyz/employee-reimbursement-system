@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class Console {
   private Scanner scan = ConsoleScanner.getInstance();
 
-  public void init(){
+  public void init() {
     System.out.println("Welcome to ERS!");
     boolean quit = false;
 
@@ -47,7 +47,14 @@ public class Console {
     System.out.println("Please Enter your password: ");
     String password = scan.nextLine();
     System.out.println("Your password is: " + password);
-    loginWithEmailAndPassword(email, password);
+    try {
+      loginWithEmailAndPassword(email, password);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    System.out.println("something wrong, please try to login later");
+    scan.nextLine();
+    printOptions();
   }
 
   private void printOptions() {
@@ -69,16 +76,16 @@ public class Console {
     CloseableHttpClient client = HttpClients.createDefault();
     HttpPost httpPost = new HttpPost("http://localhost:8080/login");
     List<NameValuePair> params = new ArrayList<>();
-    params.add((new BasicNameValuePair("email",email)));
-    params.add((new BasicNameValuePair("password",password)));
+    params.add((new BasicNameValuePair("email", email)));
+    params.add((new BasicNameValuePair("password", password)));
     httpPost.setEntity(new UrlEncodedFormEntity(params));
     CloseableHttpResponse response = client.execute(httpPost);
-    if(response.getStatusLine().getStatusCode()==200){
+    if (response.getStatusLine().getStatusCode() == 200) {
       System.out.println("_______________________________");
       System.out.println("|           Welcome           |");
       System.out.println("|          User Menu          |");
       System.out.println("|_____________________________|");
-    }else if(response.getStatusLine().getStatusCode()==403){
+    } else if (response.getStatusLine().getStatusCode() == 403) {
       System.out.println("The email and password was wrong, please try again.");
     }
   }
