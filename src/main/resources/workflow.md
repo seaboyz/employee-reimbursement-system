@@ -8,6 +8,9 @@
 
 ### Rest api handle http request
 
-- login
-- register
-- logout
+- login (POST)
+  - /api/users/login
+- register (POST)
+  - /api/users
+- profile (GET/PUT)
+  - /api/users/profile
