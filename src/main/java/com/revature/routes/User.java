@@ -9,11 +9,12 @@ import java.io.IOException;
 public class User extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    System.out.println("hello from the servlet");
+
   }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    System.out.println("Email: " + request.getParameter("email"));
+    System.out.println("Password: " + request.getParameter("password"));
   }
 }
