@@ -18,7 +18,11 @@ public class Console {
   private Scanner scan = ConsoleScanner.getInstance();
 
   public void init() {
-    System.out.println("Welcome to ERS!");
+    System.out.println("*********************************");
+    System.out.println("*           Welcome to          *");
+    System.out.println("* Employee Reimbursement System *");
+    System.out.println("*        System Loading...      *");
+    System.out.println("*********************************");
     boolean quit = false;
 
     while (!quit) {
