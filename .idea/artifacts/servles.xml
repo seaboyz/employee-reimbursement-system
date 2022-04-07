@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="servles">
+    <output-path>$PROJECT_DIR$/out/artifacts/servles</output-path>
+    <root id="archive" name="servles.war">
+      <element id="javaee-facet-resources" facet="ERS/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="ERS" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

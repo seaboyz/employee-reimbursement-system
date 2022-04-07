@@ -1,0 +1,106 @@
+package com.revature.view.console;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Console {
+  private final Scanner scan = ConsoleScanner.getInstance();
+
+  public void init() {
+    System.out.println("*********************************");
+    System.out.println("*           Welcome to          *");
+    System.out.println("* Employee Reimbursement System *");
+    System.out.println("*        System Loading...      *");
+    System.out.println("*********************************");
+    boolean quit = false;
+
+    while (!quit) {
+      printOptionsPage();
+      String choice = scan.nextLine();
+      switch (choice) {
+        case "1":
+          loginPage();
+          break;
+        case  "2":
+          registerPage();
+        case "q":
+          quit = true;
+          break;
+      }
+    }
+
+    quit();
+  }
+
+  private void registerPage() {
+    System.out.println("Register Page");
+  }
+
+  private void loginPage() {
+    System.out.println("Please Enter your email:");
+    String email = scan.nextLine();
+    System.out.println("Your email is: " + email);
+    System.out.println("Please Enter your password: ");
+    String password = scan.nextLine();
+    System.out.println("Your password is: " + password);
+    try {
+      System.out.println("*********************************");
+      System.out.println("*           Login...            *");
+      System.out.println("*********************************");
+      loginWithEmailAndPassword(email, password);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    System.out.println("something wrong, please try to login later");
+  }
+
+
+  private void printOptionsPage() {
+    System.out.println("*********************************");
+    System.out.println("*       Press 1 to login        *");
+    System.out.println("*       press 2 to register     *");
+    System.out.println("*       press q to quit         *");
+    System.out.println("*********************************");
+  }
+
+  private void quit() {
+    System.out.println("*********************************");
+    System.out.println("*       Thank for using ERS     *");
+    System.out.println("*             Good Bye          *");
+    System.out.println("*********************************");
+  }
+
+  private void loginWithEmailAndPassword(String email, String password)
+          throws IOException {
+    // TODO
+    // HttpClient POST http://localhost:8080/login
+    // https://hc.apache.org/httpcomponents-client-5.1.x/index.html
+    CloseableHttpClient client = HttpClients.createDefault();
+    HttpPost httpPost = new HttpPost("http://localhost:8080/api/user");
+    List<NameValuePair> params = new ArrayList<>();
+    params.add((new BasicNameValuePair("email", email)));
+    params.add((new BasicNameValuePair("password", password)));
+    httpPost.setEntity(new UrlEncodedFormEntity(params));
+    CloseableHttpResponse response = client.execute(httpPost);
+    if (response.getStatusLine().getStatusCode() == 200) {
+      System.out.println("_______________________________");
+      System.out.println("|           Welcome           |");
+      System.out.println("|          User Menu          |");
+      System.out.println("|_____________________________|");
+    } else if (response.getStatusLine().getStatusCode() == 403) {
+      System.out.println("The email and password was wrong, please try again.");
+      System.out.println("Press 0 to go back to the main manu");
+    }
+  }
+
+}
