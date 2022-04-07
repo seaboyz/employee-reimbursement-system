@@ -9,13 +9,12 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Console {
-  private Scanner scan = ConsoleScanner.getInstance();
+  private final Scanner scan = ConsoleScanner.getInstance();
 
   public void init() {
     System.out.println("*********************************");
@@ -26,54 +25,63 @@ public class Console {
     boolean quit = false;
 
     while (!quit) {
-      printOptions();
-      int choice = scan.nextInt();
+      printOptionsPage();
+      String choice = scan.nextLine();
       switch (choice) {
-        case 1:
-          login();
+        case "1":
+          loginPage();
           break;
-        case 0:
+        case  "2":
+          registerPage();
+        case "q":
           quit = true;
           break;
-        default:
-          printOptions();
       }
     }
 
     quit();
   }
 
-  private void login() {
+  private void registerPage() {
+    System.out.println("Register Page");
+  }
+
+  private void loginPage() {
     System.out.println("Please Enter your email:");
-    scan.nextLine();
     String email = scan.nextLine();
     System.out.println("Your email is: " + email);
     System.out.println("Please Enter your password: ");
     String password = scan.nextLine();
     System.out.println("Your password is: " + password);
     try {
+      System.out.println("*********************************");
+      System.out.println("*           Login...            *");
+      System.out.println("*********************************");
       loginWithEmailAndPassword(email, password);
     } catch (Exception e) {
       e.printStackTrace();
     }
     System.out.println("something wrong, please try to login later");
-    scan.nextLine();
-    printOptions();
   }
 
-  private void printOptions() {
-    System.out.println("Press 1 to login");
-    System.out.println("press 0 to quit");
+
+  private void printOptionsPage() {
+    System.out.println("*********************************");
+    System.out.println("*       Press 1 to login        *");
+    System.out.println("*       press 2 to register     *");
+    System.out.println("*       press q to quit         *");
+    System.out.println("*********************************");
   }
 
   private void quit() {
-    System.out.println("Thank for using ERS");
-    System.out.println("Good Bye");
+    System.out.println("*********************************");
+    System.out.println("*       Thank for using ERS     *");
+    System.out.println("*             Good Bye          *");
+    System.out.println("*********************************");
   }
 
   private void loginWithEmailAndPassword(String email, String password)
-          throws UnsupportedEncodingException, IOException {
-    System.out.println("Logging with email: " + email);
+          throws IOException {
     // TODO
     // HttpClient POST http://localhost:8080/login
     // https://hc.apache.org/httpcomponents-client-5.1.x/index.html
@@ -91,6 +99,7 @@ public class Console {
       System.out.println("|_____________________________|");
     } else if (response.getStatusLine().getStatusCode() == 403) {
       System.out.println("The email and password was wrong, please try again.");
+      System.out.println("Press 0 to go back to the main manu");
     }
   }
 
