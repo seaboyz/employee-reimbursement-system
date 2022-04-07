@@ -9,7 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a219364b-7962-4008-a7ac-9e0c09326fba" name="Changes" comment="" />
+    <list default="true" id="a219364b-7962-4008-a7ac-9e0c09326fba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/routes/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/routes/User.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -169,6 +171,7 @@
       <updated>1649211780604</updated>
       <workItem from="1649211783839" duration="1185000" />
       <workItem from="1649234071365" duration="9490000" />
+      <workItem from="1649322258324" duration="372000" />
     </task>
     <servers />
   </component>
