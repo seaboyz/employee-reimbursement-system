@@ -1,4 +1,4 @@
-package com.revature.routes;
+package com.revature.controller;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -6,7 +6,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 
 @WebServlet("/user")
-public class User extends HttpServlet {
+public class UserController extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
