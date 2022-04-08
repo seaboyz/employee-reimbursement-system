@@ -1,7 +1,7 @@
 package com.revature.services;
 
 import com.revature.models.User;
-import com.revature.repositories.UserRepository;
+import com.revature.repositories.UserDAO;
 
 import java.util.Optional;
 
@@ -22,9 +22,9 @@ import java.util.Optional;
  */
 public class UserService {
 
-  private final UserRepository userRepository;
+  private final UserDAO userRepository;
 
-  public UserService(UserRepository userRepository) {
+  public UserService(UserDAO userRepository) {
     this.userRepository = userRepository;
   }
 

@@ -6,7 +6,7 @@ import com.revature.models.User;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class UserRepository {
+public class UserDAO {
   static ArrayList<User> users;
   private MockDB mockDB = MockDB.getInstance();
 

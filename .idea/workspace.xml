@@ -10,13 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a219364b-7962-4008-a7ac-9e0c09326fba" name="Changes" comment="">
-<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/services/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/services/AuthServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/services/AuthServiceTest.java" afterDir="false" />
-=======
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/controller/UserController.java" afterDir="false" />
->>>>>>> controller
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/repositories/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/services/AuthServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/services/AuthServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/services/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/services/UserServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +70,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
-  <component name="RunManager" selected="JUnit.UserServiceTest">
+  <component name="RunManager" selected="JUnit.UserServiceTest.testGetByUsernamePassesWhenUsernameExists">
     <configuration name="ErsDriver" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.ErsDriver" />
       <module name="ERS" />
@@ -96,6 +95,38 @@
       <option name="PACKAGE_NAME" value="com.revature.services" />
       <option name="MAIN_CLASS_NAME" value="com.revature.services.UserServiceTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceTest.testGetByUsernamePassesWhenUsernameExists" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ERS" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.revature.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.revature.services" />
+      <option name="MAIN_CLASS_NAME" value="com.revature.services.UserServiceTest" />
+      <option name="METHOD_NAME" value="testGetByUsernamePassesWhenUsernameExists" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceTest.testGetByUsernamePassesWhenUsernameNotExits" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ERS" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.revature.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.revature.services" />
+      <option name="MAIN_CLASS_NAME" value="com.revature.services.UserServiceTest" />
+      <option name="METHOD_NAME" value="testGetByUsernamePassesWhenUsernameNotExits" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -191,9 +222,13 @@
       <item itemvalue="Application.ErsDriver" />
       <item itemvalue="JUnit.UserServiceTest" />
       <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
+      <item itemvalue="JUnit.UserServiceTest.testGetByUsernamePassesWhenUsernameExists" />
+      <item itemvalue="JUnit.UserServiceTest.testGetByUsernamePassesWhenUsernameNotExits" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UserServiceTest.testGetByUsernamePassesWhenUsernameExists" />
+        <item itemvalue="JUnit.UserServiceTest.testGetByUsernamePassesWhenUsernameNotExits" />
         <item itemvalue="JUnit.UserServiceTest" />
       </list>
     </recent_temporary>

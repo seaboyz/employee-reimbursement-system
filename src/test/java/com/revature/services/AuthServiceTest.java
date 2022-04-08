@@ -5,7 +5,7 @@ import com.revature.exceptions.RegistrationUnsuccessfulException;
 import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.Role;
 import com.revature.models.User;
-import com.revature.repositories.UserRepository;
+import com.revature.repositories.UserDAO;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class AuthServiceTest {
 	
 	private static AuthService authService;
 	private static UserService userService;
-	private static UserRepository userRepository;
+	private static UserDAO userRepository;
 
 	private User EMPLOYEE_TO_REGISTER;
 	private User GENERIC_EMPLOYEE_1;
@@ -30,9 +30,8 @@ public class AuthServiceTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		authService = new AuthService();
 		userService = mock(UserService.class);
-		userRepository = mock(UserRepository.class);
+		userRepository = mock(UserDAO.class);
 	}
 	
 	@Before

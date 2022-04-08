@@ -1,6 +1,6 @@
 package com.revature.controller;
 
-import com.revature.repositories.UserRepository;
+import com.revature.repositories.UserDAO;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
 
@@ -16,7 +16,7 @@ public class UserController extends HttpServlet {
   private UserService userService;
   private AuthService authService;
 
-  public UserController(UserRepository userRepository) {
+  public UserController(UserDAO userRepository) {
     this.userService = new UserService(userRepository);
     this.authService = new AuthService(userService);
   }
