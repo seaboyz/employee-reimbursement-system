@@ -11,7 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a219364b-7962-4008-a7ac-9e0c09326fba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/database/MockDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/database/MockDB.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -47,6 +48,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="27PBKxC8CzILMC31HPuYLUaIiqw" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -62,26 +66,13 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
-  <component name="RunManager" selected="Application.MockDB">
+  <component name="RunManager" selected="Application.ErsDriver">
     <configuration name="ErsDriver" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.ErsDriver" />
       <module name="ERS" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.revature.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MockDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.revature.services.MockDB" />
-      <module name="ERS" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.revature.services.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -178,14 +169,8 @@
     </configuration>
     <list>
       <item itemvalue="Application.ErsDriver" />
-      <item itemvalue="Application.MockDB" />
       <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.MockDB" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

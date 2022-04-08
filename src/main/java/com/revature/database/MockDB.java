@@ -12,19 +12,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MockDB {
+public class MockDB implements Database {
   private JSONParser jsonParser = new JSONParser();
   private JSONArray users;
-  private static  MockDB db;
+  private static MockDB db;
 
   public static MockDB getInstance() {
-    if(db==null){
+    if (db == null) {
       db = new MockDB();
     }
     return db;
   }
 
-  public ArrayList<User> findAll() {
+  @Override
+  public ArrayList<User> findAllUsers() {
     loadUserData();
     ArrayList<User> userArrayList = new ArrayList<>();
 
@@ -39,8 +40,10 @@ public class MockDB {
     return userArrayList;
   }
 
+
+  @Override
   public User getUserByUsername(String username) {
-    ArrayList<User> users = findAll();
+    ArrayList<User> users = findAllUsers();
     return users.stream().filter(user -> user.getUsername().equals(username)).findAny().orElse(null);
   }
 
