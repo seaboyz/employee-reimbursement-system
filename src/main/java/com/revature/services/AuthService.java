@@ -1,5 +1,7 @@
 package com.revature.services;
 
+import com.revature.exceptions.UserNamePasswordNotMatchException;
+import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
 
 import java.util.Optional;
@@ -28,7 +30,16 @@ public class AuthService {
      * </ul>
      */
     public User login(String username, String password) {
-        return null;
+        UserService userService = new UserService();
+        Optional<User> userOptional = userService.getByUsername(username);
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            if(user.getUsername().equals(username)&& user.getPassword().equals(password)){
+                return user;
+            }
+            throw new UserNamePasswordNotMatchException();
+        }
+        throw new UserNotExistException();
     }
 
     /**
