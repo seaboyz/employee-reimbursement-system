@@ -57,7 +57,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
-  <component name="RunManager" selected="Application.UserRepository">
+  <component name="RunManager" selected="Application.MockDB">
     <configuration name="ErsDriver" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.ErsDriver" />
       <module name="ERS" />
@@ -71,12 +71,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserRepository" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.repositories.UserRepository" />
+      <module name="ERS" />
+          <option name="PATTERN" value="com.revature.repositories.*" />
+    <configuration name="MockDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.revature.services.MockDB" />
       <module name="ERS" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.revature.repositories.*" />
+          <option name="PATTERN" value="com.revature.services.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -176,9 +179,13 @@
       <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
       <item itemvalue="Application.UserRepository" />
     </list>
-    <recent_temporary>
       <list>
         <item itemvalue="Application.UserRepository" />
+      <item itemvalue="Application.MockDB" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MockDB" />
       </list>
     </recent_temporary>
   </component>
