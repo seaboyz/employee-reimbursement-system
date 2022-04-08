@@ -71,9 +71,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-      <option name="MAIN_CLASS_NAME" value="com.revature.repositories.UserRepository" />
-      <module name="ERS" />
-          <option name="PATTERN" value="com.revature.repositories.*" />
     <configuration name="MockDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.services.MockDB" />
       <module name="ERS" />
@@ -176,12 +173,8 @@
     </configuration>
     <list>
       <item itemvalue="Application.ErsDriver" />
-      <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
-      <item itemvalue="Application.UserRepository" />
-    </list>
-      <list>
-        <item itemvalue="Application.UserRepository" />
       <item itemvalue="Application.MockDB" />
+      <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
     </list>
     <recent_temporary>
       <list>
@@ -228,5 +221,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/qiang_gao_p1$MockDB.ic" NAME="MockDB Coverage Results" MODIFIED="1649379689852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.revature.services.*</FILTER>
+    </SUITE>
   </component>
 </project>
