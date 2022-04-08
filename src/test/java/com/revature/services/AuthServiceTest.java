@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import com.revature.exceptions.NewUserHasNonZeroIdException;
 import com.revature.exceptions.RegistrationUnsuccessfulException;
-import com.revature.repositories.UserDAO;
+import com.revature.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class AuthServiceTest {
 	
 	private static AuthService authService;
 	private static UserService userService;
-	private static UserDAO userDAO;
+	private static UserRepository userRepository;
 
 	private User EMPLOYEE_TO_REGISTER;
 	private User GENERIC_EMPLOYEE_1;
@@ -32,7 +32,7 @@ public class AuthServiceTest {
 	public static void setUpBeforeClass() throws Exception {
 		authService = new AuthService();
 		userService = mock(UserService.class);
-		userDAO = mock(UserDAO.class);
+		userRepository = mock(UserRepository.class);
 	}
 	
 	@Before
@@ -51,23 +51,23 @@ public class AuthServiceTest {
 		);
 
 		verify(userService).getByUsername(EMPLOYEE_TO_REGISTER.getUsername());
-		verify(userDAO, never()).create(EMPLOYEE_TO_REGISTER);
+		verify(userRepository, never()).create(EMPLOYEE_TO_REGISTER);
 	}
 
 	@Test
 	public void testRegisterPassesWhenUsernameIsNotTaken() {
 		when(userService.getByUsername(anyString())).thenReturn(Optional.empty());
-		when(userDAO.create(anyObject())).thenReturn(GENERIC_EMPLOYEE_1);
+		when(userRepository.create(anyObject())).thenReturn(GENERIC_EMPLOYEE_1);
 		
 		assertEquals(GENERIC_EMPLOYEE_1, authService.register(EMPLOYEE_TO_REGISTER));
 
 		verify(userService).getByUsername(EMPLOYEE_TO_REGISTER.getUsername());
-		verify(userDAO).create(EMPLOYEE_TO_REGISTER);
+		verify(userRepository).create(EMPLOYEE_TO_REGISTER);
 	}
 
 	@Test
 	public void testRegisterFailsWhenRegistrationIsUnsuccessful() {
-		when(userDAO.create(anyObject())).thenThrow(new RegistrationUnsuccessfulException());
+		when(userRepository.create(anyObject())).thenThrow(new RegistrationUnsuccessfulException());
 
 		assertThrows(RegistrationUnsuccessfulException.class,
 				() -> authService.register(EMPLOYEE_TO_REGISTER)
