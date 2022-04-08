@@ -1,6 +1,8 @@
 package com.revature.controller;
 
+import com.revature.repositories.UserRepository;
 import com.revature.services.AuthService;
+import com.revature.services.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +13,14 @@ import java.io.IOException;
 
 @WebServlet("/user")
 public class UserController extends HttpServlet {
+  private UserService userService;
+  private AuthService authService;
+
+  public UserController(UserRepository userRepository) {
+    this.userService = new UserService(userRepository);
+    this.authService = new AuthService(userService);
+  }
+
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
