@@ -1,21 +1,22 @@
 package com.revature.repositories;
 
 import com.revature.models.User;
+import com.revature.services.MockDB;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 public class UserRepository {
   static ArrayList<User> users;
-
-
+  private MockDB mockDB = MockDB.getInstance();
 
 
   /**
    * Should retrieve a User from the DB with the corresponding username or an empty optional if there is no match.
    */
   public Optional<User> getByUsername(String username) {
-    return Optional.empty();
+    User user = mockDB.getUserByUsername(username);
+    return user == null ? Optional.empty() : Optional.of(user);
   }
 
   /**
