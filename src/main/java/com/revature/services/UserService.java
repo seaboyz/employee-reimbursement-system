@@ -20,13 +20,10 @@ import java.util.Optional;
  * </ul>
  */
 public class UserService {
-  private MockDB mockDB = MockDB.getInstance();
 
   /**
    * Should retrieve a User with the corresponding username or an empty optional if there is no match.
    */
   public Optional<User> getByUsername(String username) {
-    User user = mockDB.getUserByUsername(username);
-    return user!=null ? Optional.of(user) : Optional.empty();
   }
 }

@@ -11,10 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a219364b-7962-4008-a7ac-9e0c09326fba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/models/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/models/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/services/MockDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/services/MockDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/services/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/user.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/user.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,8 +178,8 @@
     </configuration>
     <list>
       <item itemvalue="Application.ErsDriver" />
-      <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
       <item itemvalue="Application.MockDB" />
+      <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
     </list>
     <recent_temporary>
       <list>
