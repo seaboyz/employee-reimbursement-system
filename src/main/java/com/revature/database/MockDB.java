@@ -40,7 +40,6 @@ public class MockDB implements Database {
     return userArrayList;
   }
 
-
   @Override
   public User getUserByUsername(String username) {
     ArrayList<User> users = findAllUsers();
@@ -59,16 +58,6 @@ public class MockDB implements Database {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  private void parseUserObject(JSONObject user) {
-    String name = (String) user.get("name");
-    String firstname = name.split(" ")[0];
-    String lastname = name.split(" ")[1];
-    String username = (String) user.get("username");
-    String email = ((String) user.get("email"));
-
-
   }
 
 }
