@@ -1,7 +1,7 @@
 package com.revature.repositories;
 
+import com.revature.database.MockDB;
 import com.revature.models.User;
-import com.revature.services.MockDB;
 
 import java.util.ArrayList;
 import java.util.Optional;

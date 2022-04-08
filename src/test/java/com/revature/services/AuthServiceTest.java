@@ -1,22 +1,22 @@
 package com.revature.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
-
 import com.revature.exceptions.NewUserHasNonZeroIdException;
 import com.revature.exceptions.RegistrationUnsuccessfulException;
+import com.revature.exceptions.UsernameNotUniqueException;
+import com.revature.models.Role;
+import com.revature.models.User;
 import com.revature.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.revature.exceptions.UsernameNotUniqueException;
-import com.revature.models.Role;
-import com.revature.models.User;
+import javax.naming.AuthenticationException;
+import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class AuthServiceTest {
 	
@@ -84,7 +84,7 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	public void testLoginPassesWhenUsernameDoesExistAndPasswordMatches() {
+	public void testLoginPassesWhenUsernameDoesExistAndPasswordMatches() throws AuthenticationException {
 		when(userService.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
 
 		assertEquals(GENERIC_EMPLOYEE_1, authService.login(GENERIC_EMPLOYEE_1.getUsername(), GENERIC_EMPLOYEE_1.getPassword()));
