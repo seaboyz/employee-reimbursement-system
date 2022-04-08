@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.models.User;
+import com.revature.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -21,9 +22,16 @@ import java.util.Optional;
  */
 public class UserService {
 
+  private UserRepository userRepository;
+
+  public UserService() {
+    this.userRepository = new UserRepository();
+  }
+
   /**
    * Should retrieve a User with the corresponding username or an empty optional if there is no match.
    */
   public Optional<User> getByUsername(String username) {
+    return userRepository.getByUsername(username);
   }
 }
