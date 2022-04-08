@@ -34,7 +34,6 @@ public class UserController extends HttpServlet {
     // use AuthService to do user authentication
     // if user exist return user info to frontend 200
     // if not throw exception?? or return 404
-    AuthService authService = new AuthService();
 
     authService.login(username, password);
   }
