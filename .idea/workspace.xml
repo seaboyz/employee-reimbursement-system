@@ -11,7 +11,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a219364b-7962-4008-a7ac-9e0c09326fba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/services/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/services/UserServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/services/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/services/AuthServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/services/AuthServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,8 +185,8 @@
     </configuration>
     <list>
       <item itemvalue="Application.ErsDriver" />
-      <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
       <item itemvalue="JUnit.UserServiceTest" />
+      <item itemvalue="Tomcat Server.Tomcat 9.0.62" />
     </list>
     <recent_temporary>
       <list>
