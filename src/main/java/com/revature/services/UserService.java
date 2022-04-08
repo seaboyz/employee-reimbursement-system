@@ -22,10 +22,10 @@ import java.util.Optional;
  */
 public class UserService {
 
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
-  public UserService() {
-    this.userRepository = new UserRepository();
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
 
   /**
