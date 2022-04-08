@@ -1,4 +1,4 @@
-package com.revature.services;
+package com.revature.database;
 
 import com.revature.models.Role;
 import com.revature.models.User;
