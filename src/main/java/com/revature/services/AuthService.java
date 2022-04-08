@@ -3,7 +3,6 @@ package com.revature.services;
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
-import com.revature.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -32,11 +31,9 @@ public class AuthService {
    */
 
   private UserService userService;
-  private UserRepository userRepository;
 
-  public AuthService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-    this.userService = new UserService(userRepository);
+  public AuthService(UserService userService) {
+    this.userService = userService;
   }
 
   public User login(String username, String password) {
