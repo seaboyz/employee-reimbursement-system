@@ -7,21 +7,18 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
-import com.revature.exceptions.NewUserHasNonZeroIdException;
-import com.revature.exceptions.RegistrationUnsuccessfulException;
-import com.revature.repositories.UserDAO;
+import com.revature.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.Role;
 import com.revature.models.User;
 
 public class UserServiceTest {
 
     private static UserService userService;
-    private static UserDAO userDAO;
+    private static UserRepository userRepository;
 
     private User GENERIC_EMPLOYEE_1;
 
@@ -29,7 +26,7 @@ public class UserServiceTest {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         userService = new UserService();
-        userDAO = mock(UserDAO.class);
+        userRepository = mock(UserRepository.class);
     }
 
     @Before
@@ -39,10 +36,10 @@ public class UserServiceTest {
 
     @Test
     public void testGetByUsernamePassesWhenUsernameExists() {
-        when(userDAO.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
+        when(userRepository.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
 
         assertEquals(Optional.of(GENERIC_EMPLOYEE_1), userService.getByUsername(GENERIC_EMPLOYEE_1.getUsername()));
 
-        verify(userDAO).getByUsername(GENERIC_EMPLOYEE_1.getUsername());
+        verify(userRepository).getByUsername(GENERIC_EMPLOYEE_1.getUsername());
     }
 }
