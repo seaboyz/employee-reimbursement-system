@@ -41,6 +41,7 @@ public class UserDAOImplementation implements UserDAO {
    * empty optional if there is no match.
    */
   public User getByUsername(String username) throws SQLException {
+    User user = new User();
     String query = "SELECT * FROM ERS_USERS "
         + "WHERE ERS_USER_NAME = "
         + "?";
@@ -48,7 +49,14 @@ public class UserDAOImplementation implements UserDAO {
     ResultSet resultSet = statement.executeQuery(query);
 
     while (resultSet.next()) {
+      user.setId(resultSet.getInt("id"));
+      user.setUsername(resultSet.getString("ERS_USER_NAME"));
+      user.setPassword(resultSet.getString("ERS_PASSWORD"));
+      user.setPassword(resultSet.getString("ERS_EMAIL"));
+      user.setPassword(resultSet.getString("ERS_FIRST_NAME"));
+      user.setPassword(resultSet.getString("ERS_LAST_NAME"));
     }
+    return user;
 
   }
 
