@@ -28,7 +28,7 @@ public class UserDAOImplementation implements UserDao {
     PreparedStatement ps = conn.prepareStatement(query);
     ps.setString(1, newUser.getUsername());
     ps.setString(2, newUser.getPassword());
-
+    ps.setString(3, newUser.getEmail());
   }
 
   /**
