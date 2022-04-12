@@ -26,14 +26,19 @@ public class AbstractUser {
     private String username;
     private String password;
     private String email;
+    private String firstname;
+    private String lastname;
     private Role role;
 
-    public AbstractUser(int id, String username, String password, String email, Role role) {
+    public AbstractUser(int id, String username, String password, String email, String firstname, String lastname,
+            Role role) {
         super();
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.role = role;
 
     }
@@ -68,6 +73,22 @@ public class AbstractUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFirstname() {
+        return this.firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return this.lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public Role getRole() {
