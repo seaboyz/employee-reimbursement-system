@@ -1,17 +1,13 @@
 package com.revature.repositories;
 
-import org.junit.BeforeClass;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.Test;
 
 public class UserDAOImplementationTest {
 
-  @BeforeClass
-  void init() {
-
-  }
-
   @Test
   public void testGetByUsername() {
-
+    assertEquals(1, 1);
   }
 }
