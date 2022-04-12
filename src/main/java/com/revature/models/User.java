@@ -20,6 +20,10 @@ public class User extends AbstractUser {
         super(id, username, password, email, firstname, lastname, role);
     }
 
+    public User() {
+        super();
+    }
+
     /**
      * This includes the minimum parameters needed for the
      * {@link com.revature.models.AbstractUser} class.

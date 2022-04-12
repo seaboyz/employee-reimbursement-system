@@ -30,6 +30,9 @@ public class AbstractUser {
     private String lastname;
     private Role role;
 
+    public AbstractUser() {
+    }
+
     public AbstractUser(int id, String username, String password, String email, String firstname, String lastname,
             Role role) {
         super();
