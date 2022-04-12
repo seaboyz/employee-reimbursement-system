@@ -3,12 +3,13 @@ package com.revature.repositories;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.User;
 
-public class UserDAOImplementation implements UserDao {
+public class UserDAOImplementation implements UserDAO {
   static Connection conn = PostgreSQLDatabase.getConnection();
 
   /**
@@ -41,6 +42,36 @@ public class UserDAOImplementation implements UserDao {
   public Optional<User> getByUsername(String username) {
 
     return Optional.empty();
+  }
+
+  @Override
+  public User getUserById(int id) throws SQLException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public User getUserByUsername(String username) throws SQLException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public List<User> all() throws SQLException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void update(User user) throws SQLException {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void delete(int id) throws SQLException {
+    // TODO Auto-generated method stub
+
   }
 
 }
