@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.revature.models.User;
 
-public interface UserDao {
+public interface UserDAO {
   public void add(User user) throws SQLException;
 
   public User getUserById(int id) throws SQLException;
+
+  public User getUserByUsername(String username) throws SQLException;
 
   public List<User> all() throws SQLException;
 
