@@ -1,22 +1,23 @@
 package com.revature.controller;
 
-import com.revature.repositories.UserDAO;
-import com.revature.services.AuthService;
-import com.revature.services.UserService;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import com.revature.repositories.UserDAOImplementation;
+import com.revature.services.AuthService;
+import com.revature.services.UserService;
 
 @WebServlet("/user")
 public class UserController extends HttpServlet {
   private UserService userService;
   private AuthService authService;
 
-  public UserController(UserDAO userRepository) {
+  public UserController(UserDAOImplementation userRepository) {
     this.userService = new UserService(userRepository);
     this.authService = new AuthService(userService);
   }
