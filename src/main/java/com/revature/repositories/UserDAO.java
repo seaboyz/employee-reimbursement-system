@@ -10,7 +10,7 @@ public interface UserDAO {
 
   public User getUserById(int id) throws SQLException;
 
-  public User getUserByUsername(String username) throws SQLException;
+  public User getByUsername(String username) throws SQLException;
 
   public List<User> all() throws SQLException;
 

@@ -2,9 +2,10 @@ package com.revature.repositories;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
-import java.util.Optional;
 
 import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.User;
@@ -39,9 +40,16 @@ public class UserDAOImplementation implements UserDAO {
    * Should retrieve a User from the DB with the corresponding username or an
    * empty optional if there is no match.
    */
-  public Optional<User> getByUsername(String username) {
+  public User getByUsername(String username) throws SQLException {
+    String query = "SELECT * FROM ERS_USERS "
+        + "WHERE ERS_USER_NAME = "
+        + "?";
+    Statement statement = conn.createStatement();
+    ResultSet resultSet = statement.executeQuery(query);
 
-    return Optional.empty();
+    while (resultSet.next()) {
+    }
+
   }
 
   @Override
