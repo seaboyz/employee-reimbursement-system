@@ -6,25 +6,24 @@ package com.revature.models;
  *
  * Example fields:
  * <ul>
- *     <li>First Name</li>
- *     <li>Last Name</li>
- *     <li>Email</li>
- *     <li>Phone Number</li>
- *     <li>Address</li>
+ * <li>First Name</li>
+ * <li>Last Name</li>
+ * <li>Email</li>
+ * <li>Phone Number</li>
+ * <li>Address</li>
  * </ul>
  *
  */
 public class User extends AbstractUser {
 
-    public User() {
-        super();
+    public User(int id, String username, String password, String email, String firstname, String lastname, Role role) {
+        super(id, username, password, email, firstname, lastname, role);
     }
 
     /**
-     * This includes the minimum parameters needed for the {@link com.revature.models.AbstractUser} class.
+     * This includes the minimum parameters needed for the
+     * {@link com.revature.models.AbstractUser} class.
      * If other fields are needed, please create additional constructors.
      */
-    public User(int id, String username, String password, Role role) {
-        super(id, username, password, role);
-    }
+
 }
