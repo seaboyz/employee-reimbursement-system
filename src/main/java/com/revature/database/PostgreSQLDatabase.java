@@ -13,11 +13,17 @@ public class PostgreSQLDatabase {
   private PostgreSQLDatabase() {
   };
 
-  public static Connection getConnection() throws SQLException {
-    if (conn == null) {
-      connect();
+  public static Connection getConnection() {
+    try {
+      if (conn == null) {
+        connect();
+      }
+    } catch (SQLException e) {
+      System.out.println("Fail connect to database");
+      e.printStackTrace();
     }
     return conn;
+
   }
 
   private static void connect() throws SQLException {
