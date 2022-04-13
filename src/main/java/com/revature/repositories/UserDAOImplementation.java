@@ -8,10 +8,22 @@ import java.sql.Statement;
 import java.util.List;
 
 import com.revature.database.PostgreSQLDatabase;
+import com.revature.models.Role;
 import com.revature.models.User;
 
 public class UserDAOImplementation implements UserDAO {
   static Connection conn = PostgreSQLDatabase.getConnection();
+
+  public static void main(String[] args) {
+    UserDAOImplementation userDAOImplementation = new UserDAOImplementation();
+    try {
+      User user = userDAOImplementation.getByUsername("test");
+      System.out.println(user);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
 
   /**
    * <ul>
@@ -41,21 +53,29 @@ public class UserDAOImplementation implements UserDAO {
    * empty optional if there is no match.
    */
   public User getByUsername(String username) throws SQLException {
-    User user = new User();
-    String query = "SELECT * FROM ERS_USERS "
-        + "WHERE ERS_USER_NAME = "
-        + "?";
+
     Statement statement = conn.createStatement();
+    String query = "select * from ers_users where ers_user_name = '" + username + "'";
     ResultSet resultSet = statement.executeQuery(query);
 
+    User user = new User();
+
     while (resultSet.next()) {
-      user.setId(resultSet.getInt("id"));
-      user.setUsername(resultSet.getString("ERS_USER_NAME"));
-      user.setPassword(resultSet.getString("ERS_PASSWORD"));
-      user.setPassword(resultSet.getString("ERS_EMAIL"));
-      user.setPassword(resultSet.getString("ERS_FIRST_NAME"));
-      user.setPassword(resultSet.getString("ERS_LAST_NAME"));
+      user.setId(resultSet.getInt("ers_user_id"));
+      user.setUsername(resultSet.getString("ers_user_name"));
+      user.setPassword(resultSet.getString("ers_password"));
+      user.setEmail(resultSet.getString("ers_email"));
+      user.setFirstname(
+          resultSet.getString("ers_first_name"));
+      user.setLastname(resultSet.getString("ers_last_name"));
+      int roleId = resultSet.getInt("user_role_id");
+      if (roleId == 1) {
+        user.setRole(Role.EMPLOYEE);
+      } else {
+        user.setRole(Role.FINANCE_MANAGER);
+      }
     }
+
     return user;
 
   }
