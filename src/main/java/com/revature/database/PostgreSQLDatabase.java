@@ -32,7 +32,10 @@ public class PostgreSQLDatabase {
       e.printStackTrace();
     }
     return conn;
+  }
 
+  public static void disconnect() throws SQLException {
+    conn.close();
   }
 
   private static void connect() throws SQLException {
