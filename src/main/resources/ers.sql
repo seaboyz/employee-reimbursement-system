@@ -86,8 +86,9 @@ VALUES
 (100, 1, 1);
 SELECT * FROM ERS_REIMBURSEMENT;
 
-
-
-
+-- adminministration
+-- CREATE USER seaboyz WITH PASSWORD '123456';
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA FROM seaboyz;
+-- SELECT * FROM information_schema. table_privileges LIMIT 5
 
 
