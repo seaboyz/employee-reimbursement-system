@@ -13,16 +13,6 @@ import com.revature.models.User;
 public class UserDAOImplementation implements UserDAO {
   static Connection conn = PostgreSQLDatabase.getConnection();
 
-  public static void main(String[] args) {
-    UserDAOImplementation uDaoImpl = new UserDAOImplementation();
-    try {
-      User user = uDaoImpl.getByUsername("test");
-      System.out.println(user);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
-
   /**
    * <ul>
    * <li>Should Insert a new User record into the DB with the provided
