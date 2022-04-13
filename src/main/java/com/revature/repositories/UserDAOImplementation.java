@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
 import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.Role;
@@ -17,7 +18,7 @@ public class UserDAOImplementation implements UserDAO {
   public static void main(String[] args) {
     UserDAOImplementation userDAOImplementation = new UserDAOImplementation();
     try {
-      User user = userDAOImplementation.getByUsername("test");
+      Optional<User> user = userDAOImplementation.getByUsername("test");
       System.out.println(user);
     } catch (Exception e) {
       e.printStackTrace();
@@ -52,7 +53,7 @@ public class UserDAOImplementation implements UserDAO {
    * Should retrieve a User from the DB with the corresponding username or an
    * empty optional if there is no match.
    */
-  public User getByUsername(String username) throws SQLException {
+  public Optional<User> getByUsername(String username) throws SQLException {
 
     Statement statement = conn.createStatement();
     String query = "select * from ers_users where ers_user_name = '" + username + "'";
@@ -74,20 +75,21 @@ public class UserDAOImplementation implements UserDAO {
       } else {
         user.setRole(Role.FINANCE_MANAGER);
       }
+      return Optional.of(user);
     }
 
-    return user;
+    return Optional.empty();
 
   }
 
   @Override
-  public User getUserById(int id) throws SQLException {
+  public Optional<User> getUserById(int id) throws SQLException {
 
-    return null;
+    return Optional.empty();
   }
 
   @Override
-  public List<User> all() throws SQLException {
+  public List<Optional<User>> all() throws SQLException {
 
     return null;
   }
