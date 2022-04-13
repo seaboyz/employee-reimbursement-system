@@ -1,5 +1,10 @@
 package com.revature.services;
 
+import java.sql.SQLException;
+import java.util.Optional;
+
+import com.revature.exceptions.UserNamePasswordNotMatchException;
+import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
 
 /**
@@ -16,6 +21,11 @@ import com.revature.models.User;
  * </ul>
  */
 public class AuthService {
+  private UserService userService;
+
+  public AuthService(UserService userService) {
+    this.userService = userService;
+  }
 
   /**
    * <ul>
@@ -26,15 +36,24 @@ public class AuthService {
    * <li>Must return user object if the user logs in successfully.</li>
    * </ul>
    */
+  public User login(String username, String password) throws UserNotExistException, UserNamePasswordNotMatchException {
+    User user = null;
+    try {
+      Optional<User> optionalUser = userService.getByUsername(username);
+      if (!optionalUser.isPresent()) {
+        throw new UserNotExistException();
+      }
+      if (!optionalUser.get().getPassword().equals(password)) {
+        throw new UserNamePasswordNotMatchException();
+      }
+      user = optionalUser.get();
 
-  private UserService userService;
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+      System.out.println("Somthing wrong with databse");
+    }
+    return user;
 
-  public AuthService(UserService userService) {
-    this.userService = userService;
-  }
-
-  public User login(String username, String password) {
-    return null;
   }
 
   /**
