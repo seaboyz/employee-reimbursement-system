@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import com.revature.models.User;
 import com.revature.repositories.UserDAOImplementation;
@@ -33,7 +34,7 @@ public class UserService {
    * Should retrieve a User with the corresponding username or an empty optional
    * if there is no match.
    */
-  public User getByUsername(String username) throws SQLException {
+  public Optional<User> getByUsername(String username) throws SQLException {
     return userDaoImpl.getByUsername(username);
   }
 }
