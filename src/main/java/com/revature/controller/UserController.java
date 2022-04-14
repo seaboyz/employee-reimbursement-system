@@ -21,6 +21,7 @@ public class UserController extends HttpServlet {
 
   public UserController(AuthService authService) {
     this.authService = authService;
+    gson = new Gson();
   }
 
   @Override
@@ -30,7 +31,7 @@ public class UserController extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String username = request.getParameter("email").split("@")[0];
+    String username = request.getParameter("username");
     String password = request.getParameter("password");
     PrintWriter out = response.getWriter();
 
@@ -39,7 +40,6 @@ public class UserController extends HttpServlet {
       User user = authService.login(username, password);
       if (user != null) {
         String userJsonString = gson.toJson(user);
-
         response.setStatus(200);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
