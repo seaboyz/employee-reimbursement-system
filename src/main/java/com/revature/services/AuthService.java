@@ -36,7 +36,7 @@ public class AuthService {
    * <li>Must return user object if the user logs in successfully.</li>
    * </ul>
    */
-  public User login(String username, String password) throws UserNotExistException, UserNamePasswordNotMatchException {
+  public User login(String username, String password) {
     User user = null;
     try {
       Optional<User> optionalUser = userService.getByUsername(username);
