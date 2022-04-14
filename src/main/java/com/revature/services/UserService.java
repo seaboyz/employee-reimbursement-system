@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import com.revature.models.User;
-import com.revature.repositories.UserDAOImplementation;
+import com.revature.repositories.UserDAO;
 
 /**
  * The UserService should handle the processing and retrieval of Users for the
@@ -24,10 +24,10 @@ import com.revature.repositories.UserDAOImplementation;
  */
 public class UserService {
 
-  private UserDAOImplementation userDaoImpl;
+  private UserDAO userDao;
 
-  public UserService(UserDAOImplementation userDaoImpl) {
-    this.userDaoImpl = userDaoImpl;
+  public UserService(UserDAO userDao) {
+    this.userDao = userDao;
   }
 
   /**
@@ -35,6 +35,6 @@ public class UserService {
    * if there is no match.
    */
   public Optional<User> getByUsername(String username) throws SQLException {
-    return userDaoImpl.getByUsername(username);
+    return userDao.getByUsername(username);
   }
 }
