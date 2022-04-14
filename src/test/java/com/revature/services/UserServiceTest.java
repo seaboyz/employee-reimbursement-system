@@ -9,15 +9,24 @@ import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.repositories.UserDAOImplementation;
 
-import org.junit.Test;
-import org.mockito.Mockito;;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+/* 
+  @ExtendWith is junit.jupiter
+  make sure @Test is also junit.jupiter
+*/
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
+
+  @Mock
+  UserDAOImplementation mockUserDao;
 
   @Test
   public void testGetByUsernamePassesWhenUsernameExists() throws Exception {
 
-    UserDAOImplementation mockUserDao = Mockito.mock(UserDAOImplementation.class);
     UserService userService = new UserService(mockUserDao);
 
     User testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
@@ -31,7 +40,6 @@ public class UserServiceTest {
   @Test
   public void testGetByUsernamePassesWhenUsernameNotExists() throws Exception {
 
-    UserDAOImplementation mockUserDao = Mockito.mock(UserDAOImplementation.class);
     UserService userService = new UserService(mockUserDao);
 
     String NOT_EXIST_USER_NAME = "notExistUserName";
@@ -43,7 +51,7 @@ public class UserServiceTest {
 
   @Test
   public void testGetByUsernamePassesWhenUsernameShouldReturnTheRightUser() throws Exception {
-    UserDAOImplementation mockUserDao = Mockito.mock(UserDAOImplementation.class);
+
     UserService userService = new UserService(mockUserDao);
 
     User testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
