@@ -38,6 +38,7 @@ public class AuthService {
    */
   public User login(String username, String password) {
     User user = null;
+
     try {
       Optional<User> optionalUser = userService.getByUsername(username);
       if (!optionalUser.isPresent()) {
@@ -47,13 +48,11 @@ public class AuthService {
         throw new UserNamePasswordNotMatchException();
       }
       user = optionalUser.get();
-
     } catch (SQLException e) {
       System.out.println(e.getMessage());
       System.out.println("Somthing wrong with databse");
     }
     return user;
-
   }
 
   /**
