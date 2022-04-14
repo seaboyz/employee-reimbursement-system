@@ -49,7 +49,11 @@ public class UserDAOImplementation implements UserDAO {
     ps.setString(3, newUser.getEmail());
     ps.setString(4, newUser.getFirstname());
     ps.setString(5, newUser.getLastname());
-    ps.executeUpdate();
+    if (ps.executeUpdate() == 1) {
+      // TODO : get auto generated key back, and update the user, then return it.
+      // https://www.baeldung.com/jdbc-returning-generated-keys
+    }
+
   }
 
   /**
