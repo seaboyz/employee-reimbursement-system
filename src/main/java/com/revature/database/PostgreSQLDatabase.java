@@ -13,15 +13,6 @@ public class PostgreSQLDatabase {
   private PostgreSQLDatabase() {
   };
 
-  public static void main(String[] args) {
-    try {
-      conn = getConnection();
-      conn.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
   public static Connection getConnection() {
     try {
       if (conn == null) {
