@@ -2,17 +2,17 @@ package com.revature.view.console;
 
 import java.util.Scanner;
 
+import com.revature.controller.UserController;
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
-import com.revature.services.AuthService;
 
 public class Console {
   private final Scanner scan = ConsoleScanner.getInstance();
-  AuthService authService;
+  private UserController userController;
 
-  public Console(AuthService authService) {
-    this.authService = authService;
+  public Console(UserController userController) {
+    this.userController = userController;
   }
 
   public void init() {
@@ -58,6 +58,11 @@ public class Console {
     System.out.println("*********************************");
     System.out.println("*           Login...            *");
     System.out.println("*********************************");
+    try {
+      Thread.sleep(1000);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     loginWithUsernameAndPassword(username, password);
 
@@ -73,18 +78,21 @@ public class Console {
 
   private void quit() {
     System.out.println("*********************************");
-    System.out.println("*       Thank for using ERS     *");
+    System.out.println("*       Thanks for using ERS     *");
     System.out.println("*             Good Bye          *");
     System.out.println("*********************************");
   }
 
   private void welcomePage(User user) {
-    System.out.println("_______________________________");
-    System.out.println("|          Welcome             |");
-    System.out.println("|         User Menu            |");
-    System.out.println("|_____________________________ |");
-    System.out.println(user);
 
+    System.out.println("Welcome " + user.getFirstname() + " " + user.getLastname());
+    userMenu();
+  }
+
+  private void userMenu() {
+    System.out.println("********************************");
+    System.out.println("*         User Menu            *");
+    System.out.println("********************************");
   }
 
   private void loginWithUsernameAndPassword(String username, String password) {
@@ -111,13 +119,13 @@ public class Console {
     // }
 
     try {
-      User user = authService.login(username, password);
+      User user = userController.login(username, password);
       welcomePage(user);
     } catch (UserNotExistException e) {
-      System.out.println("You are not register yet");
-      registerPage();
+      System.out.println("User with the username " + username + " does not exist, please try again.");
+      loginPage();
     } catch (UserNamePasswordNotMatchException e) {
-      System.out.println("Wrong Password");
+      System.out.println("The password was wrong, please try again.");
       loginPage();
     }
 
