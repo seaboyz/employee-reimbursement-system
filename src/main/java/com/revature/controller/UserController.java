@@ -24,6 +24,11 @@ public class UserController extends HttpServlet {
     gson = new Gson();
   }
 
+  public User login(String username, String password) throws UserNotExistException, UserNamePasswordNotMatchException {
+    User user = authService.login(username, password);
+    return user;
+  }
+
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 

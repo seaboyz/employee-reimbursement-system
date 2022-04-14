@@ -1,5 +1,7 @@
 package com.revature.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,6 +18,9 @@ import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,6 +28,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
+  String NOT_EXIST_USERNAME = "NOT_EXIST_USERNAME";
+  String NOT_EXIST_PASSWORD = "NOT_EXIST_PASSWORD";
+  String EXIST_USERNAME = "EXIST_USERNAME";
+  String WRONG_PASSWORD = "WRONG_PASSWORD";
 
   @Mock
   AuthService mockAuthService;
@@ -38,8 +47,6 @@ public class UserControllerTest {
 
   @Test
   void doPostShouldSent404ResponseWhenReqeustUserNotExist() throws IOException {
-    String NOT_EXIST_USERNAME = "NOT_EXIST_USERNAME";
-    String NOT_EXIST_PASSWORD = "NOT_EXIST_PASSWORD";
 
     when(mockRequest.getParameter("username")).thenReturn(NOT_EXIST_USERNAME);
     when(mockRequest.getParameter("password")).thenReturn(NOT_EXIST_PASSWORD);
@@ -60,8 +67,6 @@ public class UserControllerTest {
 
   @Test
   void doPostShouldSent401ResponseWhenRequestUserPasswordNotMatch() throws IOException {
-    String EXIST_USERNAME = "EXIST_USERNAME";
-    String WRONG_PASSWORD = "WRONG_PASSWORD";
 
     when(mockRequest.getParameter("username")).thenReturn(EXIST_USERNAME);
     when(mockRequest.getParameter("password")).thenReturn(WRONG_PASSWORD);
@@ -104,5 +109,43 @@ public class UserControllerTest {
     verify(mockOut).print(anyString());
 
     verify(mockOut).flush();
+  }
+
+  @Nested
+  @DisplayName("Test for Contoller login")
+  class Controller {
+    UserController userController;
+
+    @BeforeEach
+    void init() {
+      userController = new UserController(mockAuthService);
+    }
+
+    @Test
+    void loginShouldThrowUserNotExitException() {
+      when(mockAuthService.login(NOT_EXIST_USERNAME, NOT_EXIST_PASSWORD)).thenThrow(UserNotExistException.class);
+
+      assertThrows(
+          UserNotExistException.class,
+          () -> userController.login(NOT_EXIST_USERNAME, NOT_EXIST_PASSWORD));
+    }
+
+    @Test
+    void loginShouldUserNamePasswordNotMatchException() {
+      when(mockAuthService.login(EXIST_USERNAME, WRONG_PASSWORD)).thenThrow(UserNamePasswordNotMatchException.class);
+
+      assertThrows(
+          UserNamePasswordNotMatchException.class,
+          () -> userController.login(EXIST_USERNAME, WRONG_PASSWORD));
+    }
+
+    @Test
+    void loginShouldReturnUser() {
+      User user = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
+
+      when(mockAuthService.login(user.getUsername(), user.getPassword())).thenReturn(user);
+
+      assertEquals(user, userController.login(user.getUsername(), user.getPassword()));
+    }
   }
 }
