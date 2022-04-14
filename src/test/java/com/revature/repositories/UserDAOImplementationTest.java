@@ -8,7 +8,7 @@ import java.util.Optional;
 import com.revature.models.Role;
 import com.revature.models.User;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class UserDAOImplementationTest {
 
