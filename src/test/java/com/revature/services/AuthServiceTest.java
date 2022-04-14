@@ -1,7 +1,7 @@
 package com.revature.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +40,7 @@ public class AuthServiceTest {
     String NOT_EXIST_USER_NAME = "notExistUserName";
     when(mockUserService.getByUsername(NOT_EXIST_USER_NAME)).thenReturn(Optional.empty());
 
-    assertThrowsExactly(
+    assertThrows(
         UserNotExistException.class,
         () -> authService.login(NOT_EXIST_USER_NAME, anyString()));
   }
@@ -50,7 +50,7 @@ public class AuthServiceTest {
 
     when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
 
-    assertThrowsExactly(
+    assertThrows(
         UserNamePasswordNotMatchException.class,
         () -> authService.login("test", "wrongPassword"));
   }
