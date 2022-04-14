@@ -8,14 +8,19 @@ import java.util.Optional;
 import com.revature.models.Role;
 import com.revature.models.User;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserDAOImplementationTest {
+  UserDAOImplementation userDao;
+
+  @BeforeEach
+  public void init() {
+    userDao = new UserDAOImplementation();
+  }
 
   @Test
   public void testGetByUsernameShouldReturnOptional() throws Exception {
-
-    UserDAOImplementation userDao = new UserDAOImplementation();
 
     Optional<User> optionalUser = userDao.getByUsername("test");
 
@@ -26,7 +31,6 @@ public class UserDAOImplementationTest {
 
   @Test
   public void testGetByUsernameShouldReturnTheRightUser() throws Exception {
-    UserDAOImplementation userDao = new UserDAOImplementation();
     Optional<User> optionalUser = userDao.getByUsername("test");
     User user = optionalUser.get();
 
@@ -40,7 +44,6 @@ public class UserDAOImplementationTest {
 
   @Test
   public void testGetByUsernameshouldResturnOptionalEmpty() throws Exception {
-    UserDAOImplementation userDao = new UserDAOImplementation();
 
     Optional<User> optionalNullUser = userDao.getByUsername("notExistUsername");
     assertEquals(optionalNullUser.getClass(), Optional.class);
