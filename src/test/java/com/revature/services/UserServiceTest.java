@@ -9,6 +9,7 @@ import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.repositories.UserDAOImplementation;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,14 +21,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
+  UserService userService;
 
   @Mock
   UserDAOImplementation mockUserDao;
 
+  @BeforeEach
+  public void init() {
+    userService = new UserService(mockUserDao);
+  }
+
   @Test
   public void testGetByUsernamePassesWhenUsernameExists() throws Exception {
-
-    UserService userService = new UserService(mockUserDao);
 
     User testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
 
@@ -40,8 +45,6 @@ public class UserServiceTest {
   @Test
   public void testGetByUsernamePassesWhenUsernameNotExists() throws Exception {
 
-    UserService userService = new UserService(mockUserDao);
-
     String NOT_EXIST_USER_NAME = "notExistUserName";
 
     when(mockUserDao.getByUsername(NOT_EXIST_USER_NAME)).thenReturn(Optional.empty());
@@ -51,8 +54,6 @@ public class UserServiceTest {
 
   @Test
   public void testGetByUsernamePassesWhenUsernameShouldReturnTheRightUser() throws Exception {
-
-    UserService userService = new UserService(mockUserDao);
 
     User testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
 

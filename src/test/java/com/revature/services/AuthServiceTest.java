@@ -12,6 +12,7 @@ import com.revature.exceptions.UserNotExistException;
 import com.revature.models.Role;
 import com.revature.models.User;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,14 +20,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
+  AuthService authService;
+  User mockUser;
 
   @Mock
   UserService mockUserService;
 
+  @BeforeEach
+  public void init() {
+
+    authService = new AuthService(mockUserService);
+
+    mockUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
+  }
+
   @Test
   void loginShouldThrowUserNotExitExceptionWhenUserNotExist() throws Exception {
-
-    AuthService authService = new AuthService(mockUserService);
 
     String NOT_EXIST_USER_NAME = "notExistUserName";
     when(mockUserService.getByUsername(NOT_EXIST_USER_NAME)).thenReturn(Optional.empty());
@@ -39,9 +48,6 @@ public class AuthServiceTest {
   @Test
   void loginShouldThrowUserNamePassroedNotMatchExceptionWhenPassTheWrongPassword() throws Exception {
 
-    AuthService authService = new AuthService(mockUserService);
-
-    User mockUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
     when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
 
     assertThrowsExactly(
@@ -51,10 +57,6 @@ public class AuthServiceTest {
 
   @Test
   void loginShouldReturnUserWhenPassingRightUserNameAndPassword() throws Exception {
-
-    AuthService authService = new AuthService(mockUserService);
-
-    User mockUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
 
     when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
 
