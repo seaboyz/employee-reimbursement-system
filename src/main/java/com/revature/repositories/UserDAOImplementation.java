@@ -8,22 +8,25 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.Role;
 import com.revature.models.User;
 
 public class UserDAOImplementation implements UserDAO {
-  static Connection conn = PostgreSQLDatabase.getConnection();
+  private Connection connection;
 
-  public static void main(String[] args) {
-    UserDAOImplementation userDAOImplementation = new UserDAOImplementation();
-    try {
-      Optional<User> user = userDAOImplementation.getByUsername("test");
-      System.out.println(user);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  // public static void main(String[] args) {
+  // UserDAOImplementation userDAOImplementation = new UserDAOImplementation();
+  // try {
+  // Optional<User> user = userDAOImplementation.getByUsername("test");
+  // System.out.println(user);
+  // } catch (Exception e) {
+  // e.printStackTrace();
+  // }
 
+  // }
+
+  public UserDAOImplementation(Connection connection) {
+    this.connection = connection;
   }
 
   /**
@@ -40,7 +43,7 @@ public class UserDAOImplementation implements UserDAO {
         + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
         + "VALUES "
         + "(?, ?, ?, ? ?) ";
-    PreparedStatement ps = conn.prepareStatement(query);
+    PreparedStatement ps = connection.prepareStatement(query);
     ps.setString(1, newUser.getUsername());
     ps.setString(2, newUser.getPassword());
     ps.setString(3, newUser.getEmail());
@@ -55,7 +58,7 @@ public class UserDAOImplementation implements UserDAO {
    */
   public Optional<User> getByUsername(String username) throws SQLException {
 
-    Statement statement = conn.createStatement();
+    Statement statement = connection.createStatement();
     String query = "select * from ers_users where ers_user_name = '" + username + "'";
     ResultSet resultSet = statement.executeQuery(query);
 
