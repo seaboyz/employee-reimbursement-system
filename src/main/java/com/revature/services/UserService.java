@@ -34,7 +34,12 @@ public class UserService {
    * Should retrieve a User with the corresponding username or an empty optional
    * if there is no match.
    */
-  public Optional<User> getByUsername(String username) throws SQLException {
-    return userDao.getByUsername(username);
+  public Optional<User> getByUsername(String username) {
+    try {
+      return userDao.getByUsername(username);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return Optional.empty();
+    }
   }
 }
