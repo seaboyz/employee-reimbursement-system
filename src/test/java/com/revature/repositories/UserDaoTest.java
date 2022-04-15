@@ -26,11 +26,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UserDAOImplementationTest {
+public class UserDaoTest {
   static final String EXIST_USERNAME = "EXIST_USERNAME";
   static final String NONE_EXIST_USERNAME = "NONE_EXIST_USERNAME";
 
-  UserDAOImplementation userDao;
+  UserDao userDao;
 
   @Mock
   User mockUser;
@@ -49,7 +49,7 @@ public class UserDAOImplementationTest {
 
   @BeforeEach
   void init() {
-    userDao = new UserDAOImplementation(mockConnection);
+    userDao = new UserDao(mockConnection);
   }
 
   @Test
@@ -96,13 +96,13 @@ public class UserDAOImplementationTest {
     @Test
     public void testGetByUsernameShouldReturnOptionalWithNoneExistUsername() throws Exception {
       when(mockResultSet.next()).thenReturn(false);
-      Optional<User> noneExitUser = userDao.getByUsername(NONE_EXIST_USERNAME);
+      Optional<User> noneExitUser = userDao.get(NONE_EXIST_USERNAME);
       assertEquals(noneExitUser.getClass(), Optional.class);
     }
 
     public void testGetByUsernameShouldReturnOptionalWithExistUsername() throws Exception {
       when(mockResultSet.next()).thenReturn(true);
-      Optional<User> noneExitUser = userDao.getByUsername(EXIST_USERNAME);
+      Optional<User> noneExitUser = userDao.get(EXIST_USERNAME);
       assertEquals(noneExitUser.getClass(), Optional.class);
       assertFalse(noneExitUser.isPresent());
     }
@@ -118,7 +118,7 @@ public class UserDAOImplementationTest {
       when(mockResultSet.getString("ers_last_name")).thenReturn(TEST_USER.getLastname());
       when(mockResultSet.getInt("user_role_id")).thenReturn(1);
 
-      Optional<User> optionalUser = userDao.getByUsername(TEST_USER.getUsername());
+      Optional<User> optionalUser = userDao.get(TEST_USER.getUsername());
       User user = optionalUser.get();
 
       assertEquals(optionalUser.getClass(), Optional.class);

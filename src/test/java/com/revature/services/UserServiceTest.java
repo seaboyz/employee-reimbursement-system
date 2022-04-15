@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import com.revature.models.Role;
 import com.revature.models.User;
-import com.revature.repositories.UserDAO;
+import com.revature.repositories.Dao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class UserServiceTest {
   UserService userService;
 
   @Mock
-  UserDAO mockUserDao;
+  Dao mockUserDao;
 
   @BeforeEach
   public void init() {
@@ -36,7 +36,7 @@ public class UserServiceTest {
 
     User testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
 
-    when(mockUserDao.getByUsername("test")).thenReturn(Optional.of(testUser));
+    when(mockUserDao.get("test")).thenReturn(Optional.of(testUser));
 
     assertEquals(userService.getByUsername("test"), Optional.of(testUser));
 
@@ -47,7 +47,7 @@ public class UserServiceTest {
 
     String NOT_EXIST_USER_NAME = "notExistUserName";
 
-    when(mockUserDao.getByUsername(NOT_EXIST_USER_NAME)).thenReturn(Optional.empty());
+    when(mockUserDao.get(NOT_EXIST_USER_NAME)).thenReturn(Optional.empty());
 
     assertEquals(userService.getByUsername(NOT_EXIST_USER_NAME), Optional.empty());
   }
@@ -57,7 +57,7 @@ public class UserServiceTest {
 
     User testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
 
-    when(mockUserDao.getByUsername("test")).thenReturn(Optional.of(testUser));
+    when(mockUserDao.get("test")).thenReturn(Optional.of(testUser));
 
     assertEquals(testUser.getUsername(), userService.getByUsername("test").get().getUsername());
   }
