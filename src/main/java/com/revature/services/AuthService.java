@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
+import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
 
 /**
@@ -65,17 +66,15 @@ public class AuthService {
    * Note: userToBeRegistered will have an id=0, additional fields may be null.
    * After registration, the id will be a positive integer.
    */
-  public User register(User userToBeRegistered) {
-    return null;
+  public User register(User userToBeRegistered) throws SQLException, UsernameNotUniqueException {
+    Optional<User> optionalUser = userService.getByUsername(userToBeRegistered.getUsername());
+
+    if (optionalUser.isPresent()) {
+      throw new UsernameNotUniqueException();
+    }
+
+    return userService.addUser(userToBeRegistered);
+
   }
 
-  /**
-   * This is an example method signature for retrieving the currently logged-in
-   * user.
-   * It leverages the Optional type which is a useful interface to handle the
-   * possibility of a user being unavailable.
-   */
-  public User exampleRetrieveCurrentUser() {
-    return null;
-  }
 }
