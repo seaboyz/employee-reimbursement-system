@@ -3,7 +3,7 @@ package com.revature.models;
 import java.util.Objects;
 
 /**
- * This AbstractUser class defines a minimum functionality for
+ * This User class defines a minimum functionality for
  * interacting with users in the ERS application.
  *
  * All users in this application must at least have:
@@ -30,6 +30,17 @@ public class User {
     private Role role;
 
     public User() {
+    }
+
+    public User(
+            String email,
+            String password,
+            String firstname,
+            String lastname) {
+        this.username = email.split("@")[1];
+        this.email = email;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     public User(
