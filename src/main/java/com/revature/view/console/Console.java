@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
-import com.revature.models.Employee;
+import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 
@@ -80,9 +80,23 @@ public class Console {
       System.out.println("Your password is: " + confirmPassword);
     }
 
-    Employee employee = register(email, password, firstname, lastname);
+    User user = null;
 
-    System.out.println(employee);
+    try {
+      user = register(email, password, firstname, lastname);
+    } catch (SQLException e) {
+      System.out.println("Something wrong with the database");
+      System.out.println("Try again Later");
+      e.printStackTrace();
+      registerPage();
+      return;
+    } catch (UsernameNotUniqueException e) {
+      System.out.println("Your email is already in use, try to use another one");
+      registerPage();
+      return;
+    }
+
+    welcomePage(user);
 
   }
 
@@ -134,12 +148,14 @@ public class Console {
     System.out.println("********************************");
   }
 
-  private Employee register(
+  private User register(
       String email,
       String password,
       String firstname,
-      String lastname) {
-    return null;
+      String lastname) throws SQLException {
+    User newUser = new User(email, password, firstname, lastname);
+
+    return authService.register(newUser);
   }
 
   private void loginWithUsernameAndPassword(String username, String password) {
