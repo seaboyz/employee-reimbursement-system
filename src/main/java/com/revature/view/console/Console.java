@@ -1,5 +1,6 @@
 package com.revature.view.console;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.revature.exceptions.UserNamePasswordNotMatchException;
@@ -127,8 +128,9 @@ public class Console {
     } catch (UserNamePasswordNotMatchException e) {
       System.out.println("The password was wrong, please try again.");
       loginPage();
+    } catch (SQLException e) {
+      System.out.println("Something wrong with database");
+      e.printStackTrace();
     }
-
   }
-
 }
