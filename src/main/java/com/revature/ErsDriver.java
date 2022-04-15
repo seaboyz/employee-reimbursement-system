@@ -3,7 +3,6 @@ package com.revature;
 import java.sql.Connection;
 import java.util.Scanner;
 
-import com.revature.controller.UserController;
 import com.revature.database.PostgreSQLDatabase;
 import com.revature.repositories.UserDao;
 import com.revature.services.AuthService;
@@ -19,9 +18,8 @@ public class ErsDriver {
     UserDao userDao = new UserDao(connection);
     UserService userService = new UserService(userDao);
     AuthService authService = new AuthService(userService);
-    UserController userController = new UserController(authService);
 
-    Console console = new Console(userController);
+    Console console = new Console(authService);
     console.init();
   }
 

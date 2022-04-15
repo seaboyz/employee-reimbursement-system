@@ -2,17 +2,17 @@ package com.revature.view.console;
 
 import java.util.Scanner;
 
-import com.revature.controller.UserController;
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
+import com.revature.services.AuthService;
 
 public class Console {
   private final Scanner scan = ConsoleScanner.getInstance();
-  private UserController userController;
+  private AuthService authService;
 
-  public Console(UserController userController) {
-    this.userController = userController;
+  public Console(AuthService authService) {
+    this.authService = authService;
   }
 
   public void init() {
@@ -119,7 +119,7 @@ public class Console {
     // }
 
     try {
-      User user = userController.login(username, password);
+      User user = authService.login(username, password);
       welcomePage(user);
     } catch (UserNotExistException e) {
       System.out.println("User with the username " + username + " does not exist, please try again.");
