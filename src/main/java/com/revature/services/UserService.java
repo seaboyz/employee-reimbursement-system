@@ -30,6 +30,10 @@ public class UserService {
     this.userDao = userDao;
   }
 
+  public User addUser(User newUser) throws SQLException {
+    return userDao.add(newUser);
+  }
+
   /**
    * Should retrieve a User with the corresponding username or an empty optional
    * if there is no match.
