@@ -1,32 +1,134 @@
 package com.revature.models;
 
+import java.util.Objects;
+
 /**
- * This concrete User class can include additional fields that can be used for
- * extended functionality of the ERS application.
+ * This AbstractUser class defines a minimum functionality for
+ * interacting with users in the ERS application.
  *
- * Example fields:
+ * All users in this application must at least have:
  * <ul>
- * <li>First Name</li>
- * <li>Last Name</li>
- * <li>Email</li>
- * <li>Phone Number</li>
- * <li>Address</li>
+ * <li>ID</li>
+ * <li>Username</li>
+ * <li>Password</li>
+ * <li>Role</li>
  * </ul>
  *
+ * Additional fields ca
+ * 
+ * @author Center of Excellence
  */
-public class User extends AbstractUser {
 
-    public User(int id, String username, String password, String email, String firstname, String lastname, Role role) {
-        super(id, username, password, email, firstname, lastname, role);
-    }
+public class User {
+
+    private int id;
+    private String username;
+    private String password;
+    private String email;
+    private String firstname;
+    private String lastname;
+    private Role role;
 
     public User() {
     }
 
-    /**
-     * This includes the minimum parameters needed for the
-     * {@link com.revature.models.AbstractUser} class.
-     * If other fields are needed, please create additional constructors.
-     */
+    public User(
+            int id,
+            String username,
+            String password,
+            String email,
+            String firstname,
+            String lastname,
+            Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.role = role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstname() {
+        return this.firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return this.lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        User that = (User) o;
+        return id == that.id && Objects.equals(username, that.username) && Objects.equals(password, that.password)
+                && role == that.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, role);
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
+    }
 
 }

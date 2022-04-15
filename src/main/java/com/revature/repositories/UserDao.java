@@ -24,6 +24,7 @@ public class UserDao implements Dao<User> {
    * information.</li>
    * <li>Should throw an exception if the creation is unsuccessful.</li>
    * <li>Should return a User object with an updated ID.</li>
+   * <li>Only Employee can be added to the database by UserDao</li>
    * </ul>
    */
   @Override
