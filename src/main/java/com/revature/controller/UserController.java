@@ -2,6 +2,7 @@ package com.revature.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,15 +45,20 @@ public class UserController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         out.print(userJsonString);
-        out.flush();
       }
     } catch (UserNamePasswordNotMatchException e) {
       response.setStatus(401);
       out.print("Username and Password not match");
-      out.flush();
+
     } catch (UserNotExistException e) {
       response.setStatus(404);
       out.print("Username not found, please go to registration");
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+      response.setStatus(500);
+      out.print("Something wrong with database");
+    } finally {
       out.flush();
     }
 
