@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import com.revature.models.User;
-import com.revature.repositories.Dao;
+import com.revature.repositories.UserDao;
 
 /**
  * The UserService should handle the processing and retrieval of Users for the
@@ -24,9 +24,9 @@ import com.revature.repositories.Dao;
  */
 public class UserService {
 
-  private Dao userDao;
+  private UserDao userDao;
 
-  public UserService(Dao userDao) {
+  public UserService(UserDao userDao) {
     this.userDao = userDao;
   }
 

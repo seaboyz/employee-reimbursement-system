@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import com.revature.models.Role;
 import com.revature.models.User;
-import com.revature.repositories.Dao;
+import com.revature.repositories.UserDao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class UserServiceTest {
   UserService userService;
 
   @Mock
-  Dao mockUserDao;
+  UserDao mockUserDao;
 
   @BeforeEach
   public void init() {
