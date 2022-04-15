@@ -5,12 +5,13 @@ import java.util.Scanner;
 
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
+import com.revature.models.Employee;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 
 public class Console {
   private final Scanner scan = ConsoleScanner.getInstance();
-  private AuthService authService;
+  private final AuthService authService;
 
   public Console(AuthService authService) {
     this.authService = authService;
@@ -46,6 +47,43 @@ public class Console {
     System.out.println("______________________________");
     System.out.println("|      Registration Page      |");
     System.out.println("|_____________________________|");
+
+    System.out.println("Please Enter your First name:");
+    String firstname = scan.nextLine();
+    System.out.println("Your email is: " + firstname);
+
+    System.out.println("Please Enter your Last name:");
+    String lastname = scan.nextLine();
+    System.out.println("Your email is: " + lastname);
+
+    System.out.println("Please Enter your email:");
+    String email = scan.nextLine();
+    System.out.println("Your email is: " + email);
+
+    System.out.println("Please Enter your password:");
+    String password = scan.nextLine();
+    System.out.println("Your password is: " + password);
+
+    System.out.println("Please confirm your password:");
+    String confirmPassword = scan.nextLine();
+    System.out.println("Your password is: " + confirmPassword);
+
+    while (!password.equals(confirmPassword)) {
+      System.out.println("Passwords have to be same.");
+      System.out.println("Please try again.");
+      System.out.println("Please Enter your password:");
+      password = scan.nextLine();
+      System.out.println("Your password is: " + password);
+
+      System.out.println("Please confirm your password:");
+      confirmPassword = scan.nextLine();
+      System.out.println("Your password is: " + confirmPassword);
+    }
+
+    Employee employee = register(email, password, firstname, lastname);
+
+    System.out.println(employee);
+
   }
 
   private void loginPage() {
@@ -94,6 +132,14 @@ public class Console {
     System.out.println("********************************");
     System.out.println("*         User Menu            *");
     System.out.println("********************************");
+  }
+
+  private Employee register(
+      String email,
+      String password,
+      String firstname,
+      String lastname) {
+    return null;
   }
 
   private void loginWithUsernameAndPassword(String username, String password) {
