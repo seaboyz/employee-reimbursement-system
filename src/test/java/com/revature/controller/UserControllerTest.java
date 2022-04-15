@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +42,7 @@ public class UserControllerTest {
   PrintWriter mockOut;
 
   @Test
-  void doPostShouldSent404ResponseWhenReqeustUserNotExist() throws IOException {
+  void doPostShouldSent404ResponseWhenReqeustUserNotExist() throws IOException, SQLException {
 
     when(mockRequest.getParameter("username")).thenReturn(NOT_EXIST_USERNAME);
     when(mockRequest.getParameter("password")).thenReturn(NOT_EXIST_PASSWORD);
@@ -61,7 +62,7 @@ public class UserControllerTest {
   }
 
   @Test
-  void doPostShouldSent401ResponseWhenRequestUserPasswordNotMatch() throws IOException {
+  void doPostShouldSent401ResponseWhenRequestUserPasswordNotMatch() throws IOException, SQLException {
 
     when(mockRequest.getParameter("username")).thenReturn(EXIST_USERNAME);
     when(mockRequest.getParameter("password")).thenReturn(WRONG_PASSWORD);
@@ -81,7 +82,7 @@ public class UserControllerTest {
   }
 
   @Test
-  void doPostShouldSend200RestponseWhenRequestUserPasswordNotMatch() throws IOException {
+  void doPostShouldSend200RestponseWhenRequestUserPasswordNotMatch() throws IOException, SQLException {
 
     User user = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
 
