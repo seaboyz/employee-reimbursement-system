@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.revature.models.User;
 
 public interface UserDAO {
-  public void add(User user) throws SQLException;
+  public User add(User user) throws SQLException;
 
   public Optional<User> getUserById(int id) throws SQLException;
 

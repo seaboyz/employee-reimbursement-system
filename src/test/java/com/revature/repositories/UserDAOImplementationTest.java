@@ -2,10 +2,13 @@ package com.revature.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,7 +31,6 @@ public class UserDAOImplementationTest {
   static final String NONE_EXIST_USERNAME = "NONE_EXIST_USERNAME";
 
   UserDAOImplementation userDao;
-  User TEST_USER;
 
   @Mock
   User mockUser;
@@ -42,22 +44,55 @@ public class UserDAOImplementationTest {
   @Mock
   ResultSet mockResultSet;
 
+  @Mock
+  PreparedStatement mockPreparedStatement;
+
   @BeforeEach
-  public void init() throws SQLException {
+  void init() {
     userDao = new UserDAOImplementation(mockConnection);
+  }
 
-    when(mockConnection.createStatement()).thenReturn(mockStatement);
-
-    when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
-
-    TEST_USER = new User(1, "testUsername", "testPassword", "test@test.com", "testFirstname ", "testLastName",
+  @Test
+  void addshouldReturnUserWithUpdatedId() throws SQLException {
+    User newUser = new User(1, "test", "123456", "test@test.com", "john", "doe",
         Role.EMPLOYEE);
 
+    String query = "INSERT INTO ERS_USERS "
+        + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
+        + "VALUES "
+        + "(?, ?, ?, ? ?) ";
+
+    when(mockConnection.prepareStatement(query)).thenReturn(mockPreparedStatement);
+
+    when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+
+    when(mockPreparedStatement.getGeneratedKeys()).thenReturn(mockResultSet);
+
+    when(mockResultSet.next()).thenReturn(true);
+
+    when(mockResultSet.getInt(1)).thenReturn(anyInt());
+
+    User updatedUser = userDao.add(newUser);
+
+    assertNotEquals(999, userDao.add(updatedUser).getId());
   }
 
   @Nested
   @DisplayName("Test for return Optional")
   class TestGetByUsernameReturnOptional {
+    User TEST_USER;
+
+    @BeforeEach
+    public void init() throws SQLException {
+
+      when(mockConnection.createStatement()).thenReturn(mockStatement);
+
+      when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+
+      TEST_USER = new User(1, "testUsername", "testPassword", "test@test.com", "testFirstname ", "testLastName",
+          Role.EMPLOYEE);
+    }
+
     @Test
     public void testGetByUsernameShouldReturnOptionalWithNoneExistUsername() throws Exception {
       when(mockResultSet.next()).thenReturn(false);
@@ -71,14 +106,9 @@ public class UserDAOImplementationTest {
       assertEquals(noneExitUser.getClass(), Optional.class);
       assertFalse(noneExitUser.isPresent());
     }
-  }
 
-  @Nested
-  @DisplayName("Test for return right user")
-  class TestGetByUsername {
-
-    @BeforeEach
-    void init() throws SQLException {
+    @Test
+    public void testGetByUsernameShouldReturnTheRightUser() throws Exception {
       when(mockResultSet.next()).thenReturn(true);
       when(mockResultSet.getInt("ers_user_id")).thenReturn(TEST_USER.getId());
       when(mockResultSet.getString("ers_user_name")).thenReturn(TEST_USER.getUsername());
@@ -87,10 +117,6 @@ public class UserDAOImplementationTest {
       when(mockResultSet.getString("ers_first_name")).thenReturn(TEST_USER.getFirstname());
       when(mockResultSet.getString("ers_last_name")).thenReturn(TEST_USER.getLastname());
       when(mockResultSet.getInt("user_role_id")).thenReturn(1);
-    }
-
-    @Test
-    public void testGetByUsernameShouldReturnTheRightUser() throws Exception {
 
       Optional<User> optionalUser = userDao.getByUsername(TEST_USER.getUsername());
       User user = optionalUser.get();

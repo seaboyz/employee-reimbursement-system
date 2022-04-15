@@ -38,7 +38,8 @@ public class UserDAOImplementation implements UserDAO {
    * </ul>
    */
   @Override
-  public void add(User newUser) throws SQLException {
+  public User add(User newUser) throws SQLException {
+    User updatedUser = newUser;
     String query = "INSERT INTO ERS_USERS "
         + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
         + "VALUES "
@@ -50,9 +51,18 @@ public class UserDAOImplementation implements UserDAO {
     ps.setString(4, newUser.getFirstname());
     ps.setString(5, newUser.getLastname());
     if (ps.executeUpdate() == 1) {
-      // TODO : get auto generated key back, and update the user, then return it.
+      // get auto generated key back
       // https://www.baeldung.com/jdbc-returning-generated-keys
+      ResultSet keys = ps.getGeneratedKeys();
+      if (keys.next()) {
+        int id = keys.getInt(1);
+        updatedUser.setId(id);
+      }
+    } else {
+      throw new SQLException("Could not get auto generated key from database");
     }
+
+    return updatedUser;
 
   }
 
