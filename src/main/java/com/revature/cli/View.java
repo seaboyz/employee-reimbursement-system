@@ -1,21 +1,20 @@
-package com.revature.view.console;
+package com.revature.cli;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.revature.exceptions.UserNamePasswordNotMatchException;
-import com.revature.exceptions.UserNotExistException;
 import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
-import com.revature.services.AuthService;
 
-public class Console {
+public class View {
   private final Scanner scan = ConsoleScanner.getInstance();
-  private final AuthService authService;
+
+  private Controller controller;
   private User loggedInUser;
 
-  public Console(AuthService authService) {
-    this.authService = authService;
+  public View(Controller controller) {
+    this.controller = controller;
+    loggedInUser = controller.loggedInUser;
   }
 
   public void init() {
@@ -27,7 +26,7 @@ public class Console {
     boolean quit = false;
 
     while (!quit) {
-      if (loggedInUser == null) {
+      if (controller.loggedInUser == null) {
         homePage();
       } else {
         mainMenuPage();
@@ -41,7 +40,7 @@ public class Console {
           registerPage();
           break;
         case "3":
-          logout();
+          controller.logout();
           break;
         case "4":
           updateInfoPage();
@@ -93,7 +92,7 @@ public class Console {
     }
 
     try {
-      User user = register(email, password, firstname, lastname);
+      User user = controller.register(email, password, firstname, lastname);
       welcomePage(user);
       System.out.println("Please login ");
       loginPage();
@@ -121,7 +120,7 @@ public class Console {
     System.out.println("*           Login...            *");
     System.out.println("*********************************");
 
-    loginWithUsernameAndPassword(username, password);
+    controller.loginWithUsernameAndPassword(username, password);
 
   }
 
@@ -157,77 +156,12 @@ public class Console {
   private void updateInfoPage() {
     System.out.println("Please Enter new username:");
     String newUsername = scan.nextLine();
-    newUsername = newUsername.equals("") ? loggedInUser.getUsername() : newUsername;
     System.out.println("Please Enter your new password: ");
     String newPassword = scan.nextLine();
-    newPassword = newPassword.equals("") ? loggedInUser.getPassword() : newPassword;
     System.out.println("Please Enter your new email: ");
     String newEmail = scan.nextLine();
-    newEmail = newEmail.equals("") ? loggedInUser.getEmail() : newEmail;
 
-    update(newUsername, newPassword, newEmail);
+    controller.update(newUsername, newPassword, newEmail);
   }
 
-  private void update(String username, String password, String email) {
-    User userToBeUpdated = new User(
-        loggedInUser.getId(),
-        username,
-        password,
-        email,
-        loggedInUser.getFirstname(),
-        loggedInUser.getLastname(),
-        loggedInUser.getRole());
-    System.out.println(userToBeUpdated);
-  }
-
-  private User register(
-      String email,
-      String password,
-      String firstname,
-      String lastname) throws SQLException {
-    User newUser = new User(email, password, firstname, lastname);
-
-    return authService.register(newUser);
-  }
-
-  private void loginWithUsernameAndPassword(String username, String password) {
-    // todo for REST API
-    // HttpClient POST http://localhost:8080/login
-    // https://hc.apache.org/httpcomponents-client-5.1.x/index.html
-
-    // CloseableHttpClient client = HttpClients.createDefault();
-    // HttpPost httpPost = new HttpPost("http://localhost:8080/api/user");
-    // List<NameValuePair> params = new ArrayList<>();
-    // params.add((new BasicNameValuePair("username", username)));
-    // params.add((new BasicNameValuePair("password", password)));
-    // httpPost.setEntity(new UrlEncodedFormEntity(params));
-    // CloseableHttpResponse response = client.execute(httpPost);
-
-    // if (response.getStatusLine().getStatusCode() == 200) {
-    // System.out.println("_______________________________");
-    // System.out.println("| Welcome |");
-    // System.out.println("| User Menu |");
-    // System.out.println("|_____________________________|");
-    // } else if (response.getStatusLine().getStatusCode() == 403) {
-    // System.out.println("The username and password was wrong, please try again.");
-    // System.out.println("Press 0 to go back to the main manu");
-    // }
-
-    try {
-      User user = authService.login(username, password);
-      welcomePage(user);
-      loggedInUser = user;
-    } catch (UserNotExistException e) {
-      System.out.println("User with the username " + username + " does not exist, please try again.");
-    } catch (UserNamePasswordNotMatchException e) {
-      System.out.println("The password was wrong, please try again.");
-    } catch (SQLException e) {
-      System.out.println("Something wrong with database");
-      e.printStackTrace();
-    }
-  }
-
-  private void logout() {
-    loggedInUser = null;
-  }
 }
