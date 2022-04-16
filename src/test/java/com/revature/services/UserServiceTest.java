@@ -88,6 +88,6 @@ public class UserServiceTest {
 
     when(mockUserDao.update(testUser)).thenReturn(rtnUser);
 
-    assertEquals(testUser, rtnUser);
+    assertEquals(userService.updateUser(testUser), rtnUser);
   }
 }
