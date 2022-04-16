@@ -58,7 +58,10 @@ public class Controller {
     // }
 
     return authService.login(username, password);
+  }
 
+  public User removeUser(User userTobeDeleted) throws SQLException {
+    return userService.removeUser(userTobeDeleted);
   }
 
 }

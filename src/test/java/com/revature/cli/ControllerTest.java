@@ -113,4 +113,27 @@ public class ControllerTest {
     }
   }
 
+  @Nested
+  class TestRemoveUser {
+    User currentEmployee;
+    User notCurrentEmployee;
+
+    @BeforeEach
+    void init() {
+      currentEmployee = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
+
+      notCurrentEmployee = Util.shallowCloneUser(currentEmployee);
+      notCurrentEmployee.setRole(Role.NOT_CURRENT_EMPLOYEE);
+    }
+
+    @Test
+    void ShouldReturnAUserWithRoleNOT_CURRENT_EMPLOYEE() throws SQLException {
+
+      when(mockUserService.removeUser(currentEmployee)).thenReturn(notCurrentEmployee);
+
+      assertEquals(Role.NOT_CURRENT_EMPLOYEE, controller.removeUser(currentEmployee).getRole());
+    }
+
+  }
+
 }
