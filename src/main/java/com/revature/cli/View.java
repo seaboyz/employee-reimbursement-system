@@ -48,7 +48,7 @@ public class View {
           updateInfoPage();
           break;
         case "5":
-          System.out.println(loggedInUser);
+          profilePage();
           break;
         case "q":
           quit = true;
@@ -57,6 +57,16 @@ public class View {
     }
 
     goodBuyPage();
+  }
+
+  private void profilePage() {
+    System.out.println("*********************************");
+    System.out.println("Username: " + loggedInUser.getUsername());
+    System.out.println("Password: " + loggedInUser.getPassword());
+    System.out.println("First Name : " + loggedInUser.getFirstname());
+    System.out.println("Last Name : " + loggedInUser.getLastname());
+    System.out.println("Email : " + loggedInUser.getEmail());
+    System.out.println("*********************************");
   }
 
   private void logout() {
