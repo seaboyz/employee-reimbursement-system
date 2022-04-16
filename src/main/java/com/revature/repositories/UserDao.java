@@ -136,7 +136,7 @@ public class UserDao implements Dao<User> {
   @Override
   public User update(User user) throws SQLException {
 
-    String sql = "UPDATE ERS_USERS SET ERS_USER_NAME = ?, ERS_EMAIL = ?, ERS_PASSWORD = ?, WHERE ERS_USER_ID = ?";
+    String sql = "UPDATE ERS_USERS SET ERS_USER_NAME = ?, ERS_EMAIL = ?, ERS_PASSWORD = ? WHERE ERS_USER_ID = ?";
 
     PreparedStatement preparedStatement = connection.prepareStatement(sql);
     preparedStatement.setString(1, user.getUsername());
@@ -147,7 +147,8 @@ public class UserDao implements Dao<User> {
     if (preparedStatement.executeUpdate() == 1) {
       return Util.shallowCloneUser(user);
     } else {
-      throw new SQLException();
+      System.out.println("update failed");
+      return user;
     }
   }
 
