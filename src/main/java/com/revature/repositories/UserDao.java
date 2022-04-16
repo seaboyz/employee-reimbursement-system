@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.util.Util;
@@ -20,18 +19,18 @@ public class UserDao implements Dao<User> {
     this.connection = connection;
   }
 
-  public static void main(String[] args) {
-    UserDao userDao = new UserDao(PostgreSQLDatabase.getConnection());
-    User newUser = new User("ewUser@email.com", "newpassword", "newfirstname",
-        "newlastname");
-    try {
-      User updatedUser = userDao.add(newUser);
-      System.out.println(updatedUser);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      e.printStackTrace();
-    }
-  }
+  // public static void main(String[] args) {
+  // UserDao userDao = new UserDao(PostgreSQLDatabase.getConnection());
+  // User newUser = new User("ewUser@email.com", "newpassword", "newfirstname",
+  // "newlastname");
+  // try {
+  // User updatedUser = userDao.add(newUser);
+  // System.out.println(updatedUser);
+  // } catch (Exception e) {
+  // System.out.println(e.getMessage());
+  // e.printStackTrace();
+  // }
+  // }
 
   /**
    * <ul>
