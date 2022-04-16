@@ -45,4 +45,8 @@ public class UserService {
   public User updateUser(User userTobeUpdated) throws SQLException {
     return userDao.update(userTobeUpdated);
   }
+
+  public User removeUser(User currentEmployee) throws SQLException {
+    return null;
+  }
 }
