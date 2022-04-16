@@ -47,6 +47,9 @@ public class View {
         case "4":
           updateInfoPage();
           break;
+        case "5":
+          System.out.println(loggedInUser);
+          break;
         case "q":
           quit = true;
           break;
@@ -130,11 +133,12 @@ public class View {
       loggedInUser = controller.login(username, password);
     } catch (UserNotExistException e) {
       System.out.println("user not exist");
+      loginPage();
     } catch (UserNamePasswordNotMatchException e) {
       System.out.println("Wrong password");
+      loginPage();
     } catch (SQLException e) {
       System.out.println("server error");
-    } finally {
       loginPage();
     }
 
@@ -164,6 +168,7 @@ public class View {
     System.out.println("*          User Menu            *");
     System.out.println("*       press 3 to logout       *");
     System.out.println("*   press 4 to update your info *");
+    System.out.println("*   press 5 to view your info *");
     System.out.println("*       press q to quit         *");
     System.out.println("********************************");
   }
@@ -182,8 +187,8 @@ public class View {
 
     User userToBeUpdated = Util.shallowCloneUser(loggedInUser);
     userToBeUpdated.setUsername(newUsername);
-    userToBeUpdated.setPassword(newEmail);
-    userToBeUpdated.setPassword(newEmail);
+    userToBeUpdated.setEmail(newEmail);
+    userToBeUpdated.setPassword(newPassword);
 
     try {
       User updatedUser = controller.update(userToBeUpdated);
@@ -191,6 +196,7 @@ public class View {
         loggedInUser = updatedUser;
       }
     } catch (SQLException e) {
+      e.printStackTrace();
       System.out.println("server error");
     } finally {
       System.out.println("Update failed");
