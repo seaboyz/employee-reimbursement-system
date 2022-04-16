@@ -134,8 +134,8 @@ public class UserDao implements Dao<User> {
   }
 
   @Override
-  public void update(User user) throws SQLException {
-
+  public User update(User user) throws SQLException {
+    return null;
   }
 
   @Override
