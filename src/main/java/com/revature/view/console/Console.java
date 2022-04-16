@@ -12,6 +12,7 @@ import com.revature.services.AuthService;
 public class Console {
   private final Scanner scan = ConsoleScanner.getInstance();
   private final AuthService authService;
+  private User loggedInUser;
 
   public Console(AuthService authService) {
     this.authService = authService;
@@ -26,7 +27,11 @@ public class Console {
     boolean quit = false;
 
     while (!quit) {
-      optionsPage();
+      if (loggedInUser == null) {
+        homePage();
+      } else {
+        mainMenuPage();
+      }
       String choice = scan.nextLine();
       switch (choice) {
         case "1":
@@ -34,13 +39,20 @@ public class Console {
           break;
         case "2":
           registerPage();
+          break;
+        case "3":
+          logout();
+          break;
+        case "4":
+          updateInfoPage();
+          break;
         case "q":
           quit = true;
           break;
       }
     }
 
-    quit();
+    goodBuyPage();
   }
 
   private void registerPage() {
@@ -50,11 +62,11 @@ public class Console {
 
     System.out.println("Please Enter your First name:");
     String firstname = scan.nextLine();
-    System.out.println("Your email is: " + firstname);
+    System.out.println("Your first name is: " + firstname);
 
     System.out.println("Please Enter your Last name:");
     String lastname = scan.nextLine();
-    System.out.println("Your email is: " + lastname);
+    System.out.println("Your last name is: " + lastname);
 
     System.out.println("Please Enter your email:");
     String email = scan.nextLine();
@@ -108,17 +120,12 @@ public class Console {
     System.out.println("*********************************");
     System.out.println("*           Login...            *");
     System.out.println("*********************************");
-    try {
-      Thread.sleep(1000);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
 
     loginWithUsernameAndPassword(username, password);
 
   }
 
-  private void optionsPage() {
+  private void homePage() {
     System.out.println("*********************************");
     System.out.println("*       Press 1 to login        *");
     System.out.println("*       press 2 to register     *");
@@ -126,7 +133,7 @@ public class Console {
     System.out.println("*********************************");
   }
 
-  private void quit() {
+  private void goodBuyPage() {
     System.out.println("*********************************");
     System.out.println("*       Thanks for using ERS     *");
     System.out.println("*             Good Bye          *");
@@ -134,17 +141,43 @@ public class Console {
   }
 
   private void welcomePage(User user) {
-
     System.out.println("Welcome " + user.getFirstname() + " " + user.getLastname());
-
-    userMenu();
   }
 
-  private void userMenu() {
+  private void mainMenuPage() {
     System.out.println("********************************");
-    System.out.println("*         User Menu            *");
+    System.out.println("*          User Menu            *");
+    System.out.println("*       press 3 to logout       *");
+    System.out.println("*   press 4 to update your info *");
+    System.out.println("*       press q to quit         *");
     System.out.println("********************************");
     // TODO
+  }
+
+  private void updateInfoPage() {
+    System.out.println("Please Enter new username:");
+    String newUsername = scan.nextLine();
+    newUsername = newUsername.equals("") ? loggedInUser.getUsername() : newUsername;
+    System.out.println("Please Enter your new password: ");
+    String newPassword = scan.nextLine();
+    newPassword = newPassword.equals("") ? loggedInUser.getPassword() : newPassword;
+    System.out.println("Please Enter your new email: ");
+    String newEmail = scan.nextLine();
+    newEmail = newEmail.equals("") ? loggedInUser.getEmail() : newEmail;
+
+    update(newUsername, newPassword, newEmail);
+  }
+
+  private void update(String username, String password, String email) {
+    User userToBeUpdated = new User(
+        loggedInUser.getId(),
+        username,
+        password,
+        email,
+        loggedInUser.getFirstname(),
+        loggedInUser.getLastname(),
+        loggedInUser.getRole());
+    System.out.println(userToBeUpdated);
   }
 
   private User register(
@@ -183,15 +216,18 @@ public class Console {
     try {
       User user = authService.login(username, password);
       welcomePage(user);
+      loggedInUser = user;
     } catch (UserNotExistException e) {
       System.out.println("User with the username " + username + " does not exist, please try again.");
-      optionsPage();
     } catch (UserNamePasswordNotMatchException e) {
       System.out.println("The password was wrong, please try again.");
-
     } catch (SQLException e) {
       System.out.println("Something wrong with database");
       e.printStackTrace();
     }
+  }
+
+  private void logout() {
+    loggedInUser = null;
   }
 }
