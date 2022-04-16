@@ -37,10 +37,11 @@ public class User {
             String password,
             String firstname,
             String lastname) {
-        this.username = email.split("@")[1];
+        this.username = email.split("@")[0];
         this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.password = password;
     }
 
     public User(
@@ -134,12 +135,15 @@ public class User {
 
     @Override
     public String toString() {
-        return "AbstractUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
+        return "{" +
+                " id='" + getId() + "'" +
+                ", username='" + getUsername() + "'" +
+                ", password='" + getPassword() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", firstname='" + getFirstname() + "'" +
+                ", lastname='" + getLastname() + "'" +
+                ", role='" + getRole() + "'" +
+                "}";
     }
 
 }
