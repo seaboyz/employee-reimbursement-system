@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
+import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.Role;
 import com.revature.models.User;
 
@@ -16,6 +17,18 @@ public class UserDao implements Dao<User> {
 
   public UserDao(Connection connection) {
     this.connection = connection;
+  }
+
+  public static void main(String[] args) {
+    UserDao userDao = new UserDao(PostgreSQLDatabase.getConnection());
+    User newUser = new User("newUser@email.com", "newpassword", "newfirstname", "newlastname");
+    try {
+      User updatedUser = userDao.add(newUser);
+      System.out.println(updatedUser);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -30,26 +43,31 @@ public class UserDao implements Dao<User> {
   @Override
   public User add(User user) throws SQLException {
     String query = "INSERT INTO ERS_USERS "
-            + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
-            + "VALUES "
-            + "(?, ?, ?, ? ?) ";
-    PreparedStatement ps = connection.prepareStatement(query);
+        + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
+        + "VALUES "
+        + "(?, ?, ?, ?, ?)";
+    PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
     ps.setString(1, user.getUsername());
     ps.setString(2, user.getPassword());
     ps.setString(3, user.getEmail());
     ps.setString(4, user.getFirstname());
     ps.setString(5, user.getLastname());
-    if (ps.executeUpdate() == 1) {
-      // get auto generated key back
-      ResultSet keys = ps.getGeneratedKeys();
-      if (keys.next()) {
-        int id = keys.getInt(1);
-        user.setId(id);
+
+    ps.execute();
+    // get auto generated key back
+    ResultSet keys = ps.getGeneratedKeys();
+    if (keys.next()) {
+      int id = keys.getInt(1);
+      Optional<User> newUser = get(id);
+      if (newUser.isPresent()) {
+        return newUser.get();
+      } else {
+        throw new SQLException();
       }
     } else {
-      throw new SQLException("Could not get auto generated key from database");
+      throw new SQLException();
     }
-    return user;
+
   }
 
   /**
@@ -70,7 +88,7 @@ public class UserDao implements Dao<User> {
       user.setPassword(resultSet.getString("ers_password"));
       user.setEmail(resultSet.getString("ers_email"));
       user.setFirstname(
-              resultSet.getString("ers_first_name"));
+          resultSet.getString("ers_first_name"));
       user.setLastname(resultSet.getString("ers_last_name"));
       int roleId = resultSet.getInt("user_role_id");
       if (roleId == 1) {
@@ -83,9 +101,30 @@ public class UserDao implements Dao<User> {
     return Optional.empty();
   }
 
-  @Override
   public Optional<User> get(int id) throws SQLException {
 
+    Statement statement = connection.createStatement();
+    String query = "select * from ers_users where ers_user_id = '" + id + "'";
+    ResultSet resultSet = statement.executeQuery(query);
+
+    User user = new User();
+
+    if (resultSet.next()) {
+      user.setId(resultSet.getInt("ers_user_id"));
+      user.setUsername(resultSet.getString("ers_user_name"));
+      user.setPassword(resultSet.getString("ers_password"));
+      user.setEmail(resultSet.getString("ers_email"));
+      user.setFirstname(
+          resultSet.getString("ers_first_name"));
+      user.setLastname(resultSet.getString("ers_last_name"));
+      int roleId = resultSet.getInt("user_role_id");
+      if (roleId == 1) {
+        user.setRole(Role.EMPLOYEE);
+      } else {
+        user.setRole(Role.FINANCE_MANAGER);
+      }
+      return Optional.of(user);
+    }
     return Optional.empty();
   }
 
