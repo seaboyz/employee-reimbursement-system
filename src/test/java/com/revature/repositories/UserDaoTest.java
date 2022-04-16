@@ -1,5 +1,6 @@
 package com.revature.repositories;
 
+import static org.junit.Assert.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -16,7 +17,6 @@ import com.revature.models.Role;
 import com.revature.models.User;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,55 +50,61 @@ public class UserDaoTest {
     userDao = new UserDao(mockConnection);
   }
 
-  @Test
-  void addshouldReturnUserWithUpdatedId() throws SQLException {
-    User newUser = new User("test@test.com", "123456", "john", "doe");
+  @Nested
+  class TestAddd {
+    @Test
+    void shouldReturnUserWithUpdatedId() throws SQLException {
+      User newUser = new User("test@test.com", "123456", "john", "doe");
 
-    String query = "INSERT INTO ERS_USERS "
-        + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
-        + "VALUES "
-        + "(?, ?, ?, ?, ?)";
+      String query = "INSERT INTO ERS_USERS "
+          + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
+          + "VALUES "
+          + "(?, ?, ?, ?, ?)";
 
-    when(mockConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
-        .thenReturn(mockPreparedStatement);
+      when(mockConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
+          .thenReturn(mockPreparedStatement);
 
-    when(mockPreparedStatement.execute()).thenReturn(true);
+      when(mockPreparedStatement.execute()).thenReturn(true);
 
-    when(mockPreparedStatement.getGeneratedKeys()).thenReturn(mockResultSet);
+      when(mockPreparedStatement.getGeneratedKeys()).thenReturn(mockResultSet);
 
-    when(mockResultSet.next()).thenReturn(true);
+      when(mockResultSet.next()).thenReturn(true);
 
-    when(mockResultSet.getInt(1)).thenReturn(999);
+      when(mockResultSet.getInt(1)).thenReturn(999);
 
-    assertEquals(999, userDao.add(newUser).getId());
-  }
-
-  @Test
-  void getShouldReturnUserWithRoleWhenPassingId() throws SQLException {
-
-    User testUser = new User(1, "testUsername", "testPassword", "test@test.com", "testFirstname ", "testLastName",
-        Role.EMPLOYEE);
-
-    when(mockConnection.createStatement()).thenReturn(mockStatement);
-
-    when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
-
-    when(mockResultSet.next()).thenReturn(true);
-
-    when(mockResultSet.getInt("ers_user_id")).thenReturn(testUser.getId());
-    when(mockResultSet.getString("ers_user_name")).thenReturn(testUser.getUsername());
-    when(mockResultSet.getString("ers_password")).thenReturn(testUser.getPassword());
-    when(mockResultSet.getString("ers_email")).thenReturn(testUser.getEmail());
-    when(mockResultSet.getString("ers_first_name")).thenReturn(testUser.getFirstname());
-    when(mockResultSet.getInt("user_role_id")).thenReturn(1);
-
-    assertEquals(Optional.class, userDao.get(1).getClass());
-    assertEquals(testUser, userDao.get(1).get());
+      assertEquals(999, userDao.add(newUser).getId());
+    }
   }
 
   @Nested
-  @DisplayName("Test for return Optional")
-  class TestGetByUsernameReturnOptional {
+  class TestGetById {
+
+    @Test
+    void getShouldReturnUserWithRoleWhenPassingId() throws SQLException {
+
+      User testUser = new User(1, "testUsername", "testPassword", "test@test.com", "testFirstname ", "testLastName",
+          Role.EMPLOYEE);
+
+      when(mockConnection.createStatement()).thenReturn(mockStatement);
+
+      when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+
+      when(mockResultSet.next()).thenReturn(true);
+
+      when(mockResultSet.getInt("ers_user_id")).thenReturn(testUser.getId());
+      when(mockResultSet.getString("ers_user_name")).thenReturn(testUser.getUsername());
+      when(mockResultSet.getString("ers_password")).thenReturn(testUser.getPassword());
+      when(mockResultSet.getString("ers_email")).thenReturn(testUser.getEmail());
+      when(mockResultSet.getString("ers_first_name")).thenReturn(testUser.getFirstname());
+      when(mockResultSet.getInt("user_role_id")).thenReturn(1);
+
+      assertEquals(Optional.class, userDao.get(1).getClass());
+      assertEquals(testUser, userDao.get(1).get());
+    }
+  }
+
+  @Nested
+  class TestGetByUsername {
     User TEST_USER;
 
     @BeforeEach
@@ -151,4 +157,21 @@ public class UserDaoTest {
     }
   }
 
+  @Nested
+  class TestUpdate {
+
+    @Test
+    void ShouldReturnCopyOfTheUserToBeUpdated() throws SQLException {
+      when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+
+      when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+
+      User testUser = new User(1, "testUsername", "testPassword", "test@test.com", "testFirstname ", "testLastName",
+          Role.EMPLOYEE);
+
+      assertEquals(userDao.update(testUser), testUser);
+
+      assertNotSame(userDao.update(testUser), testUser);
+    }
+  }
 }

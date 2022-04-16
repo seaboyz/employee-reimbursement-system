@@ -11,6 +11,7 @@ import java.util.Optional;
 import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.Role;
 import com.revature.models.User;
+import com.revature.util.Util;
 
 public class UserDao implements Dao<User> {
   private final Connection connection;
@@ -135,7 +136,20 @@ public class UserDao implements Dao<User> {
 
   @Override
   public User update(User user) throws SQLException {
-    return null;
+
+    String sql = "UPDATE ERS_USERS SET ERS_USER_NAME = ?, ERS_EMAIL = ?, ERS_PASSWORD = ?, WHERE ERS_USER_ID = ?";
+
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    preparedStatement.setString(1, user.getUsername());
+    preparedStatement.setString(2, user.getEmail());
+    preparedStatement.setString(3, user.getPassword());
+    preparedStatement.setInt(4, user.getId());
+
+    if (preparedStatement.executeUpdate() == 1) {
+      return Util.shallowCloneUser(user);
+    } else {
+      throw new SQLException();
+    }
   }
 
   @Override
