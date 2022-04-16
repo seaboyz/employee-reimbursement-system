@@ -5,14 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
+import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.Role;
 import com.revature.models.User;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -34,34 +38,62 @@ public class AuthServiceTest {
     mockUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
   }
 
-  @Test
-  void loginShouldThrowUserNotExitExceptionWhenUserNotExist() throws Exception {
+  @Nested
+  @DisplayName("Test login()")
+  class TestLogin {
 
-    String NOT_EXIST_USER_NAME = "notExistUserName";
-    when(mockUserService.getByUsername(NOT_EXIST_USER_NAME)).thenReturn(Optional.empty());
+    @Test
+    void loginShouldThrowUserNotExitExceptionWhenUserNotExist() throws Exception {
+      String NOT_EXIST_USER_NAME = "notExistUserName";
+      when(mockUserService.getByUsername(NOT_EXIST_USER_NAME)).thenReturn(Optional.empty());
 
-    assertThrows(
-        UserNotExistException.class,
-        () -> authService.login(NOT_EXIST_USER_NAME, anyString()));
+      assertThrows(
+          UserNotExistException.class,
+          () -> authService.login(NOT_EXIST_USER_NAME, anyString()));
+    }
+
+    @Test
+    void loginShouldThrowUserNamePassroedNotMatchExceptionWhenPassTheWrongPassword() throws Exception {
+
+      when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
+
+      assertThrows(
+          UserNamePasswordNotMatchException.class,
+          () -> authService.login("test", "wrongPassword"));
+    }
+
+    @Test
+    void loginShouldReturnUserWhenPassingRightUserNameAndPassword() throws Exception {
+
+      when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
+
+      assertEquals(authService.login("test", "123456"), mockUser);
+
+    }
   }
 
-  @Test
-  void loginShouldThrowUserNamePassroedNotMatchExceptionWhenPassTheWrongPassword() throws Exception {
+  @Nested
+  @DisplayName("Test register()")
+  class TestRegister {
 
-    when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
+    @Test
+    void shouldThrowUsernameNotUniqueException() throws SQLException {
+      when(mockUserService.getByUsername(mockUser.getUsername())).thenReturn(Optional.of(mockUser));
 
-    assertThrows(
-        UserNamePasswordNotMatchException.class,
-        () -> authService.login("test", "wrongPassword"));
+      assertThrows(
+          UsernameNotUniqueException.class,
+          () -> authService.register(mockUser));
+    }
+
+    // @Test
+    // void shouldReturnUserWithUpdatedId() throws SQLException {
+    // User newUser = new User()
+    // updatedUser.setId(999);
+    // when(mockUserService.addUser(mockUser)).thenReturn(updatedUser);
+    // int id = mockUser.getId();
+    // int updatedId = updatedUser.getId();
+    // assertEquals(updatedId, 999);
+
+    // }
   }
-
-  @Test
-  void loginShouldReturnUserWhenPassingRightUserNameAndPassword() throws Exception {
-
-    when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
-
-    assertEquals(authService.login("test", "123456"), mockUser);
-
-  }
-
 }
