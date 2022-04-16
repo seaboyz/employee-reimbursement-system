@@ -80,10 +80,9 @@ public class Console {
       System.out.println("Your password is: " + confirmPassword);
     }
 
-    User user = null;
-
     try {
-      user = register(email, password, firstname, lastname);
+      User user = register(email, password, firstname, lastname);
+      welcomePage(user);
     } catch (SQLException e) {
       System.out.println("Something wrong with the database");
       System.out.println("Try again Later");
@@ -92,11 +91,9 @@ public class Console {
       return;
     } catch (UsernameNotUniqueException e) {
       System.out.println("Your email is already in use, try to use another one");
-      registerPage();
-      return;
-    }
+      loginPage();
 
-    welcomePage(user);
+    }
 
   }
 
