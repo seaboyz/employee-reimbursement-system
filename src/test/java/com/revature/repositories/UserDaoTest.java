@@ -2,8 +2,6 @@ package com.revature.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -54,27 +52,30 @@ public class UserDaoTest {
 
   @Test
   void addshouldReturnUserWithUpdatedId() throws SQLException {
-    User newUser = new User(1, "test", "123456", "test@test.com", "john", "doe",
-        Role.EMPLOYEE);
+    User newUser = new User("test@test.com", "123456", "john", "doe");
 
     String query = "INSERT INTO ERS_USERS "
         + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
         + "VALUES "
-        + "(?, ?, ?, ? ?) ";
+        + "(?, ?, ?, ?, ?)";
 
-    when(mockConnection.prepareStatement(query)).thenReturn(mockPreparedStatement);
+    when(mockConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
+        .thenReturn(mockPreparedStatement);
 
-    when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+    when(mockPreparedStatement.execute()).thenReturn(true);
 
     when(mockPreparedStatement.getGeneratedKeys()).thenReturn(mockResultSet);
 
     when(mockResultSet.next()).thenReturn(true);
 
-    when(mockResultSet.getInt(1)).thenReturn(anyInt());
+    when(mockResultSet.getInt(1)).thenReturn(999);
 
-    User updatedUser = userDao.add(newUser);
+    assertEquals(999, userDao.add(newUser).getId());
+  }
 
-    assertNotEquals(999, userDao.add(updatedUser).getId());
+  @Test
+  void getShouldReturnUserWithRoleWhenPassingId() {
+    // TODO
   }
 
   @Nested

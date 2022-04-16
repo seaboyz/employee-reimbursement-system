@@ -21,7 +21,8 @@ public class UserDao implements Dao<User> {
 
   public static void main(String[] args) {
     UserDao userDao = new UserDao(PostgreSQLDatabase.getConnection());
-    User newUser = new User("newUser@email.com", "newpassword", "newfirstname", "newlastname");
+    User newUser = new User("ewUser@email.com", "newpassword", "newfirstname",
+        "newlastname");
     try {
       User updatedUser = userDao.add(newUser);
       System.out.println(updatedUser);
@@ -58,12 +59,8 @@ public class UserDao implements Dao<User> {
     ResultSet keys = ps.getGeneratedKeys();
     if (keys.next()) {
       int id = keys.getInt(1);
-      Optional<User> newUser = get(id);
-      if (newUser.isPresent()) {
-        return newUser.get();
-      } else {
-        throw new SQLException();
-      }
+      user.setId(id);
+      return user;
     } else {
       throw new SQLException();
     }
