@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.repositories.UserDao;
+import com.revature.util.Util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -79,5 +80,14 @@ public class UserServiceTest {
       assertEquals(testUser.getUsername(), userService.getByUsername("test").get().getUsername());
     }
 
+  }
+
+  @Test
+  public void testUpdateUserShouldReturnTheSameUserBack() throws SQLException {
+    User rtnUser = Util.shallowCloneUser(testUser);
+
+    when(mockUserDao.update(testUser)).thenReturn(rtnUser);
+
+    assertEquals(testUser, rtnUser);
   }
 }

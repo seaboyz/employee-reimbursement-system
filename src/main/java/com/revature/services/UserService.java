@@ -41,4 +41,8 @@ public class UserService {
   public Optional<User> getByUsername(String username) throws SQLException {
     return userDao.get(username);
   }
+
+  public User updateUser(User userTobeUpdated) throws SQLException {
+    return userDao.update(userTobeUpdated);
+  }
 }
