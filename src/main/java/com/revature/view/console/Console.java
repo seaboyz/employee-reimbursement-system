@@ -26,7 +26,7 @@ public class Console {
     boolean quit = false;
 
     while (!quit) {
-      printOptionsPage();
+      optionsPage();
       String choice = scan.nextLine();
       switch (choice) {
         case "1":
@@ -83,16 +83,16 @@ public class Console {
     try {
       User user = register(email, password, firstname, lastname);
       welcomePage(user);
+      System.out.println("Please login ");
+      loginPage();
     } catch (SQLException e) {
       System.out.println("Something wrong with the database");
       System.out.println("Try again Later");
       e.printStackTrace();
       registerPage();
-      return;
     } catch (UsernameNotUniqueException e) {
       System.out.println("Your email is already in use, try to use another one");
-      loginPage();
-
+      registerPage();
     }
 
   }
@@ -118,7 +118,7 @@ public class Console {
 
   }
 
-  private void printOptionsPage() {
+  private void optionsPage() {
     System.out.println("*********************************");
     System.out.println("*       Press 1 to login        *");
     System.out.println("*       press 2 to register     *");
@@ -136,6 +136,7 @@ public class Console {
   private void welcomePage(User user) {
 
     System.out.println("Welcome " + user.getFirstname() + " " + user.getLastname());
+
     userMenu();
   }
 
@@ -143,6 +144,7 @@ public class Console {
     System.out.println("********************************");
     System.out.println("*         User Menu            *");
     System.out.println("********************************");
+    // TODO
   }
 
   private User register(
@@ -183,10 +185,10 @@ public class Console {
       welcomePage(user);
     } catch (UserNotExistException e) {
       System.out.println("User with the username " + username + " does not exist, please try again.");
-      loginPage();
+      optionsPage();
     } catch (UserNamePasswordNotMatchException e) {
       System.out.println("The password was wrong, please try again.");
-      loginPage();
+
     } catch (SQLException e) {
       System.out.println("Something wrong with database");
       e.printStackTrace();
