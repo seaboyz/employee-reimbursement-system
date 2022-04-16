@@ -27,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
   AuthService authService;
-  User mockUser;
+  User testUser;
 
   @Mock
   UserService mockUserService;
@@ -37,7 +37,7 @@ public class AuthServiceTest {
 
     authService = new AuthService(mockUserService);
 
-    mockUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
+    testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
   }
 
   @Nested
@@ -57,7 +57,7 @@ public class AuthServiceTest {
     @Test
     void loginShouldThrowUserNamePassroedNotMatchExceptionWhenPassTheWrongPassword() throws Exception {
 
-      when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
+      when(mockUserService.getByUsername("test")).thenReturn(Optional.of(testUser));
 
       assertThrows(
           UserNamePasswordNotMatchException.class,
@@ -67,9 +67,9 @@ public class AuthServiceTest {
     @Test
     void loginShouldReturnUserWhenPassingRightUserNameAndPassword() throws Exception {
 
-      when(mockUserService.getByUsername("test")).thenReturn(Optional.of(mockUser));
+      when(mockUserService.getByUsername("test")).thenReturn(Optional.of(testUser));
 
-      assertEquals(authService.login("test", "123456"), mockUser);
+      assertEquals(authService.login("test", "123456"), testUser);
 
     }
   }
@@ -80,11 +80,11 @@ public class AuthServiceTest {
 
     @Test
     void shouldThrowUsernameNotUniqueException() throws SQLException {
-      when(mockUserService.getByUsername(mockUser.getUsername())).thenReturn(Optional.of(mockUser));
+      when(mockUserService.getByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
 
       assertThrows(
           UsernameNotUniqueException.class,
-          () -> authService.register(mockUser));
+          () -> authService.register(testUser));
     }
 
     @Test
