@@ -10,8 +10,6 @@ import com.revature.services.UserService;
 
 public class Controller {
 
-  public User loggedInUser = null;
-
   private AuthService authService;
   private UserService userService;
 
@@ -20,22 +18,9 @@ public class Controller {
     this.userService = userService;
   }
 
-  public void update(String username, String password, String email) {
-    username = username.equals("") ? loggedInUser.getUsername() : username;
-    password = password.equals("") ? loggedInUser.getPassword() : password;
-    email = email.equals("") ? loggedInUser.getEmail() : email;
+  public User update(User userTobeUpdated) throws SQLException {
+    return userService.updateUser(userTobeUpdated);
 
-    User userToBeUpdated = new User(
-        loggedInUser.getId(),
-        username,
-        password,
-        email,
-        loggedInUser.getFirstname(),
-        loggedInUser.getLastname(),
-        loggedInUser.getRole());
-
-    // TODO
-    // userService.update(userToBeUpdated);
   }
 
   public User register(
@@ -48,7 +33,8 @@ public class Controller {
     return authService.register(newUser);
   }
 
-  public void loginWithUsernameAndPassword(String username, String password) {
+  public User login(String username, String password)
+      throws UserNamePasswordNotMatchException, UserNotExistException, SQLException {
     // todo for REST API
     // HttpClient POST http://localhost:8080/login
     // https://hc.apache.org/httpcomponents-client-5.1.x/index.html
@@ -71,21 +57,8 @@ public class Controller {
     // System.out.println("Press 0 to go back to the main manu");
     // }
 
-    try {
-      User user = authService.login(username, password);
-      loggedInUser = user;
-    } catch (UserNotExistException e) {
-      System.out.println("User with the username " + username + " does not exist, please try again.");
-    } catch (UserNamePasswordNotMatchException e) {
-      System.out.println("The password was wrong, please try again.");
-    } catch (SQLException e) {
-      System.out.println("Something wrong with database");
-      e.printStackTrace();
-    }
-  }
+    return authService.login(username, password);
 
-  public void logout() {
-    loggedInUser = null;
   }
 
 }

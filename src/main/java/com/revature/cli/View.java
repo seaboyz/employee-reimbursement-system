@@ -3,8 +3,11 @@ package com.revature.cli;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.revature.exceptions.UserNamePasswordNotMatchException;
+import com.revature.exceptions.UserNotExistException;
 import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
+import com.revature.util.Util;
 
 public class View {
   private final Scanner scan = ConsoleScanner.getInstance();
@@ -14,7 +17,6 @@ public class View {
 
   public View(Controller controller) {
     this.controller = controller;
-    loggedInUser = controller.loggedInUser;
   }
 
   public void init() {
@@ -26,7 +28,7 @@ public class View {
     boolean quit = false;
 
     while (!quit) {
-      if (controller.loggedInUser == null) {
+      if (loggedInUser == null) {
         homePage();
       } else {
         mainMenuPage();
@@ -40,7 +42,7 @@ public class View {
           registerPage();
           break;
         case "3":
-          controller.logout();
+          logout();
           break;
         case "4":
           updateInfoPage();
@@ -52,6 +54,10 @@ public class View {
     }
 
     goodBuyPage();
+  }
+
+  private void logout() {
+    loggedInUser = null;
   }
 
   private void registerPage() {
@@ -120,7 +126,17 @@ public class View {
     System.out.println("*           Login...            *");
     System.out.println("*********************************");
 
-    controller.loginWithUsernameAndPassword(username, password);
+    try {
+      loggedInUser = controller.login(username, password);
+    } catch (UserNotExistException e) {
+      System.out.println("user not exist");
+    } catch (UserNamePasswordNotMatchException e) {
+      System.out.println("Wrong password");
+    } catch (SQLException e) {
+      System.out.println("server error");
+    } finally {
+      loginPage();
+    }
 
   }
 
@@ -150,7 +166,6 @@ public class View {
     System.out.println("*   press 4 to update your info *");
     System.out.println("*       press q to quit         *");
     System.out.println("********************************");
-    // TODO
   }
 
   private void updateInfoPage() {
@@ -161,7 +176,25 @@ public class View {
     System.out.println("Please Enter your new email: ");
     String newEmail = scan.nextLine();
 
-    controller.update(newUsername, newPassword, newEmail);
+    newUsername = newUsername.equals("") ? loggedInUser.getUsername() : newUsername;
+    newPassword = newPassword.equals("") ? loggedInUser.getPassword() : newPassword;
+    newEmail = newEmail.equals("") ? loggedInUser.getEmail() : newEmail;
+
+    User userToBeUpdated = Util.shallowCloneUser(loggedInUser);
+    userToBeUpdated.setUsername(newUsername);
+    userToBeUpdated.setPassword(newEmail);
+    userToBeUpdated.setPassword(newEmail);
+
+    try {
+      User updatedUser = controller.update(userToBeUpdated);
+      if (updatedUser != null) {
+        loggedInUser = updatedUser;
+      }
+    } catch (SQLException e) {
+      System.out.println("server error");
+    } finally {
+      System.out.println("Update failed");
+    }
   }
 
 }
