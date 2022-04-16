@@ -74,8 +74,26 @@ public class UserDaoTest {
   }
 
   @Test
-  void getShouldReturnUserWithRoleWhenPassingId() {
-    // TODO
+  void getShouldReturnUserWithRoleWhenPassingId() throws SQLException {
+
+    User testUser = new User(1, "testUsername", "testPassword", "test@test.com", "testFirstname ", "testLastName",
+        Role.EMPLOYEE);
+
+    when(mockConnection.createStatement()).thenReturn(mockStatement);
+
+    when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+
+    when(mockResultSet.next()).thenReturn(true);
+
+    when(mockResultSet.getInt("ers_user_id")).thenReturn(testUser.getId());
+    when(mockResultSet.getString("ers_user_name")).thenReturn(testUser.getUsername());
+    when(mockResultSet.getString("ers_password")).thenReturn(testUser.getPassword());
+    when(mockResultSet.getString("ers_email")).thenReturn(testUser.getEmail());
+    when(mockResultSet.getString("ers_first_name")).thenReturn(testUser.getFirstname());
+    when(mockResultSet.getInt("user_role_id")).thenReturn(1);
+
+    assertEquals(Optional.class, userDao.get(1).getClass());
+    assertEquals(testUser, userDao.get(1).get());
   }
 
   @Nested

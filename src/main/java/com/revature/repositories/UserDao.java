@@ -121,8 +121,10 @@ public class UserDao implements Dao<User> {
         user.setRole(Role.FINANCE_MANAGER);
       }
       return Optional.of(user);
+    } else {
+      throw new SQLException();
     }
-    return Optional.empty();
+
   }
 
   @Override
