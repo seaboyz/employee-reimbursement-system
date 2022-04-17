@@ -192,7 +192,9 @@ public class View {
     // * recieve updated object <== controller
     User updatedUser = controller.updateUser(userId, newUsername, newPassword, newEmail);
     if (updatedUser != null) {
-      currentUser = updatedUser;
+      currentUser.setUsername(newUsername);
+      currentUser.setPassword(newPassword);
+      currentUser.setEmail(newEmail);
     } else {
       System.out.println("Update User info failed, try again.");
       updateInfoPage();
