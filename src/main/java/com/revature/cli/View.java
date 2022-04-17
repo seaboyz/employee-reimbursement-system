@@ -111,9 +111,10 @@ public class View {
     }
 
     try {
-      // * send email password firstname lastname to controller
-      User user = controller.register(email, password, firstname, lastname);
-      welcomePage(user);
+      // * send email password firstname lastname ==> controller
+      // * recieve registered user <== controller
+      User registeredUser = controller.register(email, password, firstname, lastname);
+      welcomePage(registeredUser);
       System.out.println("Please login ");
       loginPage();
     } catch (SQLException e) {
@@ -141,7 +142,8 @@ public class View {
     System.out.println("*********************************");
 
     try {
-      // * send user name password to controller
+      // * send user name password ==> controller
+      // * receive User object <== controller
       loggedInUser = controller.login(username, password);
     } catch (UserNotExistException e) {
       System.out.println("user not exist");
@@ -200,7 +202,8 @@ public class View {
     int userId = loggedInUser.getId();
 
     try {
-      // * send user update info to controller
+      // * send user update info ==> controller
+      // * recieve updated object <== controller
       User updatedUser = controller.update(userId, newUsername, newPassword, newEmail);
       if (updatedUser != null) {
         loggedInUser = updatedUser;
