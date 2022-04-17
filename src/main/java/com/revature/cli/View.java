@@ -13,7 +13,7 @@ public class View {
   private Scanner scan = new Scanner(System.in);
 
   private Controller controller;
-  private User loggedInUser;
+  private User currentUser;
 
   public View(Controller controller) {
     this.controller = controller;
@@ -28,7 +28,7 @@ public class View {
     boolean quit = false;
 
     while (!quit) {
-      if (loggedInUser == null) {
+      if (currentUser == null) {
         homePage();
       } else {
         mainMenuPage();
@@ -61,16 +61,16 @@ public class View {
 
   private void profilePage() {
     System.out.println("*********************************");
-    System.out.println("Username: " + loggedInUser.getUsername());
-    System.out.println("Password: " + loggedInUser.getPassword());
-    System.out.println("First Name : " + loggedInUser.getFirstname());
-    System.out.println("Last Name : " + loggedInUser.getLastname());
-    System.out.println("Email : " + loggedInUser.getEmail());
+    System.out.println("Username: " + currentUser.getUsername());
+    System.out.println("Password: " + currentUser.getPassword());
+    System.out.println("First Name : " + currentUser.getFirstname());
+    System.out.println("Last Name : " + currentUser.getLastname());
+    System.out.println("Email : " + currentUser.getEmail());
     System.out.println("*********************************");
   }
 
   private void logout() {
-    loggedInUser = null;
+    currentUser = null;
   }
 
   private void registerPage() {
@@ -144,7 +144,7 @@ public class View {
     try {
       // * send user name password ==> controller
       // * receive User object <== controller
-      loggedInUser = controller.login(username, password);
+      currentUser = controller.login(username, password);
     } catch (UserNotExistException e) {
       System.out.println("user not exist");
       loginPage();
@@ -196,17 +196,17 @@ public class View {
     System.out.println("Please Enter your new email: ");
     String newEmail = scan.nextLine();
 
-    newUsername = newUsername.equals("") ? loggedInUser.getUsername() : newUsername;
-    newPassword = newPassword.equals("") ? loggedInUser.getPassword() : newPassword;
-    newEmail = newEmail.equals("") ? loggedInUser.getEmail() : newEmail;
-    int userId = loggedInUser.getId();
+    newUsername = newUsername.equals("") ? currentUser.getUsername() : newUsername;
+    newPassword = newPassword.equals("") ? currentUser.getPassword() : newPassword;
+    newEmail = newEmail.equals("") ? currentUser.getEmail() : newEmail;
+    int userId = currentUser.getId();
 
     try {
       // * send user update info ==> controller
       // * recieve updated object <== controller
       User updatedUser = controller.update(userId, newUsername, newPassword, newEmail);
       if (updatedUser != null) {
-        loggedInUser = updatedUser;
+        currentUser = updatedUser;
       }
     } catch (SQLException e) {
       e.printStackTrace();
