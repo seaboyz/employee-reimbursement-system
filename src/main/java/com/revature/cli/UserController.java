@@ -8,12 +8,12 @@ import com.revature.models.User;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
 
-public class Controller {
+public class UserController {
 
   private AuthService authService;
   private UserService userService;
 
-  public Controller(AuthService authService, UserService userService) {
+  public UserController(AuthService authService, UserService userService) {
     this.authService = authService;
     this.userService = userService;
   }

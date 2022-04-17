@@ -12,13 +12,22 @@ public class View {
 
   private Scanner scan = new Scanner(System.in);
 
-  private Controller controller;
+  private UserController controller;
   private User currentUser;
 
-  public View(Controller controller) {
+  public View(UserController controller) {
     this.controller = controller;
   }
 
+  // * These are all the listeners listen to keyboard
+  /*
+   * key 1: Login Page
+   * key 2: Register Page
+   * key 3: Logout -> currentUser = null
+   * key 4: Update Profile Page
+   * key 5: Look Current User Profile
+   * key q: Quit -> close app
+   */
   public void init() {
     System.out.println("*********************************");
     System.out.println("*           Welcome to          *");

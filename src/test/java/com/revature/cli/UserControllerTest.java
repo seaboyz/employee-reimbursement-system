@@ -24,9 +24,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ControllerTest {
+public class UserControllerTest {
   User loggedInUser;
-  Controller controller;
+  UserController controller;
 
   @Mock
   AuthService mockAuthService;
@@ -36,7 +36,7 @@ public class ControllerTest {
 
   @BeforeEach
   void init() {
-    controller = new Controller(mockAuthService, mockUserService);
+    controller = new UserController(mockAuthService, mockUserService);
   }
 
   @Test

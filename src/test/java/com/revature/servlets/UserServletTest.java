@@ -1,4 +1,4 @@
-package com.revature.controller;
+package com.revature.servlets;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+public class UserServletTest {
   String NOT_EXIST_USERNAME = "NOT_EXIST_USERNAME";
   String NOT_EXIST_PASSWORD = "NOT_EXIST_PASSWORD";
   String EXIST_USERNAME = "EXIST_USERNAME";
@@ -51,7 +51,7 @@ public class UserControllerTest {
 
     when(mockAuthService.login(NOT_EXIST_USERNAME, NOT_EXIST_PASSWORD)).thenThrow(new UserNotExistException());
 
-    UserController userController = new UserController(mockAuthService);
+    UserServlet userController = new UserServlet(mockAuthService);
     userController.doPost(mockRequest, mockResponse);
 
     verify(mockResponse).setStatus(404);
@@ -71,7 +71,7 @@ public class UserControllerTest {
 
     when(mockAuthService.login(EXIST_USERNAME, WRONG_PASSWORD)).thenThrow(new UserNamePasswordNotMatchException());
 
-    UserController userController = new UserController(mockAuthService);
+    UserServlet userController = new UserServlet(mockAuthService);
     userController.doPost(mockRequest, mockResponse);
 
     verify(mockResponse).setStatus(401);
@@ -93,7 +93,7 @@ public class UserControllerTest {
 
     when(mockAuthService.login(user.getUsername(), user.getPassword())).thenReturn(user);
 
-    UserController userController = new UserController(mockAuthService);
+    UserServlet userController = new UserServlet(mockAuthService);
     userController.doPost(mockRequest, mockResponse);
 
     verify(mockResponse).setStatus(200);

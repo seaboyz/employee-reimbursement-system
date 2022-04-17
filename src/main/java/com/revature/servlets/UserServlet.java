@@ -1,4 +1,4 @@
-package com.revature.controller;
+package com.revature.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,11 +16,11 @@ import com.revature.models.User;
 import com.revature.services.AuthService;
 
 @WebServlet("/user")
-public class UserController extends HttpServlet {
+public class UserServlet extends HttpServlet {
   private Gson gson;
   private AuthService authService;
 
-  public UserController(AuthService authService) {
+  public UserServlet(AuthService authService) {
     this.authService = authService;
     gson = new Gson();
   }
