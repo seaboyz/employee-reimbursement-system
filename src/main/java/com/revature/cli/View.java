@@ -1,21 +1,17 @@
 package com.revature.cli;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.revature.exceptions.UserNamePasswordNotMatchException;
-import com.revature.exceptions.UserNotExistException;
-import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
 
 public class View {
 
   private Scanner scan = new Scanner(System.in);
 
-  private UserController controller;
+  private Controller controller;
   private User currentUser;
 
-  public View(UserController controller) {
+  public View(Controller controller) {
     this.controller = controller;
   }
 
@@ -118,21 +114,14 @@ public class View {
       confirmPassword = scan.nextLine();
       System.out.println("Your password is: " + confirmPassword);
     }
-
-    try {
-      // * send email password firstname lastname ==> controller
-      // * recieve registered user <== controller
-      User registeredUser = controller.register(email, password, firstname, lastname);
+    // * send email password firstname lastname ==> controller
+    // * recieve registered user <== controller
+    User registeredUser = controller.register(email, password, firstname, lastname);
+    if (registeredUser != null) {
       welcomePage(registeredUser);
       System.out.println("Please login ");
       loginPage();
-    } catch (SQLException e) {
-      System.out.println("Something wrong with the database");
-      System.out.println("Try again Later");
-      e.printStackTrace();
-      registerPage();
-    } catch (UsernameNotUniqueException e) {
-      System.out.println("Your email is already in use, try to use another one");
+    } else {
       registerPage();
     }
 
@@ -150,20 +139,9 @@ public class View {
     System.out.println("*           Login...            *");
     System.out.println("*********************************");
 
-    try {
-      // * send user name password ==> controller
-      // * receive User object <== controller
-      currentUser = controller.login(username, password);
-    } catch (UserNotExistException e) {
-      System.out.println("user not exist");
-      loginPage();
-    } catch (UserNamePasswordNotMatchException e) {
-      System.out.println("Wrong password");
-      loginPage();
-    } catch (SQLException e) {
-      System.out.println("server error");
-      loginPage();
-    }
+    // * send user name password ==> controller
+    // * receive User object <== controller
+    currentUser = controller.login(username, password);
 
   }
 
@@ -210,19 +188,16 @@ public class View {
     newEmail = newEmail.equals("") ? currentUser.getEmail() : newEmail;
     int userId = currentUser.getId();
 
-    try {
-      // * send user update info ==> controller
-      // * recieve updated object <== controller
-      User updatedUser = controller.update(userId, newUsername, newPassword, newEmail);
-      if (updatedUser != null) {
-        currentUser = updatedUser;
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      System.out.println("server error");
-    } finally {
-      System.out.println("Update failed");
+    // * send user update info ==> controller
+    // * recieve updated object <== controller
+    User updatedUser = controller.updateUser(userId, newUsername, newPassword, newEmail);
+    if (updatedUser != null) {
+      currentUser = updatedUser;
+    } else {
+      System.out.println("Update User info failed, try again.");
+      updateInfoPage();
     }
+
   }
 
 }

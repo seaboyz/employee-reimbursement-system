@@ -12,8 +12,6 @@ import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.models.Role;
 import com.revature.models.User;
-import com.revature.services.AuthService;
-import com.revature.services.UserService;
 import com.revature.util.Util;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,19 +22,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+public class ControllerTest {
   User loggedInUser;
-  UserController controller;
+  Controller controller;
 
   @Mock
-  AuthService mockAuthService;
-
-  @Mock
-  UserService mockUserService;
+  UserModel mockUserModel;
 
   @BeforeEach
   void init() {
-    controller = new UserController(mockAuthService, mockUserService);
+    controller = new Controller(mockUserModel);
   }
 
   @Test
@@ -49,10 +44,10 @@ public class UserControllerTest {
     userTobeUpdated.setPassword(testUser.getPassword());
     userTobeUpdated.setEmail(testUser.getEmail());
 
-    when(mockUserService.updateUser(userTobeUpdated)).thenReturn(Util.shallowCloneUser(testUser));
+    when(mockUserModel.update(userTobeUpdated)).thenReturn(Util.shallowCloneUser(testUser));
 
     assertNotSame(
-        controller.update(
+        controller.updateUser(
             testUser.getId(),
             testUser.getUsername(),
             testUser.getPassword(),
@@ -60,7 +55,7 @@ public class UserControllerTest {
         testUser);
 
     assertEquals(
-        controller.update(
+        controller.updateUser(
             testUser.getId(),
             testUser.getUsername(),
             testUser.getPassword(),
@@ -77,7 +72,7 @@ public class UserControllerTest {
     registeredUser.setId(1);
     registeredUser.setRole(Role.EMPLOYEE);
 
-    when(mockAuthService.register(testUser)).thenReturn(registeredUser);
+    when(mockUserModel.add(testUser)).thenReturn(registeredUser);
 
     assertEquals(
         controller.register(
@@ -101,7 +96,7 @@ public class UserControllerTest {
     @Test
     void loginShouldReturnAUserRegisterdUser() throws SQLException {
 
-      when(mockAuthService.login(testUser.getUsername(), testUser.getPassword()))
+      when(mockUserModel.auth(testUser.getUsername(), testUser.getPassword()))
           .thenReturn(testUser);
 
       assertEquals(
@@ -112,7 +107,7 @@ public class UserControllerTest {
     @Test
     void shouldThrowUserNotExitException() throws SQLException {
 
-      when(mockAuthService.login(anyString(), anyString())).thenThrow(UserNotExistException.class);
+      when(mockUserModel.auth(anyString(), anyString())).thenThrow(UserNotExistException.class);
 
       assertThrows(
           UserNotExistException.class,
@@ -122,7 +117,7 @@ public class UserControllerTest {
     @Test
     void shouldThrowUserNamePasswordNotMatchException() throws SQLException {
 
-      when(mockAuthService.login(testUser.getUsername(), testUser.getPassword()))
+      when(mockUserModel.auth(testUser.getUsername(), testUser.getPassword()))
           .thenThrow(UserNamePasswordNotMatchException.class);
 
       assertThrows(UserNamePasswordNotMatchException.class,
@@ -146,7 +141,7 @@ public class UserControllerTest {
     @Test
     void ShouldReturnAUserWithRoleNOT_CURRENT_EMPLOYEE() throws SQLException {
 
-      when(mockUserService.removeUser(currentEmployee)).thenReturn(notCurrentEmployee);
+      when(mockUserModel.remove(currentEmployee)).thenReturn(notCurrentEmployee);
 
       assertEquals(Role.NOT_CURRENT_EMPLOYEE, controller.removeUser(currentEmployee).getRole());
     }

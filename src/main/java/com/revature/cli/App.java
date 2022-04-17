@@ -9,7 +9,7 @@ import com.revature.services.UserService;
 
 public class App {
 
-  private static UserController controller;
+  private static Controller controller;
 
   public static void main(String[] args) {
     init();
@@ -23,7 +23,8 @@ public class App {
     UserDao userDao = new UserDao(connection);
     UserService userService = new UserService(userDao);
     AuthService authService = new AuthService(userService);
-    controller = new UserController(authService, userService);
+    UserModel userModel = new UserModel(authService, userService);
+    controller = new Controller(userModel);
   }
 
 }
