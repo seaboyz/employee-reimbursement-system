@@ -10,7 +10,8 @@ import com.revature.models.User;
 import com.revature.util.Util;
 
 public class View {
-  private final Scanner scan = ConsoleScanner.getInstance();
+
+  private Scanner scan = new Scanner(System.in);
 
   private Controller controller;
   private User loggedInUser;
