@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import com.revature.models.Role;
 import com.revature.models.User;
-import com.revature.util.Util;
 
 public class UserDao implements Dao<User> {
   private final Connection connection;
@@ -145,11 +144,14 @@ public class UserDao implements Dao<User> {
     preparedStatement.setInt(4, user.getId());
 
     if (preparedStatement.executeUpdate() == 1) {
-      return Util.shallowCloneUser(user);
+      Optional<User> updatedUser = get(user.getUsername());
+      if (updatedUser.isPresent()) {
+        return updatedUser.get();
+      }
     } else {
       System.out.println("update failed");
-      return user;
     }
+    return null;
   }
 
   @Override

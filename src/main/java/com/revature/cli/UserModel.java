@@ -2,6 +2,7 @@ package com.revature.cli;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
@@ -51,10 +52,20 @@ public class UserModel {
   }
 
   public User getUserByUsername(String username) {
+    try {
+      Optional<User> user = userService.getByUsername(username);
+      if (user.isPresent()) {
+        return user.get();
+      }
+      return null;
+    } catch (SQLException e) {
+      System.out.println("status 500");
+      System.out.println("Server Error");
+    }
     return null;
   }
 
-  public List<User> getUsers() {
+  public List<User> getAllUsers() {
     return null;
   }
 

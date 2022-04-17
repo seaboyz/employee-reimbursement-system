@@ -6,11 +6,12 @@ package com.revature.models;
  *
  * Example fields:
  * <ul>
- * <li>First Name</li>
- * <li>Last Name</li>
- * <li>Email</li>
- * <li>Phone Number</li>
- * <li>Address</li>
+ * <li>id</li>
+ * <li>username</li>
+ * <li>password</li>
+ * <li>email</li>
+ * <li>firstname</li>
+ * <li>lastname</li>
  * </ul>
  *
  */
@@ -22,8 +23,8 @@ public class Employee extends User {
             String password,
             String email,
             String firstname,
-            String lastname) {
-
+            String lastname,
+            Role role) {
         super(id, username, password, email, firstname, lastname, Role.EMPLOYEE);
     }
 
