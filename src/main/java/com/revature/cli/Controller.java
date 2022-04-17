@@ -18,7 +18,12 @@ public class Controller {
     this.userService = userService;
   }
 
-  public User update(User userTobeUpdated) throws SQLException {
+  public User update(int userId, String username, String password, String email) throws SQLException {
+    User userTobeUpdated = new User();
+    userTobeUpdated.setId(userId);
+    userTobeUpdated.setUsername(username);
+    userTobeUpdated.setPassword(password);
+    userTobeUpdated.setEmail(email);
     return userService.updateUser(userTobeUpdated);
 
   }

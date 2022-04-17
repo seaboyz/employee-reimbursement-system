@@ -7,7 +7,6 @@ import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
-import com.revature.util.Util;
 
 public class View {
 
@@ -112,6 +111,7 @@ public class View {
     }
 
     try {
+      // * send email password firstname lastname to controller
       User user = controller.register(email, password, firstname, lastname);
       welcomePage(user);
       System.out.println("Please login ");
@@ -141,6 +141,7 @@ public class View {
     System.out.println("*********************************");
 
     try {
+      // * send user name password to controller
       loggedInUser = controller.login(username, password);
     } catch (UserNotExistException e) {
       System.out.println("user not exist");
@@ -185,6 +186,7 @@ public class View {
   }
 
   private void updateInfoPage() {
+    // * can only update username password and email
     System.out.println("Please Enter new username:");
     String newUsername = scan.nextLine();
     System.out.println("Please Enter your new password: ");
@@ -195,14 +197,11 @@ public class View {
     newUsername = newUsername.equals("") ? loggedInUser.getUsername() : newUsername;
     newPassword = newPassword.equals("") ? loggedInUser.getPassword() : newPassword;
     newEmail = newEmail.equals("") ? loggedInUser.getEmail() : newEmail;
-
-    User userToBeUpdated = Util.shallowCloneUser(loggedInUser);
-    userToBeUpdated.setUsername(newUsername);
-    userToBeUpdated.setEmail(newEmail);
-    userToBeUpdated.setPassword(newPassword);
+    int userId = loggedInUser.getId();
 
     try {
-      User updatedUser = controller.update(userToBeUpdated);
+      // * send user update info to controller
+      User updatedUser = controller.update(userId, newUsername, newPassword, newEmail);
       if (updatedUser != null) {
         loggedInUser = updatedUser;
       }

@@ -43,12 +43,29 @@ public class ControllerTest {
   void updateShouldUpdateUser() throws SQLException {
     User testUser = new User(1, "test", "123456", "test@test.com", "john", "doe", Role.EMPLOYEE);
 
-    when(mockUserService.updateUser(testUser)).thenReturn(Util.shallowCloneUser(testUser));
+    User userTobeUpdated = new User();
+    userTobeUpdated.setId(testUser.getId());
+    userTobeUpdated.setUsername(testUser.getUsername());
+    userTobeUpdated.setPassword(testUser.getPassword());
+    userTobeUpdated.setEmail(testUser.getEmail());
 
-    User updatedUser = controller.update(testUser);
+    when(mockUserService.updateUser(userTobeUpdated)).thenReturn(Util.shallowCloneUser(testUser));
 
-    assertNotSame(testUser, updatedUser);
-    assertEquals(testUser, updatedUser);
+    assertNotSame(
+        controller.update(
+            testUser.getId(),
+            testUser.getUsername(),
+            testUser.getPassword(),
+            testUser.getEmail()),
+        testUser);
+
+    assertEquals(
+        controller.update(
+            testUser.getId(),
+            testUser.getUsername(),
+            testUser.getPassword(),
+            testUser.getEmail()),
+        testUser);
 
   }
 
