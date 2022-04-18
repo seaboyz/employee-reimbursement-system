@@ -15,7 +15,7 @@ import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 
-@WebServlet("/user")
+@WebServlet(urlPatterns = "/user",name = "userServlet")
 public class UserServlet extends HttpServlet {
   private Gson gson;
   private AuthService authService;
