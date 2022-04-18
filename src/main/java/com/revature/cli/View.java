@@ -190,6 +190,7 @@ public class View {
 
     // * send user update info ==> controller
     // * recieve updated object <== controller
+    // TODO should send the object or serialied object to backend.
     User updatedUser = controller.updateUser(userId, newUsername, newPassword, newEmail);
     if (updatedUser != null) {
       currentUser.setUsername(newUsername);
