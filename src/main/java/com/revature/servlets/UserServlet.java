@@ -19,17 +19,18 @@ public class UserServlet extends HttpServlet {
   // gson = new Gson();
   // }
 
+  // for testing GET @route /api/users
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setContentType("text/html");
     PrintWriter out = response.getWriter();
-    out.print("<h2>Hello from the UserServlet</h2>");
+    out.println("<h2>Hello from the UserServlet</h2>");
 
-    // String username = request.getParameter("username");
-    // String password = request.getParameter("password");
-    // out.print("<h2>" + username + "</h2>");
-    // out.print("<h2>" + password + "</h2>");
-    // out.flush();
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+    out.println("<h2>" + username + "</h2>");
+    out.println("<h2>" + password + "</h2>");
+    out.flush();
   }
 
   // Login with username and password
