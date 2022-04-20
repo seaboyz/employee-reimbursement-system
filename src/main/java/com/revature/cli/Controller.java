@@ -1,5 +1,6 @@
 package com.revature.cli;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -84,12 +85,10 @@ public class Controller {
 
       return employee;
 
-    } catch (Exception e) {
-      // TODO: handle exception
+    } catch (IOException e) {
       e.printStackTrace();
+      return null;
     }
-
-    return null;
 
   }
 
