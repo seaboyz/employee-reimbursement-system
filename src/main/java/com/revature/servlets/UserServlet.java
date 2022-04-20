@@ -39,11 +39,12 @@ public class UserServlet extends HttpServlet {
   // @route POST /api/users/login
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String body = Util.getBody(request);
+    // String body = Util.getBody(request);
+    String parameterString = Util.getParamsFromPost(request);
 
     PrintWriter out = response.getWriter();
 
-    out.print(body);
+    out.print(parameterString);
   }
 
   // @Override
