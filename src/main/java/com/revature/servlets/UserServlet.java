@@ -26,13 +26,21 @@ public class UserServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setContentType("text/html");
     PrintWriter out = response.getWriter();
-    out.println("<h2>Hello from the UserServlet</h2>");
+    // out.println("<h2>Hello from the UserServlet</h2>");
 
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
+    // String username = request.getParameter("username");
+    // String password = request.getParameter("password");
+
+    // recieving data from header
+    String username = request.getHeader("username");
+    String password = request.getHeader("password");
+
     out.println("<h2>" + username + "</h2>");
     out.println("<h2>" + password + "</h2>");
     out.flush();
+
+    // convert string to json
+
   }
 
   // Login with username and password
