@@ -1,20 +1,5 @@
 package com.revature.cli;
 
-/**
- * This concrete User class can include additional fields that can be used for
- * extended functionality of the ERS application.
- *
- * Example fields:
- * <ul>
- * <li>id</li>
- * <li>username</li>
- * <li>password</li>
- * <li>email</li>
- * <li>firstname</li>
- * <li>lastname</li>
- * </ul>
- *
- */
 public class Employee {
     private int id;
     private String username;

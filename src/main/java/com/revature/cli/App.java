@@ -24,7 +24,8 @@ public class App {
     UserService userService = new UserService(userDao);
     AuthService authService = new AuthService(userService);
     UserModel userModel = new UserModel(authService, userService);
-    controller = new Controller(userModel);
+    Mapper mapper = new Mapper();
+    controller = new Controller(userModel, mapper);
   }
 
 }

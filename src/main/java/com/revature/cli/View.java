@@ -2,14 +2,12 @@ package com.revature.cli;
 
 import java.util.Scanner;
 
-import com.revature.models.User;
-
 public class View {
 
   private Scanner scan = new Scanner(System.in);
 
   private Controller controller;
-  private User currentUser;
+  private Employee currentUser;
 
   public View(Controller controller) {
     this.controller = controller;
@@ -116,7 +114,7 @@ public class View {
     }
     // * send email password firstname lastname ==> controller
     // * recieve registered user <== controller
-    User registeredUser = controller.register(email, password, firstname, lastname);
+    Employee registeredUser = controller.register(email, password, firstname, lastname);
     if (registeredUser != null) {
       welcomePage(registeredUser);
       System.out.println("Please login ");
@@ -160,7 +158,7 @@ public class View {
     System.out.println("*********************************");
   }
 
-  private void welcomePage(User user) {
+  private void welcomePage(Employee user) {
     System.out.println("Welcome " + user.getFirstname() + " " + user.getLastname());
   }
 
@@ -191,11 +189,12 @@ public class View {
     // * send user update info ==> controller
     // * recieve updated object <== controller
     // TODO should send the object or serialied object to backend.
-    User updatedUser = controller.updateUser(userId, newUsername, newPassword, newEmail);
+    Employee updatedUser = controller.updateUser(userId, newUsername, newPassword, newEmail);
     if (updatedUser != null) {
-      currentUser.setUsername(newUsername);
-      currentUser.setPassword(newPassword);
-      currentUser.setEmail(newEmail);
+      // currentUser.setUsername(newUsername);
+      // currentUser.setPassword(newPassword);
+      // currentUser.setEmail(newEmail);
+      currentUser = updatedUser;
     } else {
       System.out.println("Update User info failed, try again.");
       updateInfoPage();
