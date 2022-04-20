@@ -2,44 +2,75 @@ package com.revature.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.revature.database.PostgreSQLDatabase;
+import com.revature.models.User;
+import com.revature.repositories.UserDao;
+import com.revature.services.AuthService;
+import com.revature.services.UserService;
 import com.revature.util.Util;
 
 //// @WebServlet(urlPatterns = "/users")
 public class UserServlet extends HttpServlet {
-  // private Gson gson;
-  // private AuthService authService;
+  private Gson gson;
+  private AuthService authService;
+  private UserService userService;
+  private UserDao userDao;
+  private Connection connection;
 
-  // @Override
-  // public void init(ServletConfig config) throws ServletException {
-  // this.authService = new authService();
-  // gson = new Gson();
-  // }
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    connection = PostgreSQLDatabase.getConnection();
+    userDao = new UserDao(connection);
+    userService = new UserService(userDao);
+    this.authService = new AuthService(userService);
+    gson = new Gson();
+  }
 
   // for testing GET @route /api/users
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    response.setContentType("text/html");
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
     PrintWriter out = response.getWriter();
-    // out.println("<h2>Hello from the UserServlet</h2>");
 
-    // String username = request.getParameter("username");
-    // String password = request.getParameter("password");
+    // test commection to doGet
+    //// out.println("<h2>Hello from the UserServlet</h2>");
+
+    // get data from params
+    //// String username = request.getParameter("username");
+    //// String password = request.getParameter("password");
 
     // recieving data from header
     String username = request.getHeader("username");
     String password = request.getHeader("password");
 
-    out.println("<h2>" + username + "</h2>");
-    out.println("<h2>" + password + "</h2>");
-    out.flush();
+    // testing sending data back
+    //// out.println("<h2>" + username + "</h2>");
+    //// out.println("<h2>" + password + "</h2>");
 
-    // convert string to json
+    // user userService login return User object
+    try {
+      User loggedInUser = authService.login(username, password);
+      // convert User object to json
+      String userJson = gson.toJson(loggedInUser);
+      out.print(userJson);
+    } catch (SQLException e) {
+      response.setStatus(500);
+      String errorJson = gson.toJson(e);
+      out.print(errorJson);
+    }
+
+    out.flush();
 
   }
 
