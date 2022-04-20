@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.revature.util.Util;
+
 //// @WebServlet(urlPatterns = "/users")
 public class UserServlet extends HttpServlet {
   // private Gson gson;
@@ -35,15 +37,14 @@ public class UserServlet extends HttpServlet {
 
   // Login with username and password
   // @route POST /api/users/login
-  // @Override
-  // protected void doPost(HttpServletRequest request, HttpServletResponse
-  // response) throws IOException {
-  // String body = Util.getBody(request);
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String body = Util.getBody(request);
 
-  // PrintWriter out = response.getWriter();
+    PrintWriter out = response.getWriter();
 
-  // out.print(body);
-  // }
+    out.print(body);
+  }
 
   // @Override
   // protected void doPost(HttpServletRequest request, HttpServletResponse
@@ -76,8 +77,6 @@ public class UserServlet extends HttpServlet {
   // out.print("Something wrong with database");
   // } finally {
   // out.flush();
-  // }
-
   // }
 
 }
