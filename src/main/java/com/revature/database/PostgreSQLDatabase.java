@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.servlet.UnavailableException;
+
 public class PostgreSQLDatabase {
   private static Connection conn;
 
@@ -21,6 +23,9 @@ public class PostgreSQLDatabase {
     } catch (SQLException e) {
       System.out.println("Fail connect to database");
       e.printStackTrace();
+    } catch (UnavailableException e) {
+      System.out.println("Server failer");
+      e.printStackTrace();
     }
     return conn;
   }
@@ -29,7 +34,24 @@ public class PostgreSQLDatabase {
     conn.close();
   }
 
-  private static void connect() throws SQLException {
+  private static void connect() throws SQLException, UnavailableException {
+    // preload dbDriver
+    String dbDriver = "org.postgresql.Driver";
+    try {
+      Class.forName(dbDriver).newInstance();
+    } catch (ClassNotFoundException e) {
+      throw new UnavailableException(
+          "UserServlet.init(  ) ClassNotFoundException: " +
+              e.getMessage());
+    } catch (IllegalAccessException e) {
+      throw new UnavailableException(
+          "UserServlet.init(  ) IllegalAccessException: " +
+              e.getMessage());
+    } catch (InstantiationException e) {
+      throw new UnavailableException(
+          "UserServlet.init(  ) InstantiationException: " +
+              e.getMessage());
+    }
     // get username password postgreSql string from application.properties file
     Properties props = new Properties();
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
