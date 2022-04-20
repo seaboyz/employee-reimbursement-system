@@ -48,4 +48,17 @@ public class Employee {
         return this.role;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                " id='" + getId() + "'" +
+                ", username='" + getUsername() + "'" +
+                ", password='" + getPassword() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", firstname='" + getFirstname() + "'" +
+                ", lastname='" + getLastname() + "'" +
+                ", role='" + getRole() + "'" +
+                "}";
+    }
+
 }
