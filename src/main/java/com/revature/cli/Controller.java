@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import com.google.gson.Gson;
 import com.revature.models.User;
@@ -28,24 +30,23 @@ public class Controller {
   public Employee login(String username, String password) {
     try {
       // Create a neat value object to hold the URL
-      URL url = new URL("http://localhost:8080/api/users");
+      URL url = new URL("http://localhost:8080/api/login");
+
+      // encode username and password
+      String encoding = Base64.getEncoder().encodeToString(
+          (username + ":" + password).getBytes(StandardCharsets.UTF_8));
 
       // Open a connection(?) on the URL(??) and cast the response(???)
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
       // set request type
-      connection.setRequestMethod("GET");
+      connection.setRequestMethod("POST");
+      connection.setDoOutput(true);
 
-      // set request header
-      connection.setRequestProperty("username", username);
-      connection.setRequestProperty("password", password);
-
-      //// String basicAuth = Base64.getEncoder()
-      //// .encodeToString((username + ":" +
-      //// password).getBytes(StandardCharsets.UTF_8));
-
-      //// Now it's "open", we can set the request method, headers etc.
-      //// connection.setRequestProperty("Authorization", "Basic " + basicAuth);
+      // Now it's "open", we can set the request method, headers etc.
+      // set auth header
+      connection.setRequestProperty("Authorization", "Basic " + encoding);
+      ;
 
       // This line makes the request
       InputStream responseStream = connection.getInputStream();
