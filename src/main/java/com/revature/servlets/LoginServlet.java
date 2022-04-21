@@ -2,8 +2,10 @@ package com.revature.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -17,9 +19,11 @@ import com.revature.models.User;
 import com.revature.repositories.UserDao;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
-import com.revature.util.Util;
 
-public class UserServlet extends HttpServlet {
+// POST @route /api/login
+// base authentication through Auth Basic
+// credentials are encoded with Basic64 in the header
+public class LoginServlet extends HttpServlet {
   private Gson gson;
   private AuthService authService;
   private UserService userService;
@@ -41,15 +45,18 @@ public class UserServlet extends HttpServlet {
       System.out.println("Server error");
       e.printStackTrace();
     }
-
   }
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
     // recieving data from header
-    String username = req.getHeader("username");
-    String password = req.getHeader("password");
+    String auth = req.getHeader("Authorization");
+    String base64Credentials = auth.substring("Basic".length()).trim();
+    byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
+    String credentials = new String(credentialDecoded, StandardCharsets.UTF_8);
+    String username = credentials.split(":")[0];
+    String password = credentials.split(":")[1];
 
     // setup response
     res.setContentType("application/json");
@@ -69,53 +76,7 @@ public class UserServlet extends HttpServlet {
     }
 
     out.flush();
-
   }
-
-  // Login with username and password
-  // @route POST /api/users/login
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // String body = Util.getBody(request);
-    String parameterString = Util.getParamsFromPost(request);
-
-    PrintWriter out = response.getWriter();
-
-    out.print(parameterString);
-  }
-
-  // @Override
-  // protected void doPost(HttpServletRequest request, HttpServletResponse
-  // response) throws IOException {
-  // String username = request.getParameter("username");
-  // String password = request.getParameter("password");
-  // PrintWriter out = response.getWriter();
-
-  // // use AuthService to do user authentication
-  // try {
-  // User user = authService.login(username, password);
-  // if (user != null) {
-  // String userJsonString = gson.toJson(user);
-  // response.setStatus(200);
-  // response.setContentType("application/json");
-  // response.setCharacterEncoding("UTF-8");
-  // out.print(userJsonString);
-  // }
-  // } catch (UserNamePasswordNotMatchException e) {
-  // response.setStatus(401);
-  // out.print("Username and Password not match");
-
-  // } catch (UserNotExistException e) {
-  // response.setStatus(404);
-  // out.print("Username not found, please go to registration");
-
-  // } catch (SQLException e) {
-  // e.printStackTrace();
-  // response.setStatus(500);
-  // out.print("Something wrong with database");
-  // } finally {
-  // out.flush();
-  // }
 
   @Override
   public void destroy() {

@@ -13,6 +13,12 @@ public class App {
 
   private static void init() {
     controller = new Controller();
+    try {
+      controller = new Controller();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
   }
 
 }

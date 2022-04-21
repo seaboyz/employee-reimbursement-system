@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.revature.models.User;
 
 public class Controller {
-  UserModel userModel;
 
   public Employee updateUser(int userId, String username, String password, String email) {
 
@@ -27,11 +26,6 @@ public class Controller {
   }
 
   public Employee login(String username, String password) {
-    //// User authenticatedUser = userModel.auth(username, password);
-    //// if (authenticatedUser != null) {
-    //// return mapper.userToEmployee(authenticatedUser);
-    //// }
-    // // return null;
     try {
       // Create a neat value object to hold the URL
       URL url = new URL("http://localhost:8080/api/users");
