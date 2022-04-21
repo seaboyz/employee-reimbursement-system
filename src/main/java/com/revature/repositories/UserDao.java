@@ -60,6 +60,7 @@ public class UserDao implements Dao<User> {
     if (keys.next()) {
       int id = keys.getInt(1);
       user.setId(id);
+      user.setRole(Role.EMPLOYEE);
       return user;
     } else {
       throw new SQLException();
