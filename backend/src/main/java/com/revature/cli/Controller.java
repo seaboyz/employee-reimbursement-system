@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.revature.models.User;
 
 public class Controller {
@@ -42,9 +43,15 @@ public class Controller {
       // connection output stream:
       connection.setDoOutput(true);
 
-      User user = new User(email, password, firstname, lastname);
+      // build a json object
+      JsonObject jsonObject = new JsonObject();
+      jsonObject.addProperty("email", email);
+      jsonObject.addProperty("password", password);
+      jsonObject.addProperty("firstname", firstname);
+      jsonObject.addProperty("lastname", lastname);
 
-      String userJsonString = new Gson().toJson(user);
+      // convert jsonObject to jsonString
+      String userJsonString = jsonObject.toString();
 
       // Create the Request Body
       OutputStream outputStream = connection.getOutputStream();
