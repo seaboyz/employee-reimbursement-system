@@ -3,6 +3,7 @@ package com.revature.cli;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +25,45 @@ public class Controller {
       String firstname,
       String lastname) {
 
-    return null;
+    try {
+      // Making a JSON POST Request With HttpURLConnection
+      // https://www.baeldung.com/httpurlconnection-post
+
+      URL url = new URL("http://localhost:8080/api/register");
+
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+      connection.setRequestMethod("POST");
+
+      connection.setRequestProperty("Accept", "application/json");
+
+      // To send request content, let's enable the URLConnection object's doOutput
+      // property to true.Otherwise, we won't be able to write content to the
+      // connection output stream:
+      connection.setDoOutput(true);
+
+      User user = new User(email, password, firstname, lastname);
+
+      String userJsonString = new Gson().toJson(user);
+
+      // Create the Request Body
+      OutputStream outputStream = connection.getOutputStream();
+      byte[] input = userJsonString.getBytes(StandardCharsets.UTF_8);
+      outputStream.write(input, 0, input.length);
+
+      // get response
+      InputStream responseStream = connection.getInputStream();
+      // convert json stream to Emplyee object
+      InputStreamReader inputStreamReader = new InputStreamReader(responseStream);
+      Employee employee = new Gson().fromJson(inputStreamReader, Employee.class);
+
+      return employee;
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+
   }
 
   public Employee login(String username, String password) {

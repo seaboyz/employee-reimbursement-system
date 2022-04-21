@@ -153,7 +153,7 @@ public class View {
 
   private void goodBuyPage() {
     System.out.println("*********************************");
-    System.out.println("*       Thanks for using ERS     *");
+    System.out.println("*       Thanks for using ERS    *");
     System.out.println("*             Good Bye          *");
     System.out.println("*********************************");
   }
@@ -167,7 +167,7 @@ public class View {
     System.out.println("*          User Menu            *");
     System.out.println("*       press 3 to logout       *");
     System.out.println("*   press 4 to update your info *");
-    System.out.println("*   press 5 to view your info *");
+    System.out.println("*   press 5 to view your info   *");
     System.out.println("*       press q to quit         *");
     System.out.println("********************************");
   }
