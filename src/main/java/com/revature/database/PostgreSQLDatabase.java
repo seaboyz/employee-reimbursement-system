@@ -15,17 +15,10 @@ public class PostgreSQLDatabase {
   private PostgreSQLDatabase() {
   };
 
-  public static Connection getConnection() {
-    try {
-      if (conn == null) {
-        connect();
-      }
-    } catch (SQLException e) {
-      System.out.println("Fail connect to database");
-      e.printStackTrace();
-    } catch (UnavailableException e) {
-      System.out.println("Server failer");
-      e.printStackTrace();
+  public static Connection getConnection() throws SQLException, UnavailableException {
+
+    if (conn == null) {
+      connect();
     }
     return conn;
   }
@@ -62,7 +55,7 @@ public class PostgreSQLDatabase {
     } catch (IOException e) {
       System.out.println("Fail loading props from application.properites file");
       e.printStackTrace();
-      return;
+      throw new UnavailableException(e.getMessage());
     }
 
     // Build connection string

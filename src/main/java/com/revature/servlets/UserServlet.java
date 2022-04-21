@@ -5,8 +5,8 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +19,6 @@ import com.revature.services.AuthService;
 import com.revature.services.UserService;
 import com.revature.util.Util;
 
-//// @WebServlet(urlPatterns = "/users")
 public class UserServlet extends HttpServlet {
   private Gson gson;
   private AuthService authService;
@@ -28,35 +27,34 @@ public class UserServlet extends HttpServlet {
   private Connection connection;
 
   @Override
-  public void init(ServletConfig config) throws ServletException {
-    connection = PostgreSQLDatabase.getConnection();
-    userDao = new UserDao(connection);
-    userService = new UserService(userDao);
-    this.authService = new AuthService(userService);
-    gson = new Gson();
+  public void init() {
+    try {
+      connection = PostgreSQLDatabase.getConnection();
+      userDao = new UserDao(connection);
+      userService = new UserService(userDao);
+      this.authService = new AuthService(userService);
+      gson = new Gson();
+    } catch (SQLException e) {
+      System.out.println("Database connection error");
+      e.printStackTrace();
+    } catch (UnavailableException e) {
+      System.out.println("Server error");
+      e.printStackTrace();
+    }
+
   }
 
-  // for testing GET @route /api/users
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
-    PrintWriter out = response.getWriter();
-
-    // test commection to doGet
-    //// out.println("<h2>Hello from the UserServlet</h2>");
-
-    // get data from params
-    //// String username = request.getParameter("username");
-    //// String password = request.getParameter("password");
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
     // recieving data from header
-    String username = request.getHeader("username");
-    String password = request.getHeader("password");
+    String username = req.getHeader("username");
+    String password = req.getHeader("password");
 
-    // testing sending data back
-    //// out.println("<h2>" + username + "</h2>");
-    //// out.println("<h2>" + password + "</h2>");
+    // setup response
+    res.setContentType("application/json");
+    res.setCharacterEncoding("UTF-8");
+    PrintWriter out = res.getWriter();
 
     // user userService login return User object
     try {
@@ -65,7 +63,7 @@ public class UserServlet extends HttpServlet {
       String userJson = gson.toJson(loggedInUser);
       out.print(userJson);
     } catch (SQLException e) {
-      response.setStatus(500);
+      res.setStatus(500);
       String errorJson = gson.toJson(e);
       out.print(errorJson);
     }
@@ -118,5 +116,20 @@ public class UserServlet extends HttpServlet {
   // } finally {
   // out.flush();
   // }
+
+  @Override
+  public void destroy() {
+    try {
+      PostgreSQLDatabase.disconnect();
+      if (connection.isClosed()) {
+        System.out.println("Databse connection closed");
+      } else {
+        System.out.println("database disconnect failed");
+      }
+    } catch (SQLException e) {
+      System.out.println("database disconnect failed");
+      e.printStackTrace();
+    }
+  }
 
 }

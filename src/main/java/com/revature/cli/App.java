@@ -19,13 +19,19 @@ public class App {
   }
 
   private static void init() {
-    Connection connection = PostgreSQLDatabase.getConnection();
-    UserDao userDao = new UserDao(connection);
-    UserService userService = new UserService(userDao);
-    AuthService authService = new AuthService(userService);
-    UserModel userModel = new UserModel(authService, userService);
-    Mapper mapper = new Mapper();
-    controller = new Controller(userModel, mapper);
+    try {
+      Connection connection = PostgreSQLDatabase.getConnection();
+      UserDao userDao = new UserDao(connection);
+      UserService userService = new UserService(userDao);
+      AuthService authService = new AuthService(userService);
+      UserModel userModel = new UserModel(authService, userService);
+      Mapper mapper = new Mapper();
+      controller = new Controller(userModel, mapper);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
   }
 
 }
