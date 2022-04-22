@@ -47,8 +47,22 @@ public class LoginServlet extends HttpServlet {
     }
   }
 
+  private void setAccessControlHeaders(HttpServletResponse res) {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5500");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "POST");
+  }
+
+  // for Prefligh
+  @Override
+  protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    setAccessControlHeaders(res);
+    res.setStatus(HttpServletResponse.SC_OK);
+  }
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    setAccessControlHeaders(res);
 
     // recieving data from header
     String auth = req.getHeader("Authorization");
