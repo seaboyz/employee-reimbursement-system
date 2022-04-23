@@ -101,7 +101,7 @@ public class Util {
       builder.withClaim("isAdmin", true);
     } else if (role.equals(Role.EMPLOYEE)) {
       builder.withClaim("isAdmin", false);
-    } else {
+    } else if (role.equals(Role.NOT_CURRENT_EMPLOYEE)) {
       throw new UserNotExistException();
     }
 
