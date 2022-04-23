@@ -91,9 +91,13 @@ public class UserDao implements Dao<User> {
       int roleId = resultSet.getInt("user_role_id");
       if (roleId == 1) {
         user.setRole(Role.EMPLOYEE);
-      } else if (roleId ==2) {
+      } else if (roleId == 2) {
         user.setRole(Role.FINANCE_MANAGER);
-      }else if(roleId==0)
+      } else if (roleId == 3) {
+        user.setRole(Role.NOT_CURRENT_EMPLOYEE);
+      } else {
+        return Optional.empty();
+      }
       return Optional.of(user);
     }
     return Optional.empty();
