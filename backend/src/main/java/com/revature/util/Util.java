@@ -4,9 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator.Builder;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.revature.exceptions.UserNotExistException;
+import com.revature.models.Role;
 import com.revature.models.User;
 
 public class Util {
@@ -68,6 +75,37 @@ public class Util {
     }
     body = stringBuilder.toString();
     return body;
+  }
+
+  public static String getToken(String username, Role role) throws JWTCreationException {
+    // get secrect string from application.properties file
+    Properties props = new Properties();
+    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    InputStream input = loader.getResourceAsStream("application.properties");
+    try {
+      props.load(input);
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.print("Fail loading props from application.properites file");
+      return null;
+    }
+
+    // get
+    String SECRECT = props.getProperty("ACCESS_TOKEN_SECRET");
+
+    // get jwt token
+    Algorithm algorithm = Algorithm.HMAC256(SECRECT);
+    Builder builder = JWT.create().withIssuer("auth0");
+
+    if (role.equals(Role.FINANCE_MANAGER)) {
+      builder.withClaim("isAdmin", true);
+    } else if (role.equals(Role.EMPLOYEE)) {
+      builder.withClaim("isAdmin", false);
+    } else {
+      throw new UserNotExistException();
+    }
+
+    return builder.sign(algorithm);
   }
 
 }

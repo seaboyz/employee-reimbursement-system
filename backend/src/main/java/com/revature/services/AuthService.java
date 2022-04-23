@@ -7,6 +7,7 @@ import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
+import com.revature.util.Util;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -47,11 +48,18 @@ public class AuthService {
     if (!optionalUser.isPresent()) {
       throw new UserNotExistException();
     }
-    if (!optionalUser.get().getPassword().equals(password)) {
+
+    User currentUser = optionalUser.get();
+
+    String encriptedPassword = currentUser.getPassword();
+
+    if (BCrypt.checkpw(password, encriptedPassword)) {
+      String token = Util.getToken(currentUser.getUsername(), currentUser.getRole());
+      return new User(currentUser.getUsername(), token);
+    } else {
       throw new UserNamePasswordNotMatchException();
     }
 
-    return optionalUser.get();
 
   }
 
