@@ -28,8 +28,14 @@ public class User {
     private String firstname;
     private String lastname;
     private Role role;
+    private String token;
 
     public User() {
+    }
+
+    public User(String username, String token) {
+        this.username = username;
+        this.token = token;
     }
 
     public User(
@@ -115,6 +121,10 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getToken(){
+        return this.token;
     }
 
     @Override

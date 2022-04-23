@@ -1,12 +1,20 @@
 package com.revature.services;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.Properties;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
+
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
  * The AuthService should handle login and registration for the ERS application.
@@ -66,15 +74,56 @@ public class AuthService {
    * Note: userToBeRegistered will have an id=0, additional fields may be null.
    * After registration, the id will be a positive integer.
    */
-  public User register(User userToBeRegistered) throws SQLException, UsernameNotUniqueException {
+  public User register(User userToBeRegistered) throws SQLException, UsernameNotUniqueException, IOException {
+
     Optional<User> optionalUser = userService.getByUsername(userToBeRegistered.getUsername());
 
     if (optionalUser.isPresent()) {
       throw new UsernameNotUniqueException();
     }
 
-    return userService.addUser(userToBeRegistered);
+    // encrypt password
+    String salt = BCrypt.gensalt(10);
+    String encryptedPassword = BCrypt.hashpw(userToBeRegistered.getPassword(), salt);
+    userToBeRegistered.setPassword(encryptedPassword);
 
+    // save user
+    User registedUser = userService.addUser(userToBeRegistered);
+
+    String token = getToken();
+
+    if (registedUser != null && token != null) {
+      return new User(registedUser.getUsername(), token);
+    }
+    return null;
+  }
+
+  private String getToken() throws JWTCreationException {
+    // get secrect string from application.properties file
+    Properties props = new Properties();
+    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    InputStream input = loader.getResourceAsStream("application.properties");
+    try {
+      props.load(input);
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.print("Fail loading props from application.properites file");
+      return null;
+    }
+
+    // get
+    String SECRECT = props.getProperty("ACCESS_TOKEN_SECRET");
+
+    // get jwt token
+    try {
+      Algorithm algorithm = Algorithm.HMAC256(SECRECT);
+      String token = JWT.create().withIssuer("auth0").sign(algorithm);
+      return token;
+    } catch (JWTCreationException e) {
+      e.printStackTrace();
+      System.out.println("Fail generating JWT token");
+      return null;
+    }
   }
 
 }
