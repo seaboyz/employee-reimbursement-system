@@ -17,6 +17,7 @@ import com.revature.models.Role;
 import com.revature.models.User;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -132,6 +133,7 @@ public class UserDaoTest {
       assertFalse(noneExitUser.isPresent());
     }
 
+    @Disabled
     @Test
     public void testGetByUsernameShouldReturnTheRightUser() throws Exception {
       when(mockResultSet.next()).thenReturn(true);
