@@ -112,7 +112,7 @@
 					})
 				})
 					.then(response => response.json())
-					.then(console.log)
+					.then(data => localStorage.setItem("authToken", data.token))
 					.catch(console.error);
 			});
 		</script>
