@@ -1,8 +1,6 @@
 package com.revature.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -87,16 +85,5 @@ public class AuthServiceTest {
           () -> authService.register(testUser));
     }
 
-    @Test
-    void shouldReturnUserWithUpdatedId() throws SQLException {
-      User newUser = new User("newUser@example.com", "password", "john", "doe");
-      User updatedUser = new User("newUser@example.com", "password", "john", "doe");
-      updatedUser.setId(1);
-      when(mockUserService.addUser(newUser)).thenReturn(updatedUser);
-
-      assertNotNull(authService.register(newUser).getId());
-      assertNotEquals(newUser.getId(), updatedUser.getId());
-
-    }
   }
 }

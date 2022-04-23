@@ -63,7 +63,7 @@ public class UserDao implements Dao<User> {
       user.setRole(Role.EMPLOYEE);
       return user;
     } else {
-      throw new SQLException();
+      throw new SQLException("Fail save new user to database");
     }
 
   }

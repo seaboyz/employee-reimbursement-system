@@ -54,7 +54,7 @@ public class UserDaoTest {
   class TestAddd {
     @Test
     void shouldReturnUserWithUpdatedId() throws SQLException {
-      User newUser = new User("test@test.com", "123456", "john", "doe");
+      User newUser = new User("test", "test@test.com", "123456", "john", "doe");
 
       String query = "INSERT INTO ERS_USERS "
           + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "

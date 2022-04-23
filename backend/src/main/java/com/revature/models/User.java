@@ -39,11 +39,12 @@ public class User {
     }
 
     public User(
+            String username,
             String email,
             String password,
             String firstname,
             String lastname) {
-        this.username = email.split("@")[0];
+        this.username = username;
         this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -123,7 +124,7 @@ public class User {
         this.role = role;
     }
 
-    public String getToken(){
+    public String getToken() {
         return this.token;
     }
 
