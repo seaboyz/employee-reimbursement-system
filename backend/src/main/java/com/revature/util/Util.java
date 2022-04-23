@@ -95,7 +95,7 @@ public class Util {
 
     // get jwt token
     Algorithm algorithm = Algorithm.HMAC256(SECRECT);
-    Builder builder = JWT.create().withIssuer("auth0");
+    Builder builder = JWT.create().withIssuer("auth0").withClaim("username", username);
 
     if (role.equals(Role.FINANCE_MANAGER)) {
       builder.withClaim("isAdmin", true);
