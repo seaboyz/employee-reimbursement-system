@@ -109,4 +109,23 @@ public class Util {
     return builder.sign(algorithm);
   }
 
+  public static String getSecret() {
+    // get secrect string from application.properties file
+    Properties props = new Properties();
+    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    InputStream input = loader.getResourceAsStream("application.properties");
+    try {
+      props.load(input);
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.print("Fail loading props from application.properites file");
+      return null;
+    }
+
+    // get
+    String SECRECT = props.getProperty("ACCESS_TOKEN_SECRET");
+
+    return SECRECT;
+  }
+
 }
