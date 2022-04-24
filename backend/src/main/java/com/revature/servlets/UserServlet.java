@@ -70,13 +70,16 @@ public class UserServlet extends HttpServlet {
     // ger pathInfo
     String[] path = req.getPathInfo().split("/");
     String userId = path[1];
-    out.println(userId);
-    out.println(token);
-
-    // String userId = req.getParameter("id");
-
-    // out.println(token);
-    // out.println(userId);
+    if (!authService.isTokenValid(token)) {
+      res.setStatus(401);
+      out.println("<h2>Please login</h2>");
+    } else if (!authService.isSelf(userId, token)) {
+      res.setStatus(401);
+      out.println("<h2>No permission allowed</h2>");
+      return;
+    } else {
+      out.println("verified user with id" + userId);
+    }
 
     out.flush();
 
