@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.revature.database.PostgreSQLDatabase;
+import com.revature.models.User;
 import com.revature.repositories.UserDao;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
@@ -60,8 +62,8 @@ public class UserServlet extends HttpServlet {
     setAccessControlHeaders(res);
 
     // setup response
-    // res.setContentType("application/json");
-    // res.setCharacterEncoding("UTF-8");
+    res.setContentType("application/json");
+    res.setCharacterEncoding("UTF-8");
     PrintWriter out = res.getWriter();
 
     // recieving data from header
@@ -77,9 +79,23 @@ public class UserServlet extends HttpServlet {
     } else if (!authService.isSelf(userId, token)) {
       res.setStatus(401);
       out.println("<h2>No permission allowed</h2>");
-      return;
     } else {
-      out.println("verified user with id" + userId);
+      try {
+        Optional<User> optionalUser = userService.getByUserId(userId);
+        if (!optionalUser.isPresent()) {
+          res.setStatus(500);
+          out.println("database error");
+        } else {
+          User user = optionalUser.get();
+          String jsonString = gson.toJson(user);
+          out.println(jsonString);
+        }
+
+      } catch (SQLException e) {
+        e.printStackTrace();
+        res.setStatus(500);
+      }
+
     }
 
     out.flush();

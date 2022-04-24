@@ -23,12 +23,12 @@ public class User {
 
     private int id;
     private String username;
-    private String password;
+    private transient String password;
     private String email;
     private String firstname;
     private String lastname;
-    private Role role;
-    private String token;
+    private transient Role role;
+    private transient String token;
 
     public User() {
     }
