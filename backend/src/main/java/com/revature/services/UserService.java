@@ -42,7 +42,7 @@ public class UserService {
     return userDao.get(username);
   }
 
-  public Optional<User> getByUsername(int id) throws SQLException {
+  public Optional<User> getByUserId(int id) throws SQLException {
     return userDao.get(id);
   }
 
