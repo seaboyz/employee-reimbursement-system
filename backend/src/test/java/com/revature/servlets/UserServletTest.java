@@ -1,118 +1,86 @@
-// package com.revature.servlets;
+package com.revature.servlets;
 
-// import static org.mockito.ArgumentMatchers.anyString;
-// import static org.mockito.Mockito.verify;
-// import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-// import java.io.IOException;
-// import java.io.PrintWriter;
-// import java.sql.SQLException;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-// import javax.servlet.http.HttpServletRequest;
-// import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-// import com.revature.exceptions.UserNamePasswordNotMatchException;
-// import com.revature.exceptions.UserNotExistException;
-// import com.revature.models.Role;
-// import com.revature.models.User;
-// import com.revature.services.AuthService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-// import org.junit.jupiter.api.Disabled;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.Mock;
-// import org.mockito.junit.jupiter.MockitoExtension;
+@ExtendWith(MockitoExtension.class)
+public class UserServletTest {
 
-// @ExtendWith(MockitoExtension.class)
-// public class UserServletTest {
-// String NOT_EXIST_USERNAME = "NOT_EXIST_USERNAME";
-// String NOT_EXIST_PASSWORD = "NOT_EXIST_PASSWORD";
-// String EXIST_USERNAME = "EXIST_USERNAME";
-// String WRONG_PASSWORD = "WRONG_PASSWORD";
+  UserServlet userServlet;
 
-// @Mock
-// AuthService mockAuthService;
+  @Mock
+  HttpServletRequest req;
 
-// @Mock
-// HttpServletRequest mockRequest;
+  @Mock
+  HttpServletResponse res;
 
-// @Mock
-// HttpServletResponse mockResponse;
+  @Mock
+  PrintWriter out;
 
-// @Mock
-// PrintWriter mockOut;
+  @BeforeEach
+  void init() throws IOException {
 
-// @Test
-// void doPostShouldSent404ResponseWhenReqeustUserNotExist() throws IOException,
-// SQLException {
+    userServlet = new UserServlet();
+    userServlet.init();
 
-// when(mockRequest.getParameter("username")).thenReturn(NOT_EXIST_USERNAME);
-// when(mockRequest.getParameter("password")).thenReturn(NOT_EXIST_PASSWORD);
+    when(res.getWriter()).thenReturn(out);
 
-// when(mockResponse.getWriter()).thenReturn(mockOut);
+  }
 
-// when(mockAuthService.login(NOT_EXIST_USERNAME,
-// NOT_EXIST_PASSWORD)).thenThrow(new UserNotExistException());
+  @Nested
+  class TestDoGet {
 
-// UserServlet userController = new UserServlet(mockAuthService);
-// userController.doPost(mockRequest, mockResponse);
+    @Test
+    void shouldSetStatus200() throws IOException, ServletException {
 
-// verify(mockResponse).setStatus(404);
+      when(req.getHeader("Authorization")).thenReturn(
+          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImlkIjozNCwiaXNBZG1pbiI6ZmFsc2UsInVzZXJuYW1lIjoidGVzdCJ9.Mgk6_NtdcoqRtqPxPE5prpVZJ0c55Kxv-gSdXmtwFf8");
 
-// verify(mockOut).print("Username not found, please go to registration");
+      when(req.getPathInfo()).thenReturn("users/34");
 
-// verify(mockOut).flush();
-// }
+      userServlet.doGet(req, res);
 
-// @Test
-// void doPostShouldSent401ResponseWhenRequestUserPasswordNotMatch() throws
-// IOException, SQLException {
+      verify(res, times(1)).setStatus(200);
+    }
 
-// when(mockRequest.getParameter("username")).thenReturn(EXIST_USERNAME);
-// when(mockRequest.getParameter("password")).thenReturn(WRONG_PASSWORD);
+    @Test
+    void shouldSetStatus401() throws IOException, ServletException {
 
-// when(mockResponse.getWriter()).thenReturn(mockOut);
+      when(req.getHeader("Authorization")).thenReturn(
+          null);
 
-// when(mockAuthService.login(EXIST_USERNAME, WRONG_PASSWORD)).thenThrow(new
-// UserNamePasswordNotMatchException());
+      userServlet.doGet(req, res);
 
-// UserServlet userController = new UserServlet(mockAuthService);
-// userController.doPost(mockRequest, mockResponse);
+      verify(res, times(1)).setStatus(401);
+    }
 
-// verify(mockResponse).setStatus(401);
+    @Test
+    void shouldSetStatus401TryToGetOtherUserInfo() throws IOException, ServletException {
 
-// verify(mockOut).print("Username and Password not match");
+      when(req.getHeader("Authorization")).thenReturn(
+          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImlkIjozNCwiaXNBZG1pbiI6ZmFsc2UsInVzZXJuYW1lIjoidGVzdCJ9.Mgk6_NtdcoqRtqPxPE5prpVZJ0c55Kxv-gSdXmtwFf8");
 
-// verify(mockOut).flush();
-// }
+      when(req.getPathInfo()).thenReturn("users/24");
 
-// @Test
-// void doPostShouldSend200RestponseWhenRequestUserPasswordNotMatch() throws
-// IOException, SQLException {
+      userServlet.doGet(req, res);
 
-// User user = new User(1, "test", "123456", "test@test.com", "john", "doe",
-// Role.EMPLOYEE);
+      verify(res, times(1)).setStatus(401);
+    }
+  }
 
-// when(mockRequest.getParameter("username")).thenReturn(user.getUsername());
-// when(mockRequest.getParameter("password")).thenReturn(user.getPassword());
-
-// when(mockResponse.getWriter()).thenReturn(mockOut);
-
-// when(mockAuthService.login(user.getUsername(),
-// user.getPassword())).thenReturn(user);
-
-// UserServlet userController = new UserServlet(mockAuthService);
-// userController.doPost(mockRequest, mockResponse);
-
-// verify(mockResponse).setStatus(200);
-
-// verify(mockResponse).setContentType("application/json");
-
-// verify(mockResponse).setCharacterEncoding("UTF-8");
-
-// verify(mockOut).print(anyString());
-
-// verify(mockOut).flush();
-// }
-
-// }
+}

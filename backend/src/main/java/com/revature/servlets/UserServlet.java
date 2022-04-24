@@ -18,6 +18,7 @@ import com.revature.models.User;
 import com.revature.repositories.UserDao;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
+import com.revature.util.Util;
 
 public class UserServlet extends HttpServlet {
   private Gson gson;
@@ -66,9 +67,12 @@ public class UserServlet extends HttpServlet {
     res.setCharacterEncoding("UTF-8");
     PrintWriter out = res.getWriter();
 
-    // recieving data from header
-    String token = req.getHeader("Authorization").split(" ")[1];
-
+    // get token from req
+    String token = Util.getToken(req);
+    if (token == null) {
+      res.setStatus(401);
+      return;
+    }
     // ger pathInfo
     String[] path = req.getPathInfo().split("/");
     int userId = Integer.parseInt(path[1]);
@@ -86,6 +90,7 @@ public class UserServlet extends HttpServlet {
           res.setStatus(500);
           out.println("database error");
         } else {
+          res.setStatus(200);
           User user = optionalUser.get();
           String jsonString = gson.toJson(user);
           out.println(jsonString);

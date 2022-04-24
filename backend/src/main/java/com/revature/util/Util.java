@@ -77,6 +77,16 @@ public class Util {
     return body;
   }
 
+  public static String getToken(HttpServletRequest req) {
+    try {
+      String token = req.getHeader("Authorization").split(" ")[1];
+      return token;
+    } catch (Exception e) {
+      return null;
+    }
+
+  }
+
   public static String getToken(User user) throws JWTCreationException {
     // get secrect string from application.properties file
     Properties props = new Properties();
