@@ -154,14 +154,21 @@ public class UserServlet extends HttpServlet {
     String username = jsonObject.get("username").getAsString();
     String email = jsonObject.get("email").getAsString();
     String password = jsonObject.get("password").getAsString();
+    String encriptedPassword = Util.encriptPassword(password);
 
     User userToBeUpdated = new User();
     userToBeUpdated.setId(userId);
     userToBeUpdated.setEmail(email);
-    userToBeUpdated.setPassword(password);
+    userToBeUpdated.setPassword(encriptedPassword);
     userToBeUpdated.setUsername(username);
 
-    out.println(gson.toJson(userToBeUpdated));
+    try {
+      userService.updateUser(userToBeUpdated);
+      out.println("<h2>Successfully Updated you profile</h2>");
+    } catch (SQLException e) {
+      res.setStatus(500);
+      out.println("<h2>Fail of updating your profile, try again later.</h2>");
+    }
 
   }
 
