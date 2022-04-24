@@ -122,9 +122,12 @@ public class UserDao implements Dao<User> {
       int roleId = resultSet.getInt("user_role_id");
       if (roleId == 1) {
         user.setRole(Role.EMPLOYEE);
-      } else {
+      } else if (roleId == 2) {
         user.setRole(Role.FINANCE_MANAGER);
+      } else if (roleId == 3) {
+        user.setRole(Role.NOT_CURRENT_EMPLOYEE);
       }
+
       return Optional.of(user);
     } else {
       throw new SQLException();
