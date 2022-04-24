@@ -54,12 +54,11 @@ public class AuthService {
     String encriptedPassword = currentUser.getPassword();
 
     if (BCrypt.checkpw(password, encriptedPassword)) {
-      String token = Util.getToken(currentUser.getUsername(), currentUser.getRole());
-      return new User(currentUser.getUsername(), token);
+      String token = Util.getToken(currentUser);
+      return new User(currentUser.getId(), currentUser.getUsername(), token);
     } else {
       throw new UserNamePasswordNotMatchException();
     }
-
 
   }
 

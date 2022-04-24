@@ -77,7 +77,7 @@ public class Util {
     return body;
   }
 
-  public static String getToken(String username, Role role) throws JWTCreationException {
+  public static String getToken(User user) throws JWTCreationException {
     // get secrect string from application.properties file
     Properties props = new Properties();
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -95,13 +95,14 @@ public class Util {
 
     // get jwt token
     Algorithm algorithm = Algorithm.HMAC256(SECRECT);
-    Builder builder = JWT.create().withIssuer("auth0").withClaim("username", username);
+    Builder builder = JWT.create().withIssuer("auth0").withClaim("username", user.getUsername()).withClaim("id",
+        user.getId());
 
-    if (role.equals(Role.FINANCE_MANAGER)) {
+    if (user.getRole().equals(Role.FINANCE_MANAGER)) {
       builder.withClaim("isAdmin", true);
-    } else if (role.equals(Role.EMPLOYEE)) {
+    } else if (user.getRole().equals(Role.EMPLOYEE)) {
       builder.withClaim("isAdmin", false);
-    } else if (role.equals(Role.NOT_CURRENT_EMPLOYEE)) {
+    } else if (user.getRole().equals(Role.NOT_CURRENT_EMPLOYEE)) {
       throw new UserNotExistException();
     }
 
