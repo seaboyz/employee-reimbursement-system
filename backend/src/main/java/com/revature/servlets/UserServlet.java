@@ -69,7 +69,8 @@ public class UserServlet extends HttpServlet {
 
     // ger pathInfo
     String[] path = req.getPathInfo().split("/");
-    String userId = path[1];
+    int userId = Integer.parseInt(path[1]);
+
     if (!authService.isTokenValid(token)) {
       res.setStatus(401);
       out.println("<h2>Please login</h2>");
