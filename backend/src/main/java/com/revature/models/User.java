@@ -28,7 +28,7 @@ public class User {
     private String firstname;
     private String lastname;
     private transient Role role;
-    private transient String token;
+    private String token;
 
     public User() {
     }
