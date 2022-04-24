@@ -16,6 +16,8 @@ import com.revature.exceptions.UserNotExistException;
 import com.revature.models.Role;
 import com.revature.models.User;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 public class Util {
   public static User shallowCloneUser(User user) {
     return new User(
@@ -138,4 +140,9 @@ public class Util {
     return SECRECT;
   }
 
+  public static String encriptPassword(String password) {
+    String salt = BCrypt.gensalt(10);
+    String encryptedPassword = BCrypt.hashpw(password, salt);
+    return encryptedPassword;
+  }
 }

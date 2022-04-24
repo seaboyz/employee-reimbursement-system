@@ -89,8 +89,9 @@ public class AuthService {
     }
 
     // encrypt password
-    String salt = BCrypt.gensalt(10);
-    String encryptedPassword = BCrypt.hashpw(userToBeRegistered.getPassword(), salt);
+    String encryptedPassword = Util.encriptPassword(userToBeRegistered.getPassword());
+
+    // update user with encriptedpassword
     userToBeRegistered.setPassword(encryptedPassword);
 
     // save user
