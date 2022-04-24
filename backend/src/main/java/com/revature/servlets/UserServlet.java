@@ -41,7 +41,12 @@ public class UserServlet extends HttpServlet {
       System.out.println("Server error");
       e.printStackTrace();
     }
+  }
 
+  private void setAccessControlHeaders(HttpServletResponse res) {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5500");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
   }
 
   @Override
