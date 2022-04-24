@@ -33,7 +33,8 @@ public class User {
     public User() {
     }
 
-    public User(String username, String token) {
+    public User(int id, String username, String token) {
+        this.id = id;
         this.username = username;
         this.token = token;
     }
