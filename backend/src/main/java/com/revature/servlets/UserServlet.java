@@ -49,7 +49,7 @@ public class UserServlet extends HttpServlet {
   }
 
   private void setAccessControlHeaders(HttpServletResponse res) {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5500");
+    res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
     res.setHeader("Access-Control-Allow-Headers", "Authorization");
     res.setHeader("Access-Control-Allow-Methods", "GET");
   }
