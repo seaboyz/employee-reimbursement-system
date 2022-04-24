@@ -120,11 +120,11 @@ public class AuthService {
     return false;
   }
 
-  public boolean isSelf(String userId, String token) {
+  public boolean isSelf(int userId, String token) {
     DecodedJWT verifier = getVerifier(token);
     if (verifier != null) {
-      String verifiedId = verifier.getClaim("id").asString();
-      return verifiedId.equals(userId);
+      int verifiedId = verifier.getClaim("id").asInt();
+      return verifiedId == userId;
     }
     return false;
   }
