@@ -54,6 +54,7 @@ public class UserServlet extends HttpServlet {
     res.setStatus(HttpServletResponse.SC_OK);
   }
 
+  // GET @users/{id}
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     setAccessControlHeaders(res);
@@ -66,10 +67,16 @@ public class UserServlet extends HttpServlet {
     // recieving data from header
     String token = req.getHeader("Authorization").split(" ")[1];
 
-    String userId = req.getParameter("id");
-
-    out.println(token);
+    // ger pathInfo
+    String[] path = req.getPathInfo().split("/");
+    String userId = path[1];
     out.println(userId);
+    out.println(token);
+
+    // String userId = req.getParameter("id");
+
+    // out.println(token);
+    // out.println(userId);
 
     out.flush();
 
