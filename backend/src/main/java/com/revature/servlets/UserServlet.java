@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import com.revature.database.PostgreSQLDatabase;
 import com.revature.exceptions.UserNamePasswordNotMatchException;
 import com.revature.exceptions.UserNotExistException;
+import com.revature.exceptions.UsernameNotUniqueException;
 import com.revature.models.User;
 import com.revature.repositories.UserDao;
 import com.revature.services.AuthService;
@@ -64,8 +65,7 @@ public class UserServlet extends HttpServlet {
     res.setStatus(HttpServletResponse.SC_OK);
   }
 
-  // GET @users/{id}
-
+  // GET @users
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
@@ -138,6 +138,39 @@ public class UserServlet extends HttpServlet {
         return;
       }
     }
+  }
+
+  // POST @users
+  // register
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+    setAccessControlHeaders(res);
+
+    // read body from request
+    JsonObject body = JsonParser.parseReader(new InputStreamReader(req.getInputStream())).getAsJsonObject();
+
+    // create new User object
+    String username = body.get("username").getAsString();
+    String email = body.get("email").getAsString();
+    String password = body.get("password").getAsString();
+    String firstname = body.get("firstname").getAsString();
+    String lastname = body.get("lastname").getAsString();
+
+    User newUser = new User(username, email, password, firstname, lastname);
+
+    try {
+      authService.register(newUser);
+      res.setStatus(HttpServletResponse.SC_CREATED);
+      return;
+    } catch (SQLException e) {
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    } catch (UsernameNotUniqueException e) {
+      res.setStatus(HttpServletResponse.SC_CONFLICT);
+      return;
+    }
+
   }
 
   // PUT @users/{id}
