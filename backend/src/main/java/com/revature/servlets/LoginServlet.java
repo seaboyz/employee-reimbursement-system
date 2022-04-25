@@ -61,6 +61,7 @@ public class LoginServlet extends HttpServlet {
     res.setStatus(HttpServletResponse.SC_OK);
   }
 
+  // POST @users/
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     setAccessControlHeaders(res);

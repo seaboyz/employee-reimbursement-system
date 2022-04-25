@@ -11,7 +11,6 @@ import java.util.List;
 import com.revature.models.Reimbursement;
 
 public class ReimbursementDao {
-
   private Connection connection;
 
   public ReimbursementDao(Connection connection) {

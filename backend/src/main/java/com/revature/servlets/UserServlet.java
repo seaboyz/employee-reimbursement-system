@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
@@ -61,7 +63,40 @@ public class UserServlet extends HttpServlet {
     res.setStatus(HttpServletResponse.SC_OK);
   }
 
-  // * GET @users/{id}
+  // POST @users/
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    setAccessControlHeaders(res);
+
+    // recieving data from header
+    String auth = req.getHeader("Authorization");
+    String base64Credentials = auth.substring("Basic".length()).trim();
+    byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
+    String credentials = new String(credentialDecoded, StandardCharsets.UTF_8);
+    String username = credentials.split(":")[0];
+    String password = credentials.split(":")[1];
+
+    // setup response
+    res.setContentType("application/json");
+    res.setCharacterEncoding("UTF-8");
+    PrintWriter out = res.getWriter();
+
+    // user userService login return User object
+    try {
+      User loggedInUser = authService.login(username, password);
+      // convert User object to json
+      String userJson = gson.toJson(loggedInUser);
+      out.print(userJson);
+    } catch (SQLException e) {
+      res.setStatus(500);
+      String errorJson = gson.toJson(e);
+      out.print(errorJson);
+    }
+
+    out.flush();
+  }
+
+  // GET @users/{id}
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     setAccessControlHeaders(res);
@@ -110,7 +145,7 @@ public class UserServlet extends HttpServlet {
 
   }
 
-  // * PUT @users/{id}
+  // PUT @users/{id}
   @Override
   protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     setAccessControlHeaders(res);
