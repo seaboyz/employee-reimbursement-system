@@ -49,7 +49,7 @@ public class AuthServiceTest {
 
       assertThrows(
           UserNotExistException.class,
-          () -> authService.login(NOT_EXIST_USER_NAME, anyString()));
+          () -> authService.authenticate(NOT_EXIST_USER_NAME, anyString()));
     }
 
     @Disabled
@@ -60,7 +60,7 @@ public class AuthServiceTest {
 
       assertThrows(
           UserNamePasswordNotMatchException.class,
-          () -> authService.login("test", "wrongPassword"));
+          () -> authService.authenticate("test", "wrongPassword"));
     }
   }
 

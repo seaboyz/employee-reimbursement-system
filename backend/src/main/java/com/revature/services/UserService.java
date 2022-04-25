@@ -3,6 +3,7 @@ package com.revature.services;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
 import com.revature.repositories.UserDao;
 
@@ -42,8 +43,13 @@ public class UserService {
     return userDao.get(username);
   }
 
-  public Optional<User> getByUserId(int id) throws SQLException {
-    return userDao.get(id);
+  public User getByUserId(int id) throws SQLException, UserNotExistException {
+    Optional<User> user = userDao.get(id);
+    if (user.isPresent()) {
+      return user.get();
+    } else {
+      throw new UserNotExistException();
+    }
   }
 
   public User updateUser(User userTobeUpdated) throws SQLException {

@@ -45,7 +45,7 @@ public class AuthService {
    * <li>Must return user object if the user logs in successfully.</li>
    * </ul>
    */
-  public User login(String username, String password)
+  public User authenticate(String username, String password)
       throws UserNotExistException, UserNamePasswordNotMatchException, SQLException {
 
     Optional<User> optionalUser = userService.getByUsername(username);
@@ -60,7 +60,8 @@ public class AuthService {
 
     if (BCrypt.checkpw(password, encriptedPassword)) {
       String token = Util.getToken(currentUser);
-      return new User(currentUser.getId(), currentUser.getUsername(), token);
+      currentUser.setToken(token);
+      return currentUser;
     } else {
       throw new UserNamePasswordNotMatchException();
     }

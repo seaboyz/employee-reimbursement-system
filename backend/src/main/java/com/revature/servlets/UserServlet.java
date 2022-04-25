@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Base64;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -20,6 +19,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.revature.database.PostgreSQLDatabase;
+import com.revature.exceptions.UserNamePasswordNotMatchException;
+import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
 import com.revature.repositories.UserDao;
 import com.revature.services.AuthService;
@@ -63,48 +64,50 @@ public class UserServlet extends HttpServlet {
     res.setStatus(HttpServletResponse.SC_OK);
   }
 
-  // POST @users/
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    setAccessControlHeaders(res);
-
-    // recieving data from header
-    String auth = req.getHeader("Authorization");
-    String base64Credentials = auth.substring("Basic".length()).trim();
-    byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
-    String credentials = new String(credentialDecoded, StandardCharsets.UTF_8);
-    String username = credentials.split(":")[0];
-    String password = credentials.split(":")[1];
-
-    // setup response
-    res.setContentType("application/json");
-    res.setCharacterEncoding("UTF-8");
-    PrintWriter out = res.getWriter();
-
-    // user userService login return User object
-    try {
-      User loggedInUser = authService.login(username, password);
-      // convert User object to json
-      String userJson = gson.toJson(loggedInUser);
-      out.print(userJson);
-    } catch (SQLException e) {
-      res.setStatus(500);
-      String errorJson = gson.toJson(e);
-      out.print(errorJson);
-    }
-
-    out.flush();
-  }
-
   // GET @users/{id}
+
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
     setAccessControlHeaders(res);
 
     // setup response
     res.setContentType("application/json");
     res.setCharacterEncoding("UTF-8");
     PrintWriter out = res.getWriter();
+
+    // get path
+    String path = req.getPathInfo();
+    // login
+    // @/users
+    if (path == null) {
+      String auth = req.getHeader("Authorization");
+      String base64Credentials = auth.substring("Basic".length()).trim();
+      byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
+      String credentials = new String(credentialDecoded, StandardCharsets.UTF_8);
+      String[] credentialsArray = credentials.split(":");
+      String username = credentialsArray[0];
+      String password = credentialsArray[1];
+      try {
+        User user = authService.authenticate(username, password);
+        res.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(user));
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      } catch (UserNotExistException e) {
+        res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      } catch (UserNamePasswordNotMatchException e) {
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return;
+      }
+    }
+
+    // @users/:id
+    // get userId
+    int userId = Integer.parseInt(path.substring(1));
 
     // get token from req
     String token = Util.getToken(req);
@@ -112,37 +115,29 @@ public class UserServlet extends HttpServlet {
       res.setStatus(401);
       return;
     }
-    // get userId
-    String[] path = req.getPathInfo().split("/");
-    int userId = Integer.parseInt(path[1]);
 
+    // verify token
     if (!authService.isTokenValid(token)) {
-      res.setStatus(401);
-      out.println("<h2>Please login</h2>");
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
     } else if (!authService.isSelf(userId, token)) {
-      res.setStatus(401);
-      out.println("<h2>No permission allowed</h2>");
+      // can only get their own user info
+      res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      return;
     } else {
       try {
-        Optional<User> optionalUser = userService.getByUserId(userId);
-        if (!optionalUser.isPresent()) {
-          res.setStatus(500);
-          out.println("database error");
-        } else {
-          res.setStatus(200);
-          User user = optionalUser.get();
-          String jsonString = gson.toJson(user);
-          out.println(jsonString);
-        }
+        User user = userService.getByUserId(userId);
+        res.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(user));
+        return;
       } catch (SQLException e) {
-        e.printStackTrace();
-        res.setStatus(500);
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      } catch (UserNotExistException e) {
+        res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        return;
       }
-
     }
-
-    out.flush();
-
   }
 
   // PUT @users/{id}
