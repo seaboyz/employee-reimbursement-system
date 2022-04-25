@@ -1,36 +1,58 @@
 package com.revature.repositories;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import com.revature.models.Reimbursement;
-import com.revature.models.Status;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+public class ReimbursementDao {
 
-public class ReimbursementDAO {
+  private Connection connection;
 
-    /**
-     * Should retrieve a Reimbursement from the DB with the corresponding id or an empty optional if there is no match.
-     */
-    public Optional<Reimbursement> getById(int id) {
-        return Optional.empty();
+  public ReimbursementDao(Connection connection) {
+    this.connection = connection;
+  }
+
+  public Reimbursement add(Reimbursement reimbursement) throws SQLException {
+    String query = "INSERT INTO ERS_REIMBURSEMENT (REIMB_AMOUNT, REIMB_DESCRIPTION, REIMB_AUTHOR, REIMB_TYPE_ID) VALUES (?, ?, ?, ?)";
+
+    PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+    ps.setDouble(1, reimbursement.getAmount());
+    ps.setString(2, reimbursement.getDescription());
+    ps.setInt(3, reimbursement.getAuthorId());
+    ps.setInt(4, reimbursement.getReimbursementTypeId());
+
+    ps.executeUpdate();
+    // get auto generated key back
+    ResultSet keys = ps.getGeneratedKeys();
+    if (keys.next()) {
+      int id = keys.getInt(1);
+      reimbursement.setId(id);
+      return reimbursement;
+    } else {
+      throw new SQLException("Fail save new reimbursement to database");
     }
+  }
 
-    /**
-     * Should retrieve a List of Reimbursements from the DB with the corresponding Status or an empty List if there are no matches.
-     */
-    public List<Reimbursement> getByStatus(Status status) {
-        return Collections.emptyList();
+  public Reimbursement get(int id) throws SQLException {
+    String query = "SELECT * FROM ers_reimbursement WHERE reimb_id = ?";
+    PreparedStatement ps = connection.prepareStatement(query);
+    ps.setInt(1, id);
+    ResultSet rs = ps.executeQuery();
+    if (rs.next()) {
+      Reimbursement reimbursement = new Reimbursement();
+      reimbursement.setId(rs.getInt("reimb_id"));
+      reimbursement.setAmount(rs.getDouble("reimb_amount"));
+      reimbursement.setDescription(rs.getString("reimb_description"));
+      reimbursement.setAuthorId(rs.getInt("reimb_author"));
+      reimbursement.setReimbursementTypeId(rs.getInt("reimb_type_id"));
+      reimbursement.setStatusId(rs.getInt("reimb_status_id"));
+      return reimbursement;
     }
+    return null;
+  }
 
-    /**
-     * <ul>
-     *     <li>Should Update an existing Reimbursement record in the DB with the provided information.</li>
-     *     <li>Should throw an exception if the update is unsuccessful.</li>
-     *     <li>Should return a Reimbursement object with updated information.</li>
-     * </ul>
-     */
-    public Reimbursement update(Reimbursement unprocessedReimbursement) {
-    	return null;
-    }
 }

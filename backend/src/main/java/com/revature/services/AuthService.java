@@ -113,12 +113,38 @@ public class AuthService {
     }
   }
 
-  public boolean isTokenValid(String token) {
-    DecodedJWT verifier = getVerifier(token);
-    if (verifier != null) {
-      return true;
+  public User getUserFromToken(String token) throws SQLException {
+    DecodedJWT jwt = getVerifier(token);
+    if (jwt == null) {
+      return null;
     }
-    return false;
+    String username = jwt.getClaim("username").asString();
+    Optional<User> optionalUser = userService.getByUsername(username);
+    if (!optionalUser.isPresent()) {
+      return null;
+    }
+    User user = optionalUser.get();
+    return new User(user.getId(), user.getUsername(), token);
+  }
+
+  public boolean isTokenValid(String token) {
+
+    try {
+      String secret = Util.getSecret();
+      if (secret == null) {
+        return false;
+      }
+      Algorithm algorithm = Algorithm.HMAC256(secret);
+      JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
+      DecodedJWT jwt = verifier.verify(token);
+      if (jwt == null) {
+        return false;
+      }
+      return true;
+
+    } catch (JWTVerificationException e) {
+      return false;
+    }
   }
 
   public boolean isSelf(int userId, String token) {

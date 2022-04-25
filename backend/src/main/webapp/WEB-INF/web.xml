@@ -17,6 +17,16 @@
     <url-pattern>/users/*</url-pattern>
   </servlet-mapping>
 
+  <!-- /reimbursements -->
+  <servlet>
+    <servlet-name>reimbursementServlet</servlet-name>
+    <servlet-class>com.revature.servlets.ReimbursementServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>reimbursementServlet</servlet-name>
+    <url-pattern>/reimbursements/*</url-pattern>
+  </servlet-mapping>
+
 
   <!-- /login -->
   <servlet>

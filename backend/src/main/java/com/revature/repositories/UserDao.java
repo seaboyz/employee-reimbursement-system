@@ -19,35 +19,15 @@ public class UserDao implements Dao<User> {
     this.connection = connection;
   }
 
-  // public static void main(String[] args) {
-  // UserDao userDao = new UserDao(PostgreSQLDatabase.getConnection());
-  // User newUser = new User("ewUser@email.com", "newpassword", "newfirstname",
-  // "newlastname");
-  // try {
-  // User updatedUser = userDao.add(newUser);
-  // System.out.println(updatedUser);
-  // } catch (Exception e) {
-  // System.out.println(e.getMessage());
-  // e.printStackTrace();
-  // }
-  // }
-
-  /**
-   * <ul>
-   * <li>Should Insert a new User record into the DB with the provided
-   * information.</li>
-   * <li>Should throw an exception if the creation is unsuccessful.</li>
-   * <li>Should return a User object with an updated ID.</li>
-   * <li>Only Employee can be added to the database by UserDao</li>
-   * </ul>
-   */
   @Override
   public User add(User user) throws SQLException {
     String query = "INSERT INTO ERS_USERS "
-        + "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME) "
+        +
+        "(ERS_USER_NAME,ERS_PASSWORD,ERS_EMAIL,ERS_FIRST_NAME,ERS_LAST_NAME)"
         + "VALUES "
         + "(?, ?, ?, ?, ?)";
-    PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+    PreparedStatement ps = connection.prepareStatement(query,
+        Statement.RETURN_GENERATED_KEYS);
     ps.setString(1, user.getUsername());
     ps.setString(2, user.getPassword());
     ps.setString(3, user.getEmail());
@@ -68,10 +48,6 @@ public class UserDao implements Dao<User> {
 
   }
 
-  /**
-   * Should retrieve a User from the DB with the corresponding username or an
-   * empty optional if there is no match.
-   */
   public Optional<User> get(String username) throws SQLException {
 
     Statement statement = connection.createStatement();
