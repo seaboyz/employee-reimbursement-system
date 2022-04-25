@@ -21,4 +21,9 @@ public class ReimbursementService {
         return reimbursementDAO.get(id);
     }
 
+    public Reimbursement update(Reimbursement reimbursementTobeUpdated) throws SQLException {
+        return reimbursementDAO.update(reimbursementTobeUpdated);
+
+    }
+
 }

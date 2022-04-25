@@ -156,6 +156,74 @@ public class ReimbursementServlet extends HttpServlet {
     }
   }
 
+  // PUT @/reimbursements/:id
+  @Override
+  protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+    setAccessControlHeaders(res);
+
+    // Get the token from the request
+    String token = Util.getToken(req);
+    if (token == null) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // validate token
+    if (!authService.isTokenValid(token)) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // get user from token
+    User user;
+    try {
+      user = authService.getUserFromToken(token);
+      if (user == null) {
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return;
+      }
+    } catch (SQLException e) {
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+
+    // get reimbursement id
+    String[] path = req.getPathInfo().split("/");
+    int reimbursementId = Integer.parseInt(path[1]);
+
+    // get reimbursement
+    Reimbursement reimbursement;
+    try {
+      reimbursement = reimbursementService.get(reimbursementId);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+
+    // check if reimbursement belongs to user
+    if (reimbursement.getAuthorId() != user.getId()) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    String body = req.getReader().lines().reduce("", (acc, line) -> acc + line);
+
+    Reimbursement reimbursementTobeUpdated = gson.fromJson(body, Reimbursement.class);
+    reimbursementTobeUpdated.setId(reimbursementId);
+
+    try {
+      Reimbursement updatedReimbursement = reimbursementService.update(reimbursementTobeUpdated);
+      res.setStatus(HttpServletResponse.SC_OK);
+      res.getWriter().write(gson.toJson(updatedReimbursement));
+    } catch (SQLException e) {
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+  }
+
+
   public void destroy() {
     try {
       PostgreSQLDatabase.disconnect();

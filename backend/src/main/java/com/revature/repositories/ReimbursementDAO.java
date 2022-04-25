@@ -55,4 +55,18 @@ public class ReimbursementDao {
     return null;
   }
 
+  public Reimbursement update(Reimbursement reimbursementTobeUpdated) throws SQLException {
+    String query = "UPDATE ers_reimbursement SET reimb_amount = ?, reimb_description = ?, reimb_type_id = ? WHERE reimb_id = ?";
+    PreparedStatement ps = connection.prepareStatement(query);
+    ps.setDouble(1, reimbursementTobeUpdated.getAmount());
+    ps.setString(2, reimbursementTobeUpdated.getDescription());
+    ps.setInt(3, reimbursementTobeUpdated.getReimbursementTypeId());
+    ps.setInt(4, reimbursementTobeUpdated.getId());
+    if (ps.executeUpdate() == 1) {
+      return reimbursementTobeUpdated;
+    }
+
+    return null;
+  }
+
 }
