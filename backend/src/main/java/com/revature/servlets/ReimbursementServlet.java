@@ -49,7 +49,7 @@ public class ReimbursementServlet extends HttpServlet {
   private void setAccessControlHeaders(HttpServletResponse res) {
     res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
     res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
   }
 
   @Override
@@ -58,7 +58,7 @@ public class ReimbursementServlet extends HttpServlet {
     res.setStatus(HttpServletResponse.SC_OK);
   }
 
-  // GET @/reimbursements/:id
+  // GET @/reimbursements
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
@@ -90,9 +90,24 @@ public class ReimbursementServlet extends HttpServlet {
       return;
     }
 
-    // get reimbursement id
-    String[] path = req.getPathInfo().split("/");
-    int reimbursementId = Integer.parseInt(path[1]);
+    // get path
+    String path = req.getPathInfo();
+
+    // get all reimbursements (GET @/reimbursements)
+    if (path == null) {
+      try {
+        // get userid from token
+        int userId = user.getId();
+        res.getWriter().write(gson.toJson(reimbursementService.getAllByUserId(userId)));
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
+
+    // get reimbursement by id (GET @/reimbursements/{id})
+    int reimbursementId = Integer.parseInt(path.substring(1));
 
     // get reimbursement
     Reimbursement reimbursement;
@@ -223,6 +238,71 @@ public class ReimbursementServlet extends HttpServlet {
     }
   }
 
+  // DELETE @/reimbursements/:id
+  @Override
+  protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+    setAccessControlHeaders(res);
+
+    // Get the token from the request
+    String token = Util.getToken(req);
+    if (token == null) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // validate token
+    if (!authService.isTokenValid(token)) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // get user from token
+    User user;
+    try {
+      user = authService.getUserFromToken(token);
+      if (user == null) {
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return;
+      }
+    } catch (SQLException e) {
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+
+    // get reimbursement id
+    String path = req.getPathInfo();
+
+    if (path == null) {
+      res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    int reimbursementId = Integer.parseInt(path.substring(1));
+
+    // get reimbursement
+    Reimbursement reimbursement;
+    try {
+      reimbursement = reimbursementService.get(reimbursementId);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+
+    // check if reimbursement belongs to user
+    if (reimbursement.getAuthorId() != user.getId()) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    try {
+      reimbursementService.delete(reimbursementId);
+      res.setStatus(HttpServletResponse.SC_OK);
+    } catch (SQLException e) {
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    }
+  }
 
   public void destroy() {
     try {

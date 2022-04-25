@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.revature.models.Reimbursement;
 
@@ -69,4 +71,55 @@ public class ReimbursementDao {
     return null;
   }
 
+  public void delete(int reimbursementId) throws SQLException {
+    String query = "DELETE FROM ers_reimbursement WHERE reimb_id = ?";
+    PreparedStatement ps = connection.prepareStatement(query);
+    ps.setInt(1, reimbursementId);
+    if (ps.executeUpdate() == 1) {
+      return;
+    } else {
+      throw new SQLException("Failed to delete reimbursement");
+    }
+
+  }
+
+  public List<Reimbursement> getAll() throws SQLException {
+    String query = "SELECT * FROM ers_reimbursement";
+
+    List<Reimbursement> reimbursements = new ArrayList<>();
+
+    PreparedStatement ps = connection.prepareStatement(query);
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+      Reimbursement reimbursement = new Reimbursement();
+      reimbursement.setId(rs.getInt("reimb_id"));
+      reimbursement.setAmount(rs.getDouble("reimb_amount"));
+      reimbursement.setDescription(rs.getString("reimb_description"));
+      reimbursement.setAuthorId(rs.getInt("reimb_author"));
+      reimbursement.setReimbursementTypeId(rs.getInt("reimb_type_id"));
+      reimbursement.setStatusId(rs.getInt("reimb_status_id"));
+      reimbursements.add(reimbursement);
+    }
+    return reimbursements;
+  }
+
+  public List<Reimbursement> getAllByUserId(int userId) throws SQLException {
+    String query = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
+    List<Reimbursement> reimbursements = new ArrayList<>();
+
+    PreparedStatement ps = connection.prepareStatement(query);
+    ps.setInt(1, userId);
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+      Reimbursement reimbursement = new Reimbursement();
+      reimbursement.setId(rs.getInt("reimb_id"));
+      reimbursement.setAmount(rs.getDouble("reimb_amount"));
+      reimbursement.setDescription(rs.getString("reimb_description"));
+      reimbursement.setAuthorId(rs.getInt("reimb_author"));
+      reimbursement.setReimbursementTypeId(rs.getInt("reimb_type_id"));
+      reimbursement.setStatusId(rs.getInt("reimb_status_id"));
+      reimbursements.add(reimbursement);
+    }
+    return reimbursements;
+  }
 }
