@@ -124,6 +124,7 @@
 				fetch(url, {
 					method: "POST",
 					headers: new Headers({ "Content-Type": "application/json" }),
+					mode: "cors",
 					body: JSON.stringify(json)
 				}).catch(console.error);
 			});
