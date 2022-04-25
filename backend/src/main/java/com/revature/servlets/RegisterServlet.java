@@ -50,8 +50,22 @@ public class RegisterServlet extends HttpServlet {
     }
   }
 
+  private void setAccessControlHeaders(HttpServletResponse res) {
+    res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+    // res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "POST");
+  }
+
+  @Override
+  protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    setAccessControlHeaders(res);
+    res.setStatus(204);
+  }
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    setAccessControlHeaders(res);
     // setup response
     res.setContentType("text/html");
     res.setCharacterEncoding("UTF-8");
