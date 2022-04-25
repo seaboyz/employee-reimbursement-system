@@ -1,12 +1,8 @@
 package com.revature.repositories;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import com.revature.models.Reimbursement;
+
+import java.sql.*;
 
 public class ReimbursementDao {
 
