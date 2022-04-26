@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.revature.database.PostgreSQLDatabase;
 import com.revature.models.Reimbursement;
-import com.revature.models.User;
 import com.revature.repositories.UserDao;
 import com.revature.services.AuthService;
 import com.revature.services.ReimbursementService;
@@ -306,57 +305,37 @@ public class ReimbursementServlet extends HttpServlet {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
-
-    // validate token
+    // verify token
     if (!authService.isTokenValid(token)) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
+    // get reimbursementId from request
+    int reimbursementId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
 
-    // get user from token
-    User user;
     try {
-      user = authService.getUser(token);
-      if (user == null) {
+      // get reimbursement from database
+      Reimbursement reimbursement = reimbursementService.getReimbursementById(reimbursementId);
+      if (reimbursement == null) {
+        res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+      // check if status is PENDING
+      if (reimbursement.getStatusId() != 1) {
+        res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+      // verify userId
+      if (reimbursement.getAuthorId() != authService.getUserId(token)) {
         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return;
       }
-    } catch (SQLException e) {
-      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
-
-    // get reimbursement id
-    String path = req.getPathInfo();
-
-    if (path == null) {
-      res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      return;
-    }
-
-    int reimbursementId = Integer.parseInt(path.substring(1));
-
-    // get reimbursement
-    Reimbursement reimbursement;
-    try {
-      reimbursement = reimbursementService.getReimbursementById(reimbursementId);
-    } catch (SQLException e) {
-      e.printStackTrace();
-      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
-
-    // check if reimbursement belongs to user
-    if (reimbursement.getAuthorId() != user.getId()) {
-      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      return;
-    }
-
-    try {
+      // delete reimbursement
       reimbursementService.delete(reimbursementId);
       res.setStatus(HttpServletResponse.SC_OK);
     } catch (SQLException e) {
       res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
     }
   }
 
