@@ -58,7 +58,7 @@ public class UserServlet extends HttpServlet {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
   }
 
-  // * Preflight
+  // preflight request
   @Override
   protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     setAccessControlHeaders(res);

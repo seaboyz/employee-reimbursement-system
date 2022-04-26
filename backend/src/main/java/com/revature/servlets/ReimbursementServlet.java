@@ -1,6 +1,7 @@
 package com.revature.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -52,6 +53,7 @@ public class ReimbursementServlet extends HttpServlet {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
   }
 
+  // preflight request
   @Override
   protected void doOptions(HttpServletRequest req, HttpServletResponse res) {
     setAccessControlHeaders(res);
@@ -64,41 +66,36 @@ public class ReimbursementServlet extends HttpServlet {
 
     setAccessControlHeaders(res);
 
+    // setup response
+    res.setContentType("application/json");
+    res.setCharacterEncoding("UTF-8");
+    PrintWriter out = res.getWriter();
+
     // Get the token from the request
     String token = Util.getToken(req);
+
+    // verify token
     if (token == null) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
-
-    // validate token
     if (!authService.isTokenValid(token)) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
-    // get user from token
-    User user;
-    try {
-      user = authService.getUserFromToken(token);
-      if (user == null) {
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return;
-      }
-    } catch (SQLException e) {
-      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
+    // get path info
+    String pathInfo = req.getPathInfo();
 
-    // get path
-    String path = req.getPathInfo();
+    // get userId from query string
+    String userId = req.getParameter("userId");
 
-    // get all reimbursements (GET @/reimbursements)
-    if (path == null) {
+    // as admin, get all reimbursements
+    boolean isAdmin = authService.isAdmin(token);
+    if (isAdmin && pathInfo == null) {
       try {
-        // get userid from token
-        int userId = user.getId();
-        res.getWriter().write(gson.toJson(reimbursementService.getAllByUserId(userId)));
+        out.println(gson.toJson(reimbursementService.getAllReimbursements()));
+        res.setStatus(HttpServletResponse.SC_OK);
         return;
       } catch (SQLException e) {
         res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -106,21 +103,65 @@ public class ReimbursementServlet extends HttpServlet {
       }
     }
 
-    // get reimbursement by id (GET @/reimbursements/{id})
-    int reimbursementId = Integer.parseInt(path.substring(1));
-
-    // get reimbursement
-    Reimbursement reimbursement;
-    try {
-      reimbursement = reimbursementService.get(reimbursementId);
-    } catch (SQLException e) {
-      e.printStackTrace();
-      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
+    if (isAdmin && pathInfo != null) {
+      int id = Integer.parseInt(pathInfo.substring(1));
+      try {
+        out.println(gson.toJson(reimbursementService.getReimbursementById(id)));
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
     }
 
-    res.setStatus(HttpServletResponse.SC_OK);
-    res.getWriter().write(gson.toJson(reimbursement));
+    if (isAdmin && userId != null) {
+      // get all reimbursements for user
+      try {
+        out.println(gson.toJson(reimbursementService.getReimbursementsByUserId(Integer.parseInt(userId))));
+        res.setStatus(HttpServletResponse.SC_OK);
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
+
+    // get all reimbursements
+    if (isAdmin && userId == null && pathInfo == null) {
+      try {
+        out.println(gson.toJson(reimbursementService.getAllReimbursements()));
+        res.setStatus(HttpServletResponse.SC_OK);
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
+
+    // get all reimbursements for user
+    if (!isAdmin && pathInfo == null) {
+      try {
+        out.println(
+            gson.toJson(reimbursementService.getReimbursementsByUserId(authService.getUserFromToken(token).getId())));
+        res.setStatus(HttpServletResponse.SC_OK);
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
+
+    // get reimbursement by id
+    if (!isAdmin && pathInfo != null) {
+      int id = Integer.parseInt(pathInfo.substring(1));
+      try {
+        out.println(gson.toJson(reimbursementService.getReimbursementById(id)));
+        res.setStatus(HttpServletResponse.SC_OK);
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
 
   }
 
@@ -210,7 +251,7 @@ public class ReimbursementServlet extends HttpServlet {
     // get reimbursement
     Reimbursement reimbursement;
     try {
-      reimbursement = reimbursementService.get(reimbursementId);
+      reimbursement = reimbursementService.getReimbursementById(reimbursementId);
     } catch (SQLException e) {
       e.printStackTrace();
       res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -229,9 +270,8 @@ public class ReimbursementServlet extends HttpServlet {
     reimbursementTobeUpdated.setId(reimbursementId);
 
     try {
-      Reimbursement updatedReimbursement = reimbursementService.update(reimbursementTobeUpdated);
+      reimbursementService.update(reimbursementTobeUpdated);
       res.setStatus(HttpServletResponse.SC_OK);
-      res.getWriter().write(gson.toJson(updatedReimbursement));
     } catch (SQLException e) {
       res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
@@ -283,7 +323,7 @@ public class ReimbursementServlet extends HttpServlet {
     // get reimbursement
     Reimbursement reimbursement;
     try {
-      reimbursement = reimbursementService.get(reimbursementId);
+      reimbursement = reimbursementService.getReimbursementById(reimbursementId);
     } catch (SQLException e) {
       e.printStackTrace();
       res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
