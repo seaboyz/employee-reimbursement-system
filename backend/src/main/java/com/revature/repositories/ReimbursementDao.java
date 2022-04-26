@@ -150,27 +150,29 @@ public class ReimbursementDao {
     return reimbursements;
   }
 
-  public void approve(int reimbursementId, int adminId) throws SQLException {
-    String query = "UPDATE ERS_REIMBURSEMENT SET REIMB_STATUS_ID = ?, REIMB_RESOLVER = ?, REIMB_RESOLVED = NOW() WHERE REIMB_ID = ?;";
-    PreparedStatement ps = connection.prepareStatement(query);
-    ps.setInt(1, 2);
-    ps.setInt(2, adminId);
-    ps.setInt(3, reimbursementId);
-    if (ps.executeUpdate() != 1) {
-      throw new SQLException("Failed to update reimbursement");
-    }
-  }
+  // public void approve(int reimbursementId, int adminId) throws SQLException {
+  // String query = "UPDATE ERS_REIMBURSEMENT SET REIMB_STATUS_ID = ?,
+  // REIMB_RESOLVER = ?, REIMB_RESOLVED = NOW() WHERE REIMB_ID = ?;";
+  // PreparedStatement ps = connection.prepareStatement(query);
+  // ps.setInt(1, 2);
+  // ps.setInt(2, adminId);
+  // ps.setInt(3, reimbursementId);
+  // if (ps.executeUpdate() != 1) {
+  // throw new SQLException("Failed to update reimbursement");
+  // }
+  // }
 
-  public void deny(int reimbursementId, int adminId) throws SQLException {
-    String query = "UPDATE ERS_REIMBURSEMENT SET REIMB_STATUS_ID = ?, REIMB_RESOLVER = ?, REIMB_RESOLVED = NOW() WHERE REIMB_ID = ?;";
-    PreparedStatement ps = connection.prepareStatement(query);
-    ps.setInt(1, 3);
-    ps.setInt(2, adminId);
-    ps.setInt(3, reimbursementId);
-    if (ps.executeUpdate() != 1) {
-      throw new SQLException("Failed to update reimbursement");
-    }
-  }
+  // public void deny(int reimbursementId, int adminId) throws SQLException {
+  // String query = "UPDATE ERS_REIMBURSEMENT SET REIMB_STATUS_ID = ?,
+  // REIMB_RESOLVER = ?, REIMB_RESOLVED = NOW() WHERE REIMB_ID = ?;";
+  // PreparedStatement ps = connection.prepareStatement(query);
+  // ps.setInt(1, 3);
+  // ps.setInt(2, adminId);
+  // ps.setInt(3, reimbursementId);
+  // if (ps.executeUpdate() != 1) {
+  // throw new SQLException("Failed to update reimbursement");
+  // }
+  // }
 
   public List<Reimbursement> getAllReimbursementsByUserId(int userId) throws SQLException {
     String query = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
@@ -190,6 +192,17 @@ public class ReimbursementDao {
       reimbursements.add(reimbursement);
     }
     return reimbursements;
+  }
+
+  public void updateStatus(int reimbursementId, int statusId, int resolverId) throws SQLException {
+    String query = "UPDATE ers_reimbursement SET reimb_status_id = ?, reimb_resolver = ?, reimb_resolved = NOW() WHERE reimb_id = ?";
+    PreparedStatement ps = connection.prepareStatement(query);
+    ps.setInt(1, statusId);
+    ps.setInt(2, resolverId);
+    ps.setInt(3, reimbursementId);
+    if (ps.executeUpdate() != 1) {
+      throw new SQLException("Failed to update reimbursement");
+    }
   }
 
 }

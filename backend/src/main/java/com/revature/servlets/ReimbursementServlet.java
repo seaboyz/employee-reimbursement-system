@@ -255,19 +255,13 @@ public class ReimbursementServlet extends HttpServlet {
     if (isAdmin && status != -1 && reimbursementId != -1) {
       try {
         int adminId = authService.getUserId(token);
-        if (status == 1) {
-          res.setStatus(HttpServletResponse.SC_OK);
-        } else if (status == 2) {
-          reimbursementService.approve(reimbursementId, adminId);
-        } else if (status == 3) {
-          reimbursementService.deny(reimbursementId, adminId);
-        } else {
-          res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
+        reimbursementService.updateStatus(reimbursementId, status, adminId);
+        res.setStatus(HttpServletResponse.SC_OK);
+        return;
       } catch (SQLException e) {
         res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
       }
-      return;
     }
 
     // as user, update only amount, description, receipt,and reimbursementTypeId
