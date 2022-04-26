@@ -157,4 +157,12 @@ public class AuthService {
     return false;
   }
 
+  public boolean isAdmin(String token) {
+    DecodedJWT verifier = getVerifier(token);
+    if (verifier != null) {
+      return verifier.getClaim("isAdmin").asBoolean();
+    }
+    return false;
+  }
+
 }

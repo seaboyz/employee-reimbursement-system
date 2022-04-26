@@ -78,9 +78,14 @@ public class UserServlet extends HttpServlet {
 
     // get path
     String path = req.getPathInfo();
+
+    // get token from req
+    String token = Util.getToken(req);
+
     // login
     // @/users
-    if (path == null) {
+    // login does not need to be authenticated(no token)
+    if (path == null && token == null) {
       String auth = req.getHeader("Authorization");
       String base64Credentials = auth.substring("Basic".length()).trim();
       byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
@@ -105,22 +110,35 @@ public class UserServlet extends HttpServlet {
       }
     }
 
-    // @users/:id
-    // get userId
-    int userId = Integer.parseInt(path.substring(1));
-
-    // get token from req
-    String token = Util.getToken(req);
+    // verify token
     if (token == null) {
       res.setStatus(401);
       return;
     }
-
-    // verify token
     if (!authService.isTokenValid(token)) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
-    } else if (!authService.isSelf(userId, token)) {
+    }
+
+    // as admin
+    if (authService.isAdmin(token)) {
+      // get all users as admin
+      try {
+        res.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(userService.getAllUsers()));
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
+
+    // as user
+    // @users/:id
+    // get userId
+    int userId = Integer.parseInt(path.substring(1));
+
+    if (!authService.isSelf(userId, token)) {
       // can only get their own user info
       res.setStatus(HttpServletResponse.SC_FORBIDDEN);
       return;

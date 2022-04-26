@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,9 +113,32 @@ public class UserDao implements Dao<User> {
   }
 
   @Override
-  public List<User> all() throws SQLException {
+  public List<User> getAll() throws SQLException {
+    String query = "SELECT * FROM ers_users";
 
-    return null;
+    List<User> users = new ArrayList<>();
+    PreparedStatement ps = connection.prepareStatement(query);
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+      User user = new User();
+      user.setId(rs.getInt("ers_user_id"));
+      user.setUsername(rs.getString("ers_user_name"));
+      user.setPassword(rs.getString("ers_password"));
+      user.setEmail(rs.getString("ers_email"));
+      user.setFirstname(
+          rs.getString("ers_first_name"));
+      user.setLastname(rs.getString("ers_last_name"));
+      int roleId = rs.getInt("user_role_id");
+      if (roleId == 1) {
+        user.setRole(Role.EMPLOYEE);
+      } else if (roleId == 2) {
+        user.setRole(Role.FINANCE_MANAGER);
+      } else if (roleId == 3) {
+        user.setRole(Role.NOT_CURRENT_EMPLOYEE);
+      }
+      users.add(user);
+    }
+    return users;
   }
 
   @Override

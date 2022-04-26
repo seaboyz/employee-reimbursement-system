@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import com.revature.exceptions.UserNotExistException;
@@ -58,5 +59,9 @@ public class UserService {
 
   public User removeUser(User currentEmployee) throws SQLException {
     return null;
+  }
+
+  public List<User> getAllUsers() throws SQLException {
+    return userDao.getAll();
   }
 }

@@ -13,7 +13,7 @@ public interface Dao<T> {
 
   Optional<T> get(String username) throws SQLException;
 
-  List<T> all() throws SQLException;
+  List<T> getAll() throws SQLException;
 
   User update(T t) throws SQLException;
 
