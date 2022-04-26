@@ -44,4 +44,12 @@ public class ReimbursementService {
         return reimbursementDao.getAllReimbursementsByUserId(userId);
     }
 
+    public void approve(int reimbursementId, int adminId) throws SQLException {
+        reimbursementDao.approve(reimbursementId, adminId);
+    }
+
+    public void deny(int reimbursementId, int adminId) throws SQLException {
+        reimbursementDao.deny(reimbursementId, adminId);
+    }
+
 }

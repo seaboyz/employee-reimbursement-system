@@ -150,7 +150,7 @@ public class ReimbursementDao {
     return reimbursements;
   }
 
-  public void aprove(int reimbursementId, int adminId) throws SQLException {
+  public void approve(int reimbursementId, int adminId) throws SQLException {
     String query = "UPDATE ERS_REIMBURSEMENT SET REIMB_STATUS_ID = ?, REIMB_RESOLVER = ?, REIMB_RESOLVED = NOW() WHERE REIMB_ID = ?;";
     PreparedStatement ps = connection.prepareStatement(query);
     ps.setInt(1, 2);
