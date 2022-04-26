@@ -213,6 +213,8 @@ public class UserServlet extends HttpServlet {
   }
 
   // PUT @users/{id}
+  // update user info
+  // only user can update their own info
   @Override
   protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     setAccessControlHeaders(res);
@@ -270,6 +272,63 @@ public class UserServlet extends HttpServlet {
     } catch (SQLException e) {
       res.setStatus(500);
       out.println("<h2>Fail of updating your profile, try again later.</h2>");
+    }
+
+  }
+
+  // DELETE @users/{id}
+  // delete user
+  // only admin can delete user
+  @Override
+  protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    setAccessControlHeaders(res);
+
+    // get path
+    String path = req.getPathInfo();
+    if (path == null) {
+      res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    // get token from req
+    String token = Util.getToken(req);
+    if (token == null) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // verify token
+    if (!authService.isTokenValid(token)) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    // verify identity
+    // is admin
+    if (!authService.isAdmin(token)) {
+      res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      return;
+    }
+
+    // get userId
+    int userId = Integer.parseInt(path.substring(1));
+
+    // only user can be deleted by admin
+    // admin can only delete user that is not self
+    if (authService.isSelf(userId, token)) {
+      res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      return;
+    }
+    try {
+      userService.deleteUserById(userId);
+      res.setStatus(HttpServletResponse.SC_OK);
+      return;
+    } catch (SQLException e) {
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    } catch (UserNotExistException e) {
+      res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      return;
     }
 
   }

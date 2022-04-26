@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.revature.exceptions.UserNotExistException;
 import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.util.Util;
@@ -167,7 +168,12 @@ public class UserDao implements Dao<User> {
 
   @Override
   public void delete(int id) throws SQLException {
-
+    String query = "DELETE FROM ERS_USERS WHERE ERS_USER_ID = ?";
+    PreparedStatement ps = connection.prepareStatement(query);
+    ps.setInt(1, id);
+    if (!ps.execute()) {
+      throw new UserNotExistException();
+    }
   }
 
 }

@@ -58,10 +58,6 @@ public class UserService {
     return userDao.update(userTobeUpdated);
   }
 
-  public User removeUser(User currentEmployee) throws SQLException {
-    return null;
-  }
-
   public List<User> getAllUsers() throws SQLException {
     return userDao.getAll();
   }
@@ -69,4 +65,9 @@ public class UserService {
   public User getUserById(int id) throws SQLException, UserNotExistException {
     return userDao.get(id).orElseThrow(() -> new UserNotExistException());
   }
+
+  public void deleteUserById(int userId) throws SQLException , UserNotExistException {
+    userDao.delete(userId);
+  }
+
 }
