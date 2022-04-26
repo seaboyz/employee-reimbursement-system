@@ -1,112 +1,113 @@
 package com.revature.models;
 
+import java.sql.Blob;
+import java.sql.Timestamp;
+
 public class Reimbursement {
     private int id;
-    private int authorId;
     private double amount;
+    private Timestamp submitted;
+    private Timestamp resolved;
     private String description;
+    private Blob receipt;
+    private int authorId;
+    private int resolverId;
     private int statusId;
-    private String type;
-    private String submitted;
-    private String resolved;
     private int reimbursementTypeId;
-
-    public Reimbursement(int id, int authorId, double amount, String description, int statusId, String type,
-            String submitted, String resolved, int reimbursementTypeId) {
-        this.id = id;
-        this.authorId = authorId;
-        this.amount = amount;
-        this.description = description;
-        this.statusId = statusId;
-        this.type = type;
-        this.submitted = submitted;
-        this.resolved = resolved;
-        this.reimbursementTypeId = reimbursementTypeId;
-    }
 
     public Reimbursement() {
         super();
     }
 
-    public Reimbursement(int authorId, int amount, String description, int reimbursementTypeId) {
+    public Reimbursement(int id, double amount, Timestamp submitted, Timestamp resolved, String description,
+            Blob receipt, int authorId, int resolverId, int statusId, int reimbursementTypeId) {
+        super();
+        this.id = id;
+        this.amount = amount;
+        this.submitted = submitted;
+        this.resolved = resolved;
+        this.description = description;
+        this.receipt = receipt;
         this.authorId = authorId;
-        this.amount = amount;
-        this.description = description;
-        this.reimbursementTypeId = reimbursementTypeId;
-    }
-
-    public Reimbursement(int amount, String description, int reimbursementTypeId) {
-        this.amount = amount;
-        this.description = description;
+        this.resolverId = resolverId;
+        this.statusId = statusId;
         this.reimbursementTypeId = reimbursementTypeId;
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
     public double getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public void setAmount(double amount) {
         this.amount = amount;
     }
 
+    public Timestamp getSubmitted() {
+        return this.submitted;
+    }
+
+    public void setSubmitted(Timestamp submitted) {
+        this.submitted = submitted;
+    }
+
+    public Timestamp getResolved() {
+        return this.resolved;
+    }
+
+    public void setResolved(Timestamp resolved) {
+        this.resolved = resolved;
+    }
+
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public Blob getReceipt() {
+        return this.receipt;
+    }
+
+    public void setReceipt(Blob receipt) {
+        this.receipt = receipt;
+    }
+
+    public int getAuthorId() {
+        return this.authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public int getResolverId() {
+        return this.resolverId;
+    }
+
+    public void setResolverId(int resolverId) {
+        this.resolverId = resolverId;
+    }
+
     public int getStatusId() {
-        return statusId;
+        return this.statusId;
     }
 
     public void setStatusId(int statusId) {
         this.statusId = statusId;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getSubmitted() {
-        return submitted;
-    }
-
-    public void setSubmitted(String submitted) {
-        this.submitted = submitted;
-    }
-
-    public String getResolved() {
-        return resolved;
-    }
-
-    public void setResolved(String resolved) {
-        this.resolved = resolved;
-    }
-
     public int getReimbursementTypeId() {
-        return reimbursementTypeId;
+        return this.reimbursementTypeId;
     }
 
     public void setReimbursementTypeId(int reimbursementTypeId) {
