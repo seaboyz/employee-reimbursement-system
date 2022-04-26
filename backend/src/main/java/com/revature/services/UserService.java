@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.gson.JsonElement;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
 import com.revature.repositories.UserDao;
@@ -63,5 +64,9 @@ public class UserService {
 
   public List<User> getAllUsers() throws SQLException {
     return userDao.getAll();
+  }
+
+  public User getUserById(int id) throws SQLException, UserNotExistException {
+    return userDao.get(id).orElseThrow(() -> new UserNotExistException());
   }
 }

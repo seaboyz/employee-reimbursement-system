@@ -84,7 +84,7 @@ public class UserServlet extends HttpServlet {
 
     // login
     // @/users
-    // login does not need to be authenticated(no token)
+    // login does not need to be authenticated(no token nor username/password)
     if (path == null && token == null) {
       String auth = req.getHeader("Authorization");
       String base64Credentials = auth.substring("Basic".length()).trim();
@@ -110,6 +110,7 @@ public class UserServlet extends HttpServlet {
       }
     }
 
+    // both admin and user can access this with token
     // verify token
     if (token == null) {
       res.setStatus(401);
@@ -121,7 +122,9 @@ public class UserServlet extends HttpServlet {
     }
 
     // as admin
-    if (authService.isAdmin(token)) {
+    boolean isAdmin = authService.isAdmin(token);
+    ;
+    if (isAdmin && path == null) {
       // get all users as admin
       try {
         res.setStatus(HttpServletResponse.SC_OK);
@@ -132,6 +135,24 @@ public class UserServlet extends HttpServlet {
         return;
       }
     }
+    if (isAdmin && path != null) {
+      // get any user by id as admin including self
+      try {
+        int id = Integer.parseInt(path.substring(1));
+        res.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(userService.getUserById(id)));
+        return;
+      } catch (NumberFormatException e) {
+        res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      } catch (UserNotExistException e) {
+        res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+    }
 
     // as user
     // @users/:id
@@ -139,7 +160,7 @@ public class UserServlet extends HttpServlet {
     int userId = Integer.parseInt(path.substring(1));
 
     if (!authService.isSelf(userId, token)) {
-      // can only get their own user info
+      // user can only get their own user info
       res.setStatus(HttpServletResponse.SC_FORBIDDEN);
       return;
     } else {
