@@ -181,40 +181,35 @@ public class ReimbursementServlet extends HttpServlet {
     setAccessControlHeaders(res);
 
     // Get the token from the request
+    // validate token
     String token = Util.getToken(req);
     if (token == null) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
-
-    // validate token
     if (!authService.isTokenValid(token)) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
-    // get user from token
-    User user;
-    try {
-      user = authService.getUserFromToken(token);
-      if (user == null) {
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return;
-      }
-    } catch (SQLException e) {
-      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    // get userId from token
+    int userId = authService.getUserId(token);
+    if (userId == -1) {
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
-    String body = req.getReader().lines().reduce("", (acc, line) -> acc + line);
+    // get reimbursement from request body
+    String body = Util.getBody(req);
 
+    // parse reimbursement from json
     Reimbursement reimbursement = gson.fromJson(body, Reimbursement.class);
-    reimbursement.setAuthorId(user.getId());
+    reimbursement.setAuthorId(userId);
 
     try {
       Reimbursement savedReimbursement = reimbursementService.add(reimbursement);
       res.setStatus(HttpServletResponse.SC_OK);
-      res.getWriter().write(gson.toJson(savedReimbursement));
+      res.getWriter().println(gson.toJson(savedReimbursement));
     } catch (SQLException e) {
       res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
@@ -243,7 +238,7 @@ public class ReimbursementServlet extends HttpServlet {
     // get user from token
     User user;
     try {
-      user = authService.getUserFromToken(token);
+      user = authService.getUser(token);
       if (user == null) {
         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return;
@@ -309,7 +304,7 @@ public class ReimbursementServlet extends HttpServlet {
     // get user from token
     User user;
     try {
-      user = authService.getUserFromToken(token);
+      user = authService.getUser(token);
       if (user == null) {
         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return;

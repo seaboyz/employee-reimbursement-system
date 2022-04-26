@@ -92,7 +92,7 @@ public class AuthService {
     }
   }
 
-  public User getUserFromToken(String token) throws SQLException {
+  public User getUser(String token) throws SQLException {
     DecodedJWT jwt = getVerifier(token);
     if (jwt == null) {
       return null;
@@ -106,18 +106,14 @@ public class AuthService {
     return new User(user.getId(), user.getUsername(), token);
   }
 
-  public int getUserId(String token) throws SQLException {
-    DecodedJWT jwt = getVerifier(token);
-    if (jwt == null) {
-      return -1;
+  public int getUserId(String token) {
+    DecodedJWT verifier = getVerifier(token);
+    if (verifier != null) {
+      int verifiedId = verifier.getClaim("id").asInt();
+      return verifiedId;
     }
-    String username = jwt.getClaim("username").asString();
-    Optional<User> optionalUser = userService.getByUsername(username);
-    if (!optionalUser.isPresent()) {
-      return -1;
-    }
-    User user = optionalUser.get();
-    return user.getId();
+    return -1;
+
   }
 
   public boolean isTokenValid(String token) {

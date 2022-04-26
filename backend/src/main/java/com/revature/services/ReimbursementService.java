@@ -8,40 +8,40 @@ import com.revature.models.Reimbursement;
 import com.revature.repositories.ReimbursementDao;
 
 public class ReimbursementService {
-    ReimbursementDao reimbursementDAO;
+    ReimbursementDao reimbursementDao;
 
     public ReimbursementService(Connection connection) {
-        this.reimbursementDAO = new ReimbursementDao(connection);
+        this.reimbursementDao = new ReimbursementDao(connection);
     }
 
     public Reimbursement add(Reimbursement reimbursement) throws SQLException {
-        return reimbursementDAO.add(reimbursement);
+        return reimbursementDao.add(reimbursement);
     }
 
     public Reimbursement getReimbursementById(int id) throws SQLException, IllegalArgumentException {
-        return reimbursementDAO.get(id);
+        return reimbursementDao.get(id);
     }
 
     public void update(Reimbursement reimbursementTobeUpdated) throws SQLException {
-        reimbursementDAO.update(reimbursementTobeUpdated);
+        reimbursementDao.update(reimbursementTobeUpdated);
 
     }
 
     public void delete(int reimbursementId) throws SQLException {
-        reimbursementDAO.delete(reimbursementId);
+        reimbursementDao.delete(reimbursementId);
     }
 
     public List<Reimbursement> getAllReimbursements() throws SQLException {
-        return reimbursementDAO.getAll();
+        return reimbursementDao.getAll();
 
     }
 
     public List<Reimbursement> getAllByUserId(int userId) throws SQLException {
-        return reimbursementDAO.getAllByUserId(userId);
+        return reimbursementDao.getAllByUserId(userId);
     }
 
     public List<Reimbursement> getAllReimbursementsByUserId(int userId) throws SQLException {
-        return reimbursementDAO.getAllReimbursementsByUserId(userId);
+        return reimbursementDao.getAllReimbursementsByUserId(userId);
     }
 
 }
