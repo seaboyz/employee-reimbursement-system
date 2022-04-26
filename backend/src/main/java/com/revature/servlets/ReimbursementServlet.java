@@ -264,10 +264,34 @@ public class ReimbursementServlet extends HttpServlet {
       }
     }
 
-    // as user, update only amount, description, receipt,and reimbursementTypeId
-    if (!isAdmin) {
-
+    // as user, update only amount, description, reimbursementTypeId
+    // when status is PENDING
+    if (!isAdmin && reimbursementId != -1) {
+      String body = Util.getBody(req);
+      try {
+        Reimbursement reimbursementFromDatabase = reimbursementService.getReimbursementById(reimbursementId);
+        if (reimbursementFromDatabase.getAuthorId() != authService.getUserId(token)) {
+          res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          return;
+        }
+        if (reimbursementFromDatabase.getStatusId() != 1) {
+          res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          return;
+        }
+        Reimbursement reimbursementFromRequest = gson.fromJson(body, Reimbursement.class);
+        reimbursementFromDatabase.setAmount(reimbursementFromRequest.getAmount());
+        reimbursementFromDatabase.setDescription(reimbursementFromRequest.getDescription());
+        reimbursementFromDatabase.setReimbursementTypeId(reimbursementFromRequest.getReimbursementTypeId());
+        reimbursementService.update(reimbursementFromDatabase);
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    } else {
+      res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      return;
     }
+
   }
 
   // DELETE @/reimbursements/:id
