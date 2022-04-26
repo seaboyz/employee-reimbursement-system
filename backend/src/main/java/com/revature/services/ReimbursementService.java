@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.google.gson.JsonElement;
 import com.revature.models.Reimbursement;
 import com.revature.repositories.ReimbursementDao;
 
@@ -19,7 +18,7 @@ public class ReimbursementService {
         return reimbursementDAO.add(reimbursement);
     }
 
-    public Reimbursement getReimbursementById(int id) throws SQLException {
+    public Reimbursement getReimbursementById(int id) throws SQLException, IllegalArgumentException {
         return reimbursementDAO.get(id);
     }
 
@@ -41,8 +40,8 @@ public class ReimbursementService {
         return reimbursementDAO.getAllByUserId(userId);
     }
 
-    public List<Reimbursement> getReimbursementsByUserId(int userId) throws SQLException {
-        return reimbursementDAO.getReimbursementsByUserId(userId);
+    public List<Reimbursement> getAllReimbursementsByUserId(int userId) throws SQLException {
+        return reimbursementDAO.getAllReimbursementsByUserId(userId);
     }
 
 }

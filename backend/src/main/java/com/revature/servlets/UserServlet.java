@@ -84,7 +84,7 @@ public class UserServlet extends HttpServlet {
 
     // login
     // @/users
-    // login does not need to be authenticated(no token nor username/password)
+    // login does not need to be authenticated(no token)
     if (path == null && token == null) {
       String auth = req.getHeader("Authorization");
       String base64Credentials = auth.substring("Basic".length()).trim();

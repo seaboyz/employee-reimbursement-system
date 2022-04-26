@@ -36,15 +36,6 @@ public class AuthService {
     this.userService = userService;
   }
 
-  /**
-   * <ul>
-   * <li>Needs to check for existing users with username/email provided.</li>
-   * <li>Must throw exception if user does not exist.</li>
-   * <li>Must compare password provided and stored password for that user.</li>
-   * <li>Should throw exception if the passwords do not match.</li>
-   * <li>Must return user object if the user logs in successfully.</li>
-   * </ul>
-   */
   public User authenticate(String username, String password)
       throws UserNotExistException, UserNamePasswordNotMatchException, SQLException {
 
@@ -68,19 +59,6 @@ public class AuthService {
 
   }
 
-  /**
-   * <ul>
-   * <li>Should ensure that the username/email provided is unique.</li>
-   * <li>Must throw exception if the username/email is not unique.</li>
-   * <li>Should persist the user object upon successful registration.</li>
-   * <li>Must throw exception if registration is unsuccessful.</li>
-   * <li>Must return user object if the user registers successfully.</li>
-   * <li>Must throw exception if provided user has a non-zero ID</li>
-   * </ul>
-   * <p>
-   * Note: userToBeRegistered will have an id=0, additional fields may be null.
-   * After registration, the id will be a positive integer.
-   */
   public void register(User userToBeRegistered) throws SQLException, UsernameNotUniqueException {
 
     Optional<User> optionalUser = userService.getByUsername(userToBeRegistered.getUsername());
@@ -126,6 +104,20 @@ public class AuthService {
     }
     User user = optionalUser.get();
     return new User(user.getId(), user.getUsername(), token);
+  }
+
+  public int getUserId(String token) throws SQLException {
+    DecodedJWT jwt = getVerifier(token);
+    if (jwt == null) {
+      return -1;
+    }
+    String username = jwt.getClaim("username").asString();
+    Optional<User> optionalUser = userService.getByUsername(username);
+    if (!optionalUser.isPresent()) {
+      return -1;
+    }
+    User user = optionalUser.get();
+    return user.getId();
   }
 
   public boolean isTokenValid(String token) {

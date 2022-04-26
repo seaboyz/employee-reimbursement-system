@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonElement;
 import com.revature.models.Reimbursement;
 
 public class ReimbursementDao {
@@ -59,7 +58,7 @@ public class ReimbursementDao {
 
       return reimbursement;
     } else {
-      throw new SQLException("Reimbursement not found");
+      return null;
     }
 
   }
@@ -173,7 +172,7 @@ public class ReimbursementDao {
     }
   }
 
-  public List<Reimbursement> getReimbursementsByUserId(int userId) throws SQLException {
+  public List<Reimbursement> getAllReimbursementsByUserId(int userId) throws SQLException {
     String query = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
     List<Reimbursement> reimbursements = new ArrayList<>();
 

@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import com.google.gson.JsonElement;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.models.User;
 import com.revature.repositories.UserDao;
