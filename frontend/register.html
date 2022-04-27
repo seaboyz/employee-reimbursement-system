@@ -133,6 +133,12 @@
 					type="text"
 					placeholder="Your Email"
 				/>
+				<input
+					id="username"
+					style="margin-top: 1rem"
+					type="text"
+					placeholder="Username"
+				/>
 				<br />
 				<input
 					id="password"
@@ -166,32 +172,6 @@
 				<button style="margin-top: 1.5rem; cursor: pointer">Register</button>
 			</div>
 		</div>
-
-		<script>
-			const button = document.querySelector("button");
-			button.addEventListener("click", event => {
-				event.preventDefault();
-				const email = document.querySelector("#email").value;
-				const username = document.querySelector("#username").value;
-				const password = document.querySelector("#password").value;
-				const firstname = document.querySelector("#firstname").value;
-				const lastname = document.querySelector("#lastname").value;
-				const json = {
-					email,
-					username,
-					password,
-					firstname,
-					lastname
-				};
-				const url = "http://localhost:8080/api/register";
-				fetch(url, {
-					method: "POST",
-					headers: new Headers({ "Content-Type": "application/json" }),
-					mode: "cors",
-					body: JSON.stringify(json)
-				}).catch(console.error);
-			});
-		</script>
 
 		<script src="./scripts/userConnection.js"></script>
 		<script src="./scripts/register.js"></script>

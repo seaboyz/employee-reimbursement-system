@@ -28,8 +28,7 @@ async function registerRequest(newUser) {
 	let response = await fetch(userBaseURL, {
 		method: "POST",
 		headers: {
-			"Content-Type": "application/json",
-			mode: "register"
+			"Content-Type": "application/json"
 		},
 		body: JSON.stringify(newUser)
 	});
