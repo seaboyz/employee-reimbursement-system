@@ -14,6 +14,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator.Builder;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.revature.exceptions.UserNotExistException;
 import com.revature.models.Role;
 import com.revature.models.User;
@@ -56,6 +58,12 @@ public class Util {
     String credentials = new String(credentialDecoded, StandardCharsets.UTF_8);
     String[] credentialsArray = credentials.split(":");
     return credentialsArray;
+  }
+
+  public static JsonObject getJson(HttpServletRequest req) throws IOException {
+    InputStream requestStream = req.getInputStream();
+    InputStreamReader inputStreamReader = new InputStreamReader(requestStream);
+    return JsonParser.parseReader(inputStreamReader).getAsJsonObject();
   }
 
   public static String getBody(HttpServletRequest request) throws IOException {

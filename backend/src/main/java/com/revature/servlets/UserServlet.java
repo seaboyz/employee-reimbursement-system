@@ -1,7 +1,6 @@
 package com.revature.servlets;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -171,10 +170,6 @@ public class UserServlet extends HttpServlet {
     }
   }
 
-  private int extracted(HttpServletRequest req) {
-    return req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
-  }
-
   // POST @users
   // register
   @Override
@@ -218,7 +213,6 @@ public class UserServlet extends HttpServlet {
     // setup response
     res.setContentType("text/html");
     res.setCharacterEncoding("UTF-8");
-    PrintWriter out = res.getWriter();
 
     // get token from req
     String token = Util.getToken(req);
@@ -230,29 +224,25 @@ public class UserServlet extends HttpServlet {
     // verify token
     if (!authService.isTokenValid(token)) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      out.println("<h2>Please login</h2>");
       return;
     }
 
     // get userId
-    int userId = extracted(req);
+    int userId = Util.getUserId(req);
 
     // verify identity
     if (!authService.isSelf(userId, token)) {
       res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      out.println("<h2>No permission allowed</h2>");
       return;
     }
 
     // read json from request
-    InputStream requestStream = req.getInputStream();
-    InputStreamReader inputStreamReader = new InputStreamReader(requestStream);
-    JsonObject jsonObject = JsonParser.parseReader(inputStreamReader).getAsJsonObject();
+    JsonObject body = Util.getJson(req);
 
     // create new User object
-    String username = jsonObject.get("username").getAsString();
-    String email = jsonObject.get("email").getAsString();
-    String password = jsonObject.get("password").getAsString();
+    String username = body.get("username").getAsString();
+    String email = body.get("email").getAsString();
+    String password = body.get("password").getAsString();
     String encriptedPassword = Util.encriptPassword(password);
 
     User userToBeUpdated = new User();
@@ -263,10 +253,11 @@ public class UserServlet extends HttpServlet {
 
     try {
       userService.updateUser(userToBeUpdated);
-      out.println("<h2>Successfully Updated you profile</h2>");
+      res.setStatus(HttpServletResponse.SC_OK);
+      return;
     } catch (SQLException e) {
-      res.setStatus(500);
-      out.println("<h2>Fail of updating your profile, try again later.</h2>");
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
     }
 
   }
@@ -299,7 +290,7 @@ public class UserServlet extends HttpServlet {
     }
 
     // get userId
-    int userId = extracted(req);
+    int userId = Util.getUserId(req);
 
     // only user can be deleted by admin
     // admin can only delete user that is not self
