@@ -1,120 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<link rel="stylesheet" href="./style.css" />
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<style>
-			@import url("https://fonts.googleapis.com/css2?family=Inspiration&family=Roboto&display=swap");
-
-			/* _________________________ */
-			/* Reset                     */
-			/* _________________________ */
-
-			/* Box sizing */
-			*,
-			*::before,
-			*::after {
-				box-sizing: border-box;
-			}
-
-			/* Reset margins */
-			body,
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6,
-			p,
-			picture {
-				margin: 0;
-			}
-
-			/* Reset link underline */
-			a {
-				text-decoration: none;
-			}
-
-			/* set up the body */
-			body {
-				line-height: 1.5;
-				min-height: 100vh;
-			}
-
-			/* make images easier to work with */
-			img,
-			picture {
-				max-width: 100%;
-				display: block;
-			}
-
-			/* make forms easier to work with */
-			input,
-			button,
-			textarea,
-			select {
-				font: inherit;
-			}
-			/* _________________________ */
-			/* Custom properties         */
-			/* _________________________ */
-			body {
-				font-family: "Roboto", sans-serif;
-			}
-
-			h1 {
-				text-align: center;
-			}
-
-			.container {
-				padding: 1rem;
-			}
-
-			input[type="text"],
-			input[type="password"] {
-				width: 100%;
-				padding: 0.5rem;
-				margin: 0.5rem 0;
-			}
-			button {
-				width: 100%;
-				cursor: pointer;
-				margin: 0.5rem 0;
-				padding: 0.5rem 0;
-			}
-		</style>
-		<title>ERS</title>
+		<title>Login</title>
 	</head>
+	<!-- This is our input form. We're not using the HTML form tags here, just some bare elements
+    and some javascript to find them and see their data. The classes are for styling. We are
+    putting a visible box "contentBox" around a flexbox arranged as a column. The flexbox contains
+    "flexRow"s which have the input elements.-->
 	<body>
-		<h1>Welcome to ERS System</h1>
-		<div>
-			<div class="container">
-				<label for="username">Username</label>
-				<input type="text" name="username" id="username" required />
-				<label for="password">Password</label>
-				<input type="password" name="password" id="password" required />
-				<button type="button">Login</button>
+		<p>username: test</p>
+		<p>password: 123456</p>
+		<hr />
+		<div class="contentBox">
+			<div class="flexColumn">
+				<div class="flexRow">
+					<label>Username: </label>
+					<input
+						type="text"
+						id="username"
+						placeholder="username"
+						name="username"
+					/>
+				</div>
+				<div class="flexRow">
+					<label>Password: </label>
+					<input
+						type="text"
+						id="password"
+						placeholder="password"
+						name="password"
+					/>
+				</div>
 			</div>
+			<!-- onclick="submitForm()" hooks into our javascript, calling the funciton below -->
 		</div>
+		<hr />
+		<button onclick="submitForm()">Login</button>
+
+		<!-- This brings in all of the scripts in the source file. 
+        They are effectively "inlined" into this document -->
+		<script src="./scripts/userConnection.js"></script>
+
+		<!-- We can have multiple script elements in one document. 
+        Script elements contain javascript, not HTML -->
 		<script>
-			const button = document.querySelector("button");
-			button.addEventListener("click", event => {
-				event.preventDefault();
-				const username = document.querySelector("#username").value;
-				const password = document.querySelector("#password").value;
-				const encoding = btoa(username + ":" + password);
-				const url = "http://localhost:8080/api/login";
-				fetch(url, {
-					method: "POST",
-					headers: new Headers({
-						Authorization: "Basic " + btoa(username + ":" + password)
-					})
-				})
-					.then(response => response.json())
-					.then(data => localStorage.setItem("authToken", data.token))
-					.catch(console.error);
-			});
+			//so from here until the closing /script tag it's all js.
+			async function submitForm() {
+				/*
+			         Build the object we will transfer in our API call. Grab the values from
+			         the input elements above.
+			         */
+				let credentials = {
+					username: document.getElementById("username").value,
+					password: document.getElementById("password").value
+				};
+
+				let response = await loginRequest(credentials);
+
+				if (response.status == 200) {
+					let json = await response.json();
+
+					let token = json.token;
+					let userId = json.id;
+					localStorage.setItem("userId", userId);
+					localStorage.setItem("token", token);
+
+					//navigate the window to the landing page
+					window.location.href = "./index.html";
+				} else {
+					alert("Unable to log in! Check username and password!");
+				}
+			}
 		</script>
 	</body>
 </html>

@@ -1,0 +1,44 @@
+/*
+.flexColumn is a class selector, when this stylesheet is linked
+into our HTML documents it will apply it's styling to all elements
+with the class="flexColumn" attribute
+The styling is a flexbox arranged in a column with elements evenly spaced.
+*/
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 10px;
+
+}
+/*
+.flexRow class selector. Applys styling to items inside the 
+flexColumn justifying them to the top of the column and giving
+a bit of padding.
+*/
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 5px;
+}
+
+/*
+.contentBox class selector. Applys styling to a box around 
+the flexColumn. Basically a drop shadow effect that is super jank town.
+*/
+.contentBox {
+    border-top: 2px solid gray;
+    border-left: 2px solid gray;
+    border-bottom: 5px solid gray;
+    border-right: 6px solid gray;
+    margin: auto;
+    width: min-content;
+}
+
+/*
+Styling for buttons in flexboxes. Selects contentBoxButton class elements.
+*/
+.contentBoxButton {
+    align-self: center;
+}

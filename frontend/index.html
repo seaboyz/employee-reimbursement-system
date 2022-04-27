@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Welcome to ERS</title>
+	</head>
+
+	<body>
+		<div id="pageContent"><!-- Our inserted content will go here --></div>
+		<script src="./scripts/userConnection.js"></script>
+		<script>
+			let token = localStorage.getItem("token");
+
+			if (!token) {
+				//If there is no token, we redirect to the login page
+				window.location.href = "./login.html";
+			} else {
+				displayUser();
+			}
+
+			function logout() {
+				//We remove the authToken from localStorage
+				localStorage.clear();
+				//We then redirect the user to the login page
+				window.location.href = "./login.html";
+			}
+
+			async function displayUser() {
+				let response = await getUserRequest();
+				let json = await response.json();
+				console.log("Response: ", response);
+				console.log("Response JSON: ", json);
+
+				let paragraph = document.getElementById("pageContent");
+				paragraph.innerHTML += `
+					<h1>Welcome, ${json.username}!</h1>
+					<p>You are logged in!</p>
+					<p>Email: ${json.email}</p>
+					<p>First Name: ${json.firstname}</p>
+					<p>Last Name: ${json.lastname}</p>
+					<hr />
+					<button onclick="logout()">Logout</button>
+				`;
+			}
+		</script>
+	</body>
+</html>
