@@ -90,6 +90,9 @@ public class ReimbursementServlet extends HttpServlet {
     boolean isUser = authService.isTokenValid(token);
     boolean isAdmin = authService.isAdmin(token);
 
+    // @/reimbursements?status={statusId}
+    int statusTypeId = getStatus(req);
+
     // @/reimbursements/:reimbursementId
     int reimbursementId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
 
@@ -99,9 +102,22 @@ public class ReimbursementServlet extends HttpServlet {
 
     // @/reimbursements
     // as admin, get all reimbursements
-    if (isAdmin && reimbursementId == -1 && userId == -1) {
+    if (isAdmin && reimbursementId == -1 && userId == -1 && statusTypeId == -1) {
       try {
         out.println(gson.toJson(reimbursementService.getAllReimbursements()));
+        res.setStatus(HttpServletResponse.SC_OK);
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
+
+    // @/reimbursements?status={statusId}
+    // as admin, can filter reimbursements by status
+    if (isAdmin && reimbursementId == -1 && userId == -1 && statusTypeId != -1) {
+      try {
+        out.println(gson.toJson(reimbursementService.getReimbursementsByStatus(statusTypeId)));
         res.setStatus(HttpServletResponse.SC_OK);
         return;
       } catch (SQLException e) {
@@ -141,7 +157,6 @@ public class ReimbursementServlet extends HttpServlet {
 
     // @/reimbursements
     // as user get all reimbursements belonging to user
-    int statusTypeId = getStatus(req);
 
     if (isUser && reimbursementId == -1 && userId == -1 && statusTypeId == -1) {
       try {

@@ -55,8 +55,13 @@ public class ReimbursementService {
         reimbursementDao.updateStatus(reimbursementId, adminId, statusId);
     }
 
-    public List<Reimbursement> getAllReimbursementsByUserIdAndStatus(int userId, int statusTypeId)  throws SQLException {
+    public List<Reimbursement> getAllReimbursementsByUserIdAndStatus(int userId, int statusTypeId) throws SQLException {
         return reimbursementDao.getAllReimbursementsByUserIdAndStatus(userId, statusTypeId);
+    }
+
+    public List<Reimbursement> getReimbursementsByStatus(int statusTypeId) throws SQLException {
+        return reimbursementDao.getReimbursementsByStatus(statusTypeId);
+
     }
 
 }
