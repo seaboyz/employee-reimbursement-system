@@ -76,16 +76,16 @@ public class UserServlet extends HttpServlet {
     res.setCharacterEncoding("UTF-8");
     PrintWriter out = res.getWriter();
 
-    // get path
-    String path = req.getPathInfo();
-
     // get token from req
     String token = Util.getToken(req);
 
+    // get userId from path
+    int userId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
+
     // login
-    // @/users
-    // login does not need to be authenticated(no token)
-    if (path == null && token == null) {
+    // /users
+    // token is empty
+    if (userId == -1 && token == null) {
       String auth = req.getHeader("Authorization");
       String base64Credentials = auth.substring("Basic".length()).trim();
       byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
@@ -110,7 +110,6 @@ public class UserServlet extends HttpServlet {
       }
     }
 
-    // both admin and user can access this with token
     // verify token
     if (token == null) {
       res.setStatus(401);
@@ -121,10 +120,11 @@ public class UserServlet extends HttpServlet {
       return;
     }
 
+    // /users
     // as admin
     boolean isAdmin = authService.isAdmin(token);
     ;
-    if (isAdmin && path == null) {
+    if (isAdmin && userId == -1) {
       // get all users as admin
       try {
         res.setStatus(HttpServletResponse.SC_OK);
@@ -135,12 +135,13 @@ public class UserServlet extends HttpServlet {
         return;
       }
     }
-    if (isAdmin && path != null) {
+
+    // users/:id
+    if (isAdmin && userId != -1) {
       // get any user by id as admin including self
       try {
-        int id = Integer.parseInt(path.substring(1));
         res.setStatus(HttpServletResponse.SC_OK);
-        out.print(gson.toJson(userService.getUserById(id)));
+        out.print(gson.toJson(userService.getUserById(userId)));
         return;
       } catch (NumberFormatException e) {
         res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -156,26 +157,23 @@ public class UserServlet extends HttpServlet {
 
     // as user
     // @users/:id
-    // get userId
-    int userId = Integer.parseInt(path.substring(1));
-
+    // user can only get their own user info
     if (!authService.isSelf(userId, token)) {
-      // user can only get their own user info
-      res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
-    } else {
-      try {
-        User user = userService.getByUserId(userId);
-        res.setStatus(HttpServletResponse.SC_OK);
-        out.print(gson.toJson(user));
-        return;
-      } catch (SQLException e) {
-        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return;
-      } catch (UserNotExistException e) {
-        res.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      }
+    }
+
+    try {
+      User user = userService.getByUserId(userId);
+      res.setStatus(HttpServletResponse.SC_OK);
+      out.print(gson.toJson(user));
+      return;
+    } catch (SQLException e) {
+      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    } catch (UserNotExistException e) {
+      res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      return;
     }
   }
 
@@ -227,24 +225,23 @@ public class UserServlet extends HttpServlet {
     // get token from req
     String token = Util.getToken(req);
     if (token == null) {
-      res.setStatus(401);
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
-    // get userId
-    String[] path = req.getPathInfo().split("/");
-    int userId = Integer.parseInt(path[1]);
-
     // verify token
     if (!authService.isTokenValid(token)) {
-      res.setStatus(401);
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       out.println("<h2>Please login</h2>");
       return;
     }
 
+    // get userId
+    int userId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
+
     // verify identity
     if (!authService.isSelf(userId, token)) {
-      res.setStatus(401);
+      res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       out.println("<h2>No permission allowed</h2>");
       return;
     }
@@ -283,13 +280,6 @@ public class UserServlet extends HttpServlet {
   protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     setAccessControlHeaders(res);
 
-    // get path
-    String path = req.getPathInfo();
-    if (path == null) {
-      res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      return;
-    }
-
     // get token from req
     String token = Util.getToken(req);
     if (token == null) {
@@ -311,7 +301,7 @@ public class UserServlet extends HttpServlet {
     }
 
     // get userId
-    int userId = Integer.parseInt(path.substring(1));
+    int userId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
 
     // only user can be deleted by admin
     // admin can only delete user that is not self

@@ -171,7 +171,7 @@ public class UserDao implements Dao<User> {
     String query = "DELETE FROM ERS_USERS WHERE ERS_USER_ID = ?";
     PreparedStatement ps = connection.prepareStatement(query);
     ps.setInt(1, id);
-    if (!ps.execute()) {
+    if (ps.executeUpdate() == 0) {
       throw new UserNotExistException();
     }
   }

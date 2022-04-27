@@ -61,7 +61,6 @@ public class ReimbursementServlet extends HttpServlet {
   }
 
   // GET @/reimbursements
-
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
