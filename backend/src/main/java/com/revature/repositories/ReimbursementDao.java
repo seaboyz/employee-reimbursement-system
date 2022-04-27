@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +106,9 @@ public class ReimbursementDao {
       reimbursement.setAuthorId(rs.getInt("reimb_author"));
       reimbursement.setReimbursementTypeId(rs.getInt("reimb_type_id"));
       reimbursement.setStatusId(rs.getInt("reimb_status_id"));
+      reimbursement.setResolverId(rs.getInt("reimb_resolver"));
       reimbursements.add(reimbursement);
+
     }
     return reimbursements;
   }
@@ -218,7 +221,12 @@ public class ReimbursementDao {
     String query = "UPDATE ers_reimbursement SET reimb_status_id = ?, reimb_resolver = ?, reimb_resolved = NOW() WHERE reimb_id = ?";
     PreparedStatement ps = connection.prepareStatement(query);
     ps.setInt(1, statusId);
-    ps.setInt(2, resolverId);
+    // if statusId is 1(pending), resolverId is null
+    if (statusId == 1) {
+      ps.setNull(2, Types.INTEGER);
+    } else {
+      ps.setInt(2, resolverId);
+    }
     ps.setInt(3, reimbursementId);
     if (ps.executeUpdate() != 1) {
       throw new SQLException("Failed to update reimbursement");
