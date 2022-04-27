@@ -1,80 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<link rel="stylesheet" href="./style.css" />
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Login</title>
+		<style>
+			@import url("https://fonts.googleapis.com/css?family=Poppins:300,600");
+			@import url("https://fonts.googleapis.com/css2?family=Ms+Madi&display=swap");
+
+			:root {
+				--white: #fff;
+				--green: #0f9;
+				--black: #444;
+			}
+			/* init */
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				text-decoration: none;
+				/* get rid of tap highlight color  */
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				-webkit-tap-highlight-color: transparent;
+			}
+
+			body {
+				font-family: "Poppins", sans-serif;
+				color: var(--black);
+				font-size: 1.1em;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				background-color: #333740;
+				flex-direction: column;
+			}
+
+			.main {
+				width: 640px;
+				height: 480px;
+				margin: auto auto;
+				padding: 15px 0 50px 50px;
+				position: relative;
+				box-shadow: 0px 0px 200px -40px;
+				border-radius: 10px;
+				background-color: #fff;
+			}
+
+			.main h1 {
+				margin-top: 3rem;
+			}
+			a {
+				text-decoration: none;
+				color: rgba(142, 68, 173, 1);
+			}
+
+			.recuperar {
+				position: relative;
+				left: 210px;
+			}
+
+			button {
+				width: 150px;
+				height: 50px;
+				border: none;
+				color: #fff;
+				padding: 8px;
+				border-radius: 50em;
+				text-align: center;
+				font-weight: 600;
+				font-size: 1em;
+				background: #333740;
+			}
+
+			input[type="text"],
+			input[type="password"] {
+				width: 420px;
+				height: 40px;
+				padding: 8px;
+				border-radius: 5px;
+				border: silver solid 1px;
+			}
+		</style>
+		<title>Document</title>
 	</head>
-	<!-- This is our input form. We're not using the HTML form tags here, just some bare elements
-    and some javascript to find them and see their data. The classes are for styling. We are
-    putting a visible box "contentBox" around a flexbox arranged as a column. The flexbox contains
-    "flexRow"s which have the input elements.-->
 	<body>
-		<p>username: test</p>
-		<p>password: 123456</p>
-		<hr />
-		<div class="contentBox">
-			<div class="flexColumn">
-				<div class="flexRow">
-					<label>Username: </label>
-					<input
-						type="text"
-						id="username"
-						placeholder="username"
-						name="username"
-					/>
-				</div>
-				<div class="flexRow">
-					<label>Password: </label>
-					<input
-						type="text"
-						id="password"
-						placeholder="password"
-						name="password"
-					/>
+		<nav style="width: 90%; margin-top: 1rem">
+			<div>
+				<div style="display: flex">
+					<div style="margin-right: auto">
+						<a
+							style="
+								color: #bdc3c7;
+								font-family: 'Ms Madi', cursive;
+								font-size: 3rem;
+								font-weight: 800;
+							"
+							href="#"
+							>H&H</a
+						>
+					</div>
+					<ul
+						style="
+							display: flex;
+							align-items: center;
+							gap: 1rem;
+							font-size: 1.5rem;
+						"
+					>
+						<li><a style="color: #bdc3c7" href="./index.html">Home</a></li>
+						<li><a style="color: #bdc3c7" href="#">About</a></li>
+						<li><a style="color: #bdc3c7" href="#">Service</a></li>
+						<li><a style="color: #bdc3c7" href="#">Contact</a></li>
+					</ul>
 				</div>
 			</div>
-			<!-- onclick="submitForm()" hooks into our javascript, calling the funciton below -->
+		</nav>
+		<div class="main">
+			<h1 style="color: #2c3e50">Login</h1>
+			<p style="margin-top: 2rem">
+				Don't have an account? <a href="./register.html"> Create an account</a>
+			</p>
+
+			<input
+				style="margin-top: 1rem"
+				id="username"
+				type="text"
+				placeholder="User name"
+			/>
+			<br />
+			<input
+				style="margin-top: 1rem"
+				id="password"
+				type="password"
+				placeholder="Password"
+			/>
+			<br />
+
+			<button
+				style="margin-top: 1.5rem; margin-left: -5px"
+				onclick="submitForm()"
+			>
+				LOGIN
+			</button>
 		</div>
-		<hr />
-		<button onclick="submitForm()">Login</button>
-
-		<!-- This brings in all of the scripts in the source file. 
-        They are effectively "inlined" into this document -->
 		<script src="./scripts/userConnection.js"></script>
-
-		<!-- We can have multiple script elements in one document. 
-        Script elements contain javascript, not HTML -->
-		<script>
-			//so from here until the closing /script tag it's all js.
-			async function submitForm() {
-				/*
-			         Build the object we will transfer in our API call. Grab the values from
-			         the input elements above.
-			         */
-				let credentials = {
-					username: document.getElementById("username").value,
-					password: document.getElementById("password").value
-				};
-
-				let response = await loginRequest(credentials);
-
-				if (response.status == 200) {
-					let json = await response.json();
-
-					let token = json.token;
-					let userId = json.id;
-					localStorage.setItem("userId", userId);
-					localStorage.setItem("token", token);
-
-					//navigate the window to the landing page
-					window.location.href = "./index.html";
-				} else {
-					alert("Unable to log in! Check username and password!");
-				}
-			}
-		</script>
+		<script src="./scripts/login.js"></script>
 	</body>
 </html>

@@ -2,22 +2,435 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Welcome to ERS</title>
-	</head>
+		<!-- displays site properly based on user's device -->
 
-	<body>
-		<div id="pageContent"><!-- Our inserted content will go here --></div>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./images/favicon-32x32.png"
+		/>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+			@import url("https://fonts.googleapis.com/css?family=Poppins:300,600");
+			@import url("https://fonts.googleapis.com/css2?family=Ms+Madi&display=swap");
+
+			:root {
+				--blue: hsl(246, 80%, 60%);
+				/* work */
+				--light-orange: hsl(15, 100%, 70%);
+				/* play */
+				--soft-blue: hsl(195, 74%, 62%);
+				/* study */
+				--light-red: hsl(348, 100%, 68%);
+				/* exercise */
+				--lime-green: hsl(145, 58%, 55%);
+				/* social */
+				--violet: hsl(264, 64%, 52%);
+				/* self care */
+				--soft-orange: hsl(43, 84%, 65%);
+
+				--darker-blue: hsl(226, 43%, 10%);
+				--dark-blue: hsl(235, 46%, 20%);
+				--desaturated-blue: hsl(235, 45%, 61%);
+				--pale-blue: hsl(236, 100%, 87%);
+				--white: #ffffff;
+			}
+
+			body {
+				background: #333740;
+			}
+
+			/* typology */
+			p {
+				font-size: 15px;
+			}
+
+			h1 {
+				font-size: 40px;
+				font-weight: 300;
+			}
+
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				text-decoration: none;
+				/* get rid of tap highlight color  */
+				/* -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent; */
+			}
+
+			main {
+				font-family: "Rubik", sans-serif;
+				color: var(--white);
+				/* display: flex; */
+				justify-content: center;
+				align-items: center;
+			}
+			.container {
+				padding: 80px 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 24px;
+			}
+
+			.card {
+				border-radius: 15px 15px 20px 20px;
+				width: 90vw;
+			}
+
+			/* user card */
+			.user {
+				background: var(--dark-blue);
+			}
+
+			.user .header {
+				padding: 35px;
+				border-radius: 15px;
+				background: var(--blue);
+				display: flex;
+				gap: 20px;
+				flex-direction: row;
+				justify-content: space-between;
+			}
+			.user .hero {
+				width: 64px;
+				height: 64px;
+				border-radius: 39px;
+				border: 3px solid #ffffff;
+				box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+			}
+
+			.user .name {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.user h1 {
+				font-size: 24px;
+				font-weight: 300;
+			}
+
+			.user ul {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				gap: 21px;
+				color: var(--desaturated-blue);
+			}
+
+			.header p {
+				color: var(--pale-blue);
+			}
+
+			.user .content {
+				border-radius: 0 0 15px 15px;
+				font-size: 18px;
+				padding: 26px 32px 32px 32px;
+			}
+
+			.content li:hover {
+				cursor: pointer;
+				color: var(--white);
+			}
+
+			.selected {
+				color: var(--white);
+				cursor: none;
+			}
+
+			/* activity card */
+
+			.activity.card {
+				background-repeat: no-repeat;
+				background-position: right 15px top -15px;
+			}
+
+			.activity.card::before {
+				content: "";
+				height: 45px;
+				display: block;
+			}
+
+			.activity .content {
+				background: var(--dark-blue);
+				border-radius: 15px;
+				padding: 29px 35px 32px 30px;
+				border: 1px solid var(--dark-blue);
+				cursor: pointer;
+			}
+
+			.activity .content:active {
+				background-color: var(--desaturated-blue);
+			}
+
+			.activity h1 {
+				font-size: 18px;
+				line-height: 21px;
+				font-weight: 500;
+				margin-bottom: 24px;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.activity h1 span {
+				color: var(--pale-blue);
+				letter-spacing: 3px;
+			}
+
+			.activity h1 span:hover {
+				color: var(--white);
+			}
+
+			.record {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+			.total {
+				font-size: 32px;
+				font-weight: 300;
+				line-height: 38px;
+			}
+
+			.last {
+				color: var(--pale-blue);
+			}
+
+			.work {
+				background-color: var(--light-orange);
+			}
+
+			.play {
+				background-color: var(--soft-blue);
+			}
+			.study {
+				background-color: var(--light-red);
+			}
+			.exercise {
+				background-color: var(--lime-green);
+			}
+			.social {
+				background-color: var(--violet);
+			}
+			.self-care {
+				background-color: var(--soft-orange);
+			}
+
+			@media (min-width: 640px) {
+				.container {
+					flex-direction: row;
+					flex-wrap: wrap;
+					padding: 32px;
+					padding-bottom: auto;
+				}
+
+				.record {
+					flex-direction: column;
+					align-items: flex-start;
+				}
+
+				.total {
+					font-size: 56px;
+					line-height: 66px;
+					font-weight: 300;
+				}
+
+				.user.card {
+					flex: 1 1 100%;
+				}
+
+				.activity.card {
+					flex: 1 1 40%;
+				}
+			}
+
+			@media (min-width: 810px) {
+				main {
+					height: 100vh;
+					display: flex;
+					align-items: center;
+				}
+				.activity.card {
+					flex: 1 1 30%;
+				}
+			}
+
+			@media (min-width: 1080px) {
+				.container {
+					padding: 0;
+					flex-direction: column;
+					justify-content: space-between;
+					align-content: center;
+					gap: 30px;
+					height: 515px;
+				}
+
+				.card {
+					width: 20vw;
+					max-width: 253px;
+					flex: 0 1;
+				}
+
+				.activity.card {
+					flex: 0 1;
+				}
+
+				.user .header {
+					flex-direction: column;
+					gap: 43px;
+					padding-bottom: 80px;
+				}
+
+				.user .hero {
+					width: 78px;
+					height: 78px;
+					border-radius: 39px;
+				}
+
+				.user h1 {
+					font-size: 40px;
+					line-height: 47px;
+				}
+				.user ul {
+					flex-direction: column;
+				}
+			}
+		</style>
+		<title>Time Tracker</title>
+	</head>
+	<body
+		style="
+			background-color: #130f40;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		"
+	>
+		<nav
+			style="
+				width: 90%;
+				margin-top: 1rem;
+				font-family: Rubik, sans-serif;
+				font-weight: 300;
+			"
+		>
+			<div>
+				<div style="display: flex">
+					<div style="margin-right: auto">
+						<a
+							style="
+								color: #bdc3c7;
+								font-family: 'Ms Madi', cursive;
+								font-size: 3rem;
+								font-weight: 800;
+							"
+							href="#"
+							>H&H</a
+						>
+					</div>
+					<ul
+						style="
+							display: flex;
+							align-items: center;
+							gap: 1rem;
+							font-size: 1.5rem;
+						"
+					>
+						<li>
+							<a
+								onclick="logout()"
+								style="color: #bdc3c7; font-size: 1.2rem; cursor: pointer"
+								href="./index.html"
+								>Logout</a
+							>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<main>
+			<div class="container">
+				<div class="user card">
+					<div style="background-color: #273c75" class="header">
+						<img src="./qianggao.jpeg" alt="" class="hero" />
+						<div class="name">
+							<h1>John Doe</h1>
+						</div>
+					</div>
+					<div class="content">
+						<ul>
+							<li>Pending</li>
+							<li class="selected">Approved</li>
+							<li>Denied</li>
+						</ul>
+					</div>
+				</div>
+				<div class="activity work card">
+					<div class="content">
+						<h1>Travel<span>···</span></h1>
+						<div class="record">
+							<p class="total">$0.00</p>
+						</div>
+					</div>
+				</div>
+				<div class="activity play card">
+					<div class="content">
+						<h1>Food<span>···</span></h1>
+						<div class="record">
+							<p class="total">$0.00</p>
+						</div>
+					</div>
+				</div>
+				<div class="activity study card">
+					<div class="content">
+						<h1>Lodging<span>···</span></h1>
+						<div class="record">
+							<p class="total">$0.00</p>
+						</div>
+					</div>
+				</div>
+				<div class="activity exercise card">
+					<div class="content">
+						<h1>Training<span>···</span></h1>
+						<div class="record">
+							<p class="total">$0.00</p>
+						</div>
+					</div>
+				</div>
+				<div class="activity social card">
+					<div class="content">
+						<h1>Business<span>···</span></h1>
+						<div class="record">
+							<p class="total">$0.00</p>
+						</div>
+					</div>
+				</div>
+				<div class="activity self-care card">
+					<div class="content">
+						<h1>Other<span>···</span></h1>
+						<div class="record">
+							<p class="total">$0.00</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
 		<script src="./scripts/userConnection.js"></script>
 		<script>
 			let token = localStorage.getItem("token");
 
-			if (!token) {
-				//If there is no token, we redirect to the login page
-				window.location.href = "./login.html";
-			} else {
+			if (token) {
 				displayUser();
+			} else {
+				window.location.href = "./login.html";
 			}
 
 			function logout() {
@@ -30,19 +443,14 @@
 			async function displayUser() {
 				let response = await getUserRequest();
 				let json = await response.json();
-				console.log("Response: ", response);
-				console.log("Response JSON: ", json);
 
-				let paragraph = document.getElementById("pageContent");
-				paragraph.innerHTML += `
-					<h1>Welcome, ${json.username}!</h1>
-					<p>You are logged in!</p>
-					<p>Email: ${json.email}</p>
-					<p>First Name: ${json.firstname}</p>
-					<p>Last Name: ${json.lastname}</p>
-					<hr />
-					<button onclick="logout()">Logout</button>
-				`;
+				let name = document.querySelector(".name h1");
+				name.innerHTML =
+					capitalize(json.firstname) + " " + capitalize(json.lastname);
+			}
+
+			function capitalize(string) {
+				return string.charAt(0).toUpperCase() + string.slice(1);
 			}
 		</script>
 	</body>

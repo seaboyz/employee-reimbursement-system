@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Welcome to ERS</title>
+	</head>
+	<style>
+		@import url("https://fonts.googleapis.com/css?family=Poppins:300,600");
+
+		/* variables */
+		:root {
+			--white: #fff;
+			--green: #0f9;
+			--black: #444;
+		}
+		/* init */
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			text-decoration: none;
+			/* get rid of tap highlight color  */
+			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		body {
+			font-family: "Poppins", sans-serif;
+			color: var(--black);
+			font-size: 1.1em;
+		}
+
+		.hero {
+			height: 100vh;
+			background-image: url(//unsplash.it/1000/1000);
+			background-size: cover;
+			background-color: #444;
+			background-blend-mode: multiply;
+			color: var(--white);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			cursor: pointer;
+		}
+
+		.hero p {
+			padding: 0.5em 0;
+			font-size: 0.8em;
+		}
+
+		.hero p span {
+			color: var(--green);
+		}
+
+		.hero h1 {
+			font-size: 4em;
+			color: var(--green);
+			border: 3px solid var(--white);
+			padding: 0 0.5em 0 0.4em;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+		}
+
+		.hero h1 span {
+			font-weight: lighter;
+			font-size: 1rem;
+		}
+
+		.hero p span {
+			font-weight: bolder;
+		}
+
+		.hero p strong {
+			font-size: 1.5rem;
+		}
+		@media (max-width: 800px) {
+			.hero h1 {
+				font-size: 11vmin;
+				transform: translateY(-30vmin);
+			}
+
+			.hero p {
+				display: none;
+			}
+		}
+
+		.btn {
+			background: var(--green);
+			color: var(--black);
+			padding: 0.25em;
+			display: block;
+			width: 7em;
+			text-align: center;
+			margin-top: 0.5em;
+		}
+
+		@media (min-width: 640px) {
+			.cta-text {
+				flex-basis: 50%;
+			}
+		}
+	</style>
+	<body>
+		<div class="hero">
+			<p>Welcome to</p>
+			<h1>E<span>mployee</span>R<span>imburse</span>S<span>ystem</span></h1>
+			<p>
+				An Employer's <strong>Hassle</strong> and an Employee's
+				<strong>Hustle</strong>
+			</p>
+		</div>
+
+		<script src="./scripts/userConnection.js"></script>
+		<script src="./scripts/landingPage.js"></script>
+	</body>
+</html>

@@ -1,103 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			@import url("https://fonts.googleapis.com/css?family=Poppins:300,600");
+			@import url("https://fonts.googleapis.com/css?family=Poppins:300,600");
+			@import url("https://fonts.googleapis.com/css2?family=Ms+Madi&display=swap");
+			:root {
+				--white: #fff;
+				--green: #0f9;
+				--black: #444;
+			}
+			/* init */
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				text-decoration: none;
+				/* get rid of tap highlight color  */
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				-webkit-tap-highlight-color: transparent;
+			}
 
-<head>
-    <link rel="stylesheet" href="./style.css">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
+			body {
+				font-family: "Poppins", sans-serif;
+				color: var(--black);
+				font-size: 1.1em;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				background-color: hsl(235, 46%, 20%);
+			}
 
-<body>
-    <!-- This is our input form. We're not using the HTML form tags here, just some bare elements
-    and some javascript to find them and see their data. The classes are for styling. We are
-    putting a visible box "contentBox" around a flexbox arranged as a column. The flexbox contains
-    "flexRow"s which have the input elements.-->
-    <div class="contentBox">
-        <div class="flexColumn">
-            <div class="flexRow">
-                <label>First name: </label>
-                <input type="text" id="firstName" placeholder="firstName" name="John">
-            </div>
-            <div class="flexRow">
-                <label>Last name: </label>
-                <input type="text" id="lastName" placeholder="lastName" name="Smith">
-            </div>
-            <div class="flexRow">
-                <label>Username: </label>
-                <input type="text" id="username" placeholder="username" name="jsmith123">
-            </div>
-            <div class="flexRow">
-                <label>Password: </label>
-                <input type="text" id="password" placeholder="password" name="N1n31nchn41ls!">
-            </div>
-            <div class="flexRow">
-                <label>Email: </label>
-                <input type="text" id="email" placeholder="email" name="john.smith@email.com">
-            </div>
+			.main {
+				width: 640px;
+				height: 540px;
+				margin: auto auto;
+				padding: 15px 0 50px 50px;
+				position: relative;
+				box-shadow: 0px 0px 200px -40px;
+				display: flex;
+				align-items: center;
+				border-radius: 10px;
+				background-color: #fff;
+			}
 
-            <!-- onclick="submitForm()" hooks into our javascript, calling the funciton below -->
-            <button id="contentBoxButton" onclick="submitForm()">Register</button>
-        </div>
+			.form {
+				margin-left: 2rem;
+			}
 
+			.main h1 {
+				margin-top: 1rem;
+			}
+			a {
+				text-decoration: none;
+				color: rgba(142, 68, 173, 1);
+			}
 
-    </div>
+			.register {
+				position: relative;
+				left: 210px;
+			}
 
-    <!-- This brings in all of the scripts in the source file. 
-        They are effectively "inlined" into this document -->
-    <script src="./scripts/userConnection.js"></script>
+			button {
+				width: 150px;
+				height: 50px;
+				border: none;
+				color: #fff;
+				padding: 8px;
+				border-radius: 50em;
+				text-align: center;
+				font-weight: 600;
+				font-size: 1em;
+				background: rgba(142, 68, 173, 1);
+			}
 
-    <!-- We can have multiple script elements in one document. 
-        Script elements contain javascript, not HTML -->
-    <script>
-        //so from here until the closing /script tag it's all js.
-        async function submitForm() {
+			input[type="text"],
+			input[type="password"] {
+				width: 420px;
+				height: 40px;
+				padding: 8px;
+				border-radius: 5px;
+				border: silver solid 1px;
+			}
+		</style>
+		<title>Document</title>
+	</head>
+	<body style="display: flex; flex-direction: column">
+		<nav style="width: 90%; margin-top: 1rem">
+			<div>
+				<div style="display: flex">
+					<div style="margin-right: auto">
+						<a
+							style="
+								color: #bdc3c7;
+								font-family: 'Ms Madi', cursive;
+								font-size: 3rem;
+								font-weight: 800;
+							"
+							href="./index.html"
+							>H&H</a
+						>
+					</div>
+					<ul
+						style="
+							display: flex;
+							align-items: center;
+							gap: 1rem;
+							font-size: 1.5rem;
+						"
+					>
+						<li><a style="color: #bdc3c7" href="./index.html">Home</a></li>
+						<li><a style="color: #bdc3c7" href="#">About</a></li>
+						<li><a style="color: #bdc3c7" href="#">Service</a></li>
+						<li><a style="color: #bdc3c7" href="#">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="main">
+			<div class="form">
+				<h1>Create Your Account</h1>
 
-            /*
-            Build the object we will transfer in our API call. Grab the values from
-            the input elements above.
-            */
-            let newUser = {
-                username: document.getElementById("username").value,
-                password: document.getElementById("password").value,
-                firstName: document.getElementById("firstName").value,
-                lastName: document.getElementById("lastName").value,
-                email: document.getElementById("email").value
-            }
-            console.log(newUser);//fact finding
+				<input
+					id="email"
+					style="margin-top: 1rem"
+					type="text"
+					placeholder="Your Email"
+				/>
+				<br />
+				<input
+                    id="password"
+					style="margin-top: 1rem"
+					type="password"
+					placeholder="Password"
+				/>
+				<br />
+				<input
+					id="confirmPassword"
+					style="margin-top: 1rem"
+					type="password"
+					placeholder="Confirm Password"
+				/>
+				<br />
+				<input
+					id="firstname"
+					style="margin-top: 1rem"
+					type="text"
+					placeholder="Your First Name"
+				/>
+				<br />
+				<input
+					id="lastname"
+					style="margin-top: 1rem"
+					type="text"
+					placeholder="Your Last Name"
+				/>
+				<br />
 
-            //Make our asynchronous API call
-            let response = await registerRequest(newUser);
-
-            console.log("Response: ", response);//fact finding
-            console.log("Response JSON: ", response.json());//we should delete these later
-
-            if (response.status == 201) {
-                /*
-                Here we are retyrieving the authToken header, which contains our username as
-                passed back from the server. This way we can use it to identify ourselves in 
-                subsequent API calls.
-                For this to work, you must send back a token in the header of the response
-                The key should match the shown key name "authToken" and the value should be
-                a string you can use to locally store information about the logged in user.
-                In this case we are getting a token that contains the username string, 
-                and storing it in localStorage.
-                */
-                let token = response.headers.get("authToken");
-                console.log("authToken received: ", token);//fact finding
-                localStorage.setItem("authToken", token);
-
-                //navigate the window to the landing page
-                window.location.href = "./landingPage.html";
-
-            } else {
-                alert("Unable to register!");
-            }
-        }
-    </script>
-
-
-</body>
-
+				<button style="margin-top: 1.5rem; cursor: pointer">Register</button>
+			</div>
+		</div>
+		<script src="./scripts/userConnection.js"></script>
+		"
+		<script src="./scripts/register.js"></script>
+	</body>
 </html>
