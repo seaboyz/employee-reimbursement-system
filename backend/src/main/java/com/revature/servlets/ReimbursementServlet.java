@@ -141,18 +141,37 @@ public class ReimbursementServlet extends HttpServlet {
 
     // @/reimbursements
     // as user get all reimbursements belonging to user
-    if (isUser && reimbursementId == -1 && userId == -1) {
+    int statusTypeId = getStatus(req);
+
+    if (isUser && reimbursementId == -1 && userId == -1 && statusTypeId == -1) {
       try {
         List<Reimbursement> reimbursements = reimbursementService
             .getAllReimbursementsByUserId(authService.getUserId(token));
         res.setStatus(HttpServletResponse.SC_OK);
         out.println(gson.toJson(reimbursements));
+        return;
       } catch (SQLException e) {
         res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;
       }
     }
 
+    // @/reimbursements/?status=1
+    // as user get all reimbursements belonging to user by status
+
+    if (isUser && reimbursementId == -1 && userId == -1 && statusTypeId != -1) {
+      try {
+        List<Reimbursement> reimbursements = reimbursementService
+            .getAllReimbursementsByUserIdAndStatus(authService.getUserId(token), statusTypeId);
+
+        res.setStatus(HttpServletResponse.SC_OK);
+        out.println(gson.toJson(reimbursements));
+        return;
+      } catch (SQLException e) {
+        res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
     // @/reimbursements/:reimbursementId
     // as user get reimbursement by id belonging to userself
     if (isUser && reimbursementId != -1 && userId == -1) {
@@ -249,7 +268,7 @@ public class ReimbursementServlet extends HttpServlet {
     // 1 PENDING
     // 2 APPROVED
     // 3 DENIED
-    int status = req.getParameter("status") == null ? -1 : Integer.parseInt(req.getParameter("status"));
+    int status = getStatus(req);
     if (isAdmin && status != -1 && reimbursementId != -1) {
       try {
         int adminId = authService.getUserId(token);
@@ -290,6 +309,10 @@ public class ReimbursementServlet extends HttpServlet {
       return;
     }
 
+  }
+
+  private int getStatus(HttpServletRequest req) {
+    return req.getParameter("status") == null ? -1 : Integer.parseInt(req.getParameter("status"));
   }
 
   // DELETE @/reimbursements/:id

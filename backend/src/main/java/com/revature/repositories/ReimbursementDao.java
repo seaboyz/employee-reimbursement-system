@@ -194,6 +194,26 @@ public class ReimbursementDao {
     return reimbursements;
   }
 
+  public List<Reimbursement> getAllReimbursementsByUserIdAndStatus(int userId, int statusTypeId) throws SQLException {
+    String query = "SELECT * FROM ers_reimbursement WHERE reimb_author = ? AND reimb_status_id = ?";
+    List<Reimbursement> reimbursements = new ArrayList<>();
+    PreparedStatement ps = connection.prepareStatement(query);
+    ps.setInt(1, userId);
+    ps.setInt(2, statusTypeId);
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+      Reimbursement reimbursement = new Reimbursement();
+      reimbursement.setId(rs.getInt("reimb_id"));
+      reimbursement.setAmount(rs.getDouble("reimb_amount"));
+      reimbursement.setDescription(rs.getString("reimb_description"));
+      reimbursement.setAuthorId(rs.getInt("reimb_author"));
+      reimbursement.setReimbursementTypeId(rs.getInt("reimb_type_id"));
+      reimbursement.setStatusId(rs.getInt("reimb_status_id"));
+      reimbursements.add(reimbursement);
+    }
+    return reimbursements;
+  }
+
   public void updateStatus(int reimbursementId, int statusId, int resolverId) throws SQLException {
     String query = "UPDATE ers_reimbursement SET reimb_status_id = ?, reimb_resolver = ?, reimb_resolved = NOW() WHERE reimb_id = ?";
     PreparedStatement ps = connection.prepareStatement(query);
