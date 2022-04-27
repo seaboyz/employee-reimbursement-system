@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +49,15 @@ public class Util {
     return params;
   }
 
+  public static String[] getCredentails(HttpServletRequest req) {
+    String auth = req.getHeader("Authorization");
+    String base64Credentials = auth.substring("Basic".length()).trim();
+    byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
+    String credentials = new String(credentialDecoded, StandardCharsets.UTF_8);
+    String[] credentialsArray = credentials.split(":");
+    return credentialsArray;
+  }
+
   public static String getBody(HttpServletRequest request) throws IOException {
     String body = null;
     StringBuilder stringBuilder = new StringBuilder();
@@ -79,10 +90,17 @@ public class Util {
     return body;
   }
 
+  public static int getUserId(HttpServletRequest req) {
+    return req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
+  }
+
   public static String getToken(HttpServletRequest req) {
     try {
-      String token = req.getHeader("Authorization").split(" ")[1];
-      return token;
+      String auth = req.getHeader("Authorization");
+      if (auth.split(" ")[0].equals("Bearer")) {
+        return auth.split(" ")[1];
+      }
+      return null;
     } catch (Exception e) {
       return null;
     }

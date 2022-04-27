@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -80,17 +78,13 @@ public class UserServlet extends HttpServlet {
     String token = Util.getToken(req);
 
     // get userId from path
-    int userId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
+    int userId = Util.getUserId(req);
 
     // login
     // /users
     // token is empty
     if (userId == -1 && token == null) {
-      String auth = req.getHeader("Authorization");
-      String base64Credentials = auth.substring("Basic".length()).trim();
-      byte[] credentialDecoded = Base64.getDecoder().decode(base64Credentials);
-      String credentials = new String(credentialDecoded, StandardCharsets.UTF_8);
-      String[] credentialsArray = credentials.split(":");
+      String[] credentialsArray = Util.getCredentails(req);
       String username = credentialsArray[0];
       String password = credentialsArray[1];
       try {
@@ -177,6 +171,10 @@ public class UserServlet extends HttpServlet {
     }
   }
 
+  private int extracted(HttpServletRequest req) {
+    return req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
+  }
+
   // POST @users
   // register
   @Override
@@ -237,7 +235,7 @@ public class UserServlet extends HttpServlet {
     }
 
     // get userId
-    int userId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
+    int userId = extracted(req);
 
     // verify identity
     if (!authService.isSelf(userId, token)) {
@@ -301,7 +299,7 @@ public class UserServlet extends HttpServlet {
     }
 
     // get userId
-    int userId = req.getPathInfo() == null ? -1 : Integer.parseInt(req.getPathInfo().substring(1));
+    int userId = extracted(req);
 
     // only user can be deleted by admin
     // admin can only delete user that is not self
