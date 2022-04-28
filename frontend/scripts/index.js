@@ -1,6 +1,6 @@
 const reimbursementHtml = (id, amount, discription) => `
 	<div data-id=${id} class="reimbursement">
-		<p class="total">$${amount}</p>
+		<p class="total" onclick="update(event)" style="cursor: pointer;">$${amount}</p>
 		<p class="discription">${discription}</p>
 		<p style="display: flex; gap: 5px">
 									<span style="cursor: pointer;" id="yes" onclick="approve(event)">✅</span>
@@ -259,6 +259,17 @@ async function remove(event) {
 		return;
 	}
 	displayReimbursements();
+}
+
+function update(event) {
+	let id = event.target.parentElement.dataset.id;
+
+	let amount = event.target.innerText;
+	console.log(amount);
+	let description = event.target.nextSibling.innerHTML;
+	console.log(description);
+	localStorage.setItem("reimbursementId", id);
+	window.location.href = "./update-reimbursement.html";
 }
 
 function changeStatus(event) {

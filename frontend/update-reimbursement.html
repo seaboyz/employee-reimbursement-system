@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			@import url("https://fonts.googleapis.com/css?family=Poppins:300,600");
+			@import url("https://fonts.googleapis.com/css2?family=Ms+Madi&display=swap");
+
+			:root {
+				--white: #fff;
+				--green: #0f9;
+				--black: #444;
+			}
+			/* init */
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				text-decoration: none;
+				/* get rid of tap highlight color  */
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				-webkit-tap-highlight-color: transparent;
+			}
+
+			body {
+				font-family: "Poppins", sans-serif;
+				color: var(--black);
+				font-size: 1.1em;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				background-color: #333740;
+				flex-direction: column;
+			}
+
+			.main {
+				width: 640px;
+				height: 480px;
+				margin: auto auto;
+				padding: 15px 0 50px 50px;
+				position: relative;
+				box-shadow: 0px 0px 200px -40px;
+				border-radius: 10px;
+				background-color: #fff;
+			}
+
+			.main h1 {
+				margin-top: 3rem;
+			}
+			a {
+				text-decoration: none;
+				color: rgba(142, 68, 173, 1);
+			}
+
+			.recuperar {
+				position: relative;
+				left: 210px;
+			}
+
+			button {
+				width: 150px;
+				height: 50px;
+				border: none;
+				color: #fff;
+				padding: 8px;
+				border-radius: 50em;
+				text-align: center;
+				font-weight: 600;
+				font-size: 1em;
+				background: #333740;
+			}
+
+			input[type="text"],
+			input[type="number"],
+			input[type="password"],
+			select {
+				width: 420px;
+				height: 40px;
+				padding: 8px;
+				border-radius: 5px;
+				border: silver solid 1px;
+			}
+		</style>
+		<title>Document</title>
+	</head>
+	<body style="background-color: #130f40">
+		<nav style="width: 90%; margin-top: 1rem">
+			<div>
+				<div style="display: flex">
+					<div style="margin-right: auto">
+						<a
+							style="
+								color: #bdc3c7;
+								font-family: Poppins, sans-serif;
+								font-size: 3rem;
+								font-weight: 800;
+								color: #0f9;
+							"
+							href="index.html"
+							>H&H</a
+						>
+					</div>
+					<ul
+						style="
+							display: flex;
+							align-items: center;
+							gap: 1rem;
+							font-size: 1.2rem;
+						"
+					>
+						<li><a style="color: #bdc3c7" href="./index.html">Home</a></li>
+						<li><a style="color: #bdc3c7" href="#">About</a></li>
+						<li><a style="color: #bdc3c7" href="#">Service</a></li>
+						<li><a style="color: #bdc3c7" href="#">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="main">
+			<p style="font-size: 1.5rem; margin-top: 4rem">Change your mind?</p>
+			<p style="font-size: 1.5rem; margin-top: 5px">More Hassle >_<*</p>
+
+			<input
+				style="margin-top: 1rem"
+				id="amount"
+				type="number"
+				placeholder="Amount"
+			/>
+			<br />
+			<input
+				style="margin-top: 1rem"
+				id="discription"
+				type="text"
+				placeholder="Discription"
+			/>
+			<br />
+			<select
+				name="type"
+				id="reimbursementType"
+				style="margin-top: 15px; text-transform: capitalize; color: #333740"
+			>
+				<option value="1">travel</option>
+				<option value="4">food</option>
+				<option value="5">lodging</option>
+				<option value="7">training</option>
+				<option value="6">other</option>
+			</select>
+			<br />
+
+			<button
+				style="
+					cursor: pointer;
+					margin-top: 1.5rem;
+					margin-left: -5px;
+					text-transform: uppercase;
+				"
+				onclick="updateReimbursement()"
+			>
+				Submit
+			</button>
+			<button
+				style="
+					cursor: pointer;
+					margin-top: 1.5rem;
+					margin-left: 20px;
+					text-transform: uppercase;
+				"
+				onclick="clearForm()"
+			>
+				cancel
+			</button>
+		</div>
+		<script src="./scripts/reimbursement.js"></script>
+		<script src="./scripts/update-reimbursement.js"></script>
+	</body>
+</html>
