@@ -120,6 +120,10 @@ function init() {
 
 	displayUser();
 	displayReimbursements();
+
+	document.querySelector(".plus-sign").addEventListener("click", () => {
+		window.location.href = "./create-reimbursement.html";
+	});
 }
 
 function changeStatus(event) {
