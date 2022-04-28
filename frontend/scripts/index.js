@@ -80,10 +80,6 @@ async function displayUser() {
 
 	if (user.username === "admin") {
 		document.querySelector("#username").innerText = user.username;
-		// remove plus sign
-		document
-			.querySelectorAll(".plus-sign")
-			.forEach(element => (element.style.display = "none"));
 	} else {
 		document.querySelector("#username").innerText =
 			user.firstname + " " + user.lastname;
@@ -141,6 +137,27 @@ async function displayReimbursements() {
 		);
 	});
 	document.querySelector(".other .reimbursementList").innerHTML = html;
+
+	let response = await getUserRequest();
+	let user = await response.json();
+
+	if (user.username === "admin") {
+		document.querySelector("#username").innerText = user.username;
+		// remove plus sign
+		document
+			.querySelectorAll(".plus-sign")
+			.forEach(element => element.remove());
+	} else {
+		document.querySelector("#username").innerText =
+			user.firstname + " " + user.lastname;
+		// remove approve and deny buttons
+		document
+			.querySelectorAll("#yes")
+			.forEach(element => element.parentElement.remove());
+		document
+			.querySelectorAll("#no")
+			.forEach(element => element.parentElement.remove());
+	}
 }
 
 function init() {
@@ -224,7 +241,6 @@ async function deny(event) {
 }
 
 function changeStatus(event) {
-	console.log(event.target.innerText);
 	document.querySelector(".selected").classList.remove("selected");
 	event.target.classList.add("selected");
 
