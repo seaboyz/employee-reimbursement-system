@@ -1,3 +1,8 @@
+const token = localStorage.getItem("token");
+if (token) {
+	location.href = "./index.html";
+}
+
 async function submitForm() {
 	/*
          Build the object we will transfer in our API call. Grab the values from
