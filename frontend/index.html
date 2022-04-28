@@ -349,69 +349,29 @@
 				<div class="activity travel card">
 					<div class="content">
 						<h1>Travel<span class="plus-sign">+</span></h1>
-						<div class="record">
-							<p class="total">$0.00</p>
-						</div>
 					</div>
 				</div>
 
 				<div class="activity lodging card">
 					<div class="content">
 						<h1>Lodging<span class="plus-sign">+</span></h1>
-						<div class="record">
-							<p class="total">$0.00</p>
-						</div>
 					</div>
 				</div>
 
 				<div class="activity training card">
 					<div class="content">
 						<h1>Training<span class="plus-sign">+</span></h1>
-						<div class="record">
-							<p class="total">$0.00</p>
-						</div>
 					</div>
 				</div>
 
 				<div class="activity other card">
 					<div class="content">
 						<h1>Other<span class="plus-sign">+</span></h1>
-						<div class="record">
-							<p class="total">$0.00</p>
-						</div>
 					</div>
 				</div>
 			</div>
 		</main>
 		<script src="./scripts/userConnection.js"></script>
-		<script>
-			let token = localStorage.getItem("token");
-
-			if (token) {
-				displayUser();
-			} else {
-				window.location.href = "./login.html";
-			}
-
-			function logout() {
-				//We remove the authToken from localStorage
-				localStorage.clear();
-				//We then redirect the user to the login page
-				window.location.href = "./login.html";
-			}
-
-			async function displayUser() {
-				let response = await getUserRequest();
-				let json = await response.json();
-
-				let name = document.querySelector(".name h1");
-				name.innerHTML =
-					capitalize(json.firstname) + " " + capitalize(json.lastname);
-			}
-
-			function capitalize(string) {
-				return string.charAt(0).toUpperCase() + string.slice(1);
-			}
-		</script>
+		<script src="./scripts/index.js"></script>
 	</body>
 </html>
