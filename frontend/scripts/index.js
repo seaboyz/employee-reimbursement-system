@@ -1,8 +1,8 @@
-"use strict";
-
-const activityElements = document.querySelectorAll(".activity");
-
 let token = localStorage.getItem("token");
+
+if (!token) {
+	window.location.href = "./login.html";
+}
 
 function logout() {
 	//We remove the authToken from localStorage
