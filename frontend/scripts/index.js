@@ -1,7 +1,11 @@
-const reimbursementHtml = (amount, discription) => `
-	<div class="reimbursement">
+const reimbursementHtml = (id, amount, discription) => `
+	<div data-id=${id} class="reimbursement">
 		<p class="total">$${amount}</p>
 		<p class="discription">${discription}</p>
+		<p style="display: flex; gap: 5px">
+									<span style="cursor: pointer;" id="yes" onclick="approve(event)">✅</span
+									><span style="cursor: pointer;" onclick="deny(event)" id="no">❌</span>
+								</p>
 </div>
 `;
 
@@ -74,8 +78,16 @@ async function displayUser() {
 	let response = await getUserRequest();
 	let user = await response.json();
 
-	document.querySelector("#username").innerText =
-		user.firstname + " " + user.lastname;
+	if (user.username === "admin") {
+		document.querySelector("#username").innerText = user.username;
+		// remove plus sign
+		document
+			.querySelectorAll(".plus-sign")
+			.forEach(element => (element.style.display = "none"));
+	} else {
+		document.querySelector("#username").innerText =
+			user.firstname + " " + user.lastname;
+	}
 }
 
 async function displayReimbursements() {
@@ -85,28 +97,48 @@ async function displayReimbursements() {
 
 	let html = "";
 	food.forEach(reimbursement => {
-		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
+		html += reimbursementHtml(
+			reimbursement.id,
+			reimbursement.amount,
+			reimbursement.description
+		);
 	});
 	document.querySelector(".food .reimbursementList").innerHTML = html;
 	html = "";
 	lodging.forEach(reimbursement => {
-		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
+		html += reimbursementHtml(
+			reimbursement.id,
+			reimbursement.amount,
+			reimbursement.description
+		);
 	});
 	document.querySelector(".lodging .reimbursementList").innerHTML = html;
 	html = "";
 	travel.forEach(reimbursement => {
-		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
+		html += reimbursementHtml(
+			reimbursement.id,
+			reimbursement.amount,
+			reimbursement.description
+		);
 	});
 	document.querySelector(".travel .reimbursementList").innerHTML = html;
 	html = "";
 	training.forEach(reimbursement => {
-		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
+		html += reimbursementHtml(
+			reimbursement.id,
+			reimbursement.amount,
+			reimbursement.description
+		);
 	});
 	document.querySelector(".training .reimbursementList").innerHTML = html;
 
 	html = "";
 	other.forEach(reimbursement => {
-		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
+		html += reimbursementHtml(
+			reimbursement.id,
+			reimbursement.amount,
+			reimbursement.description
+		);
 	});
 	document.querySelector(".other .reimbursementList").innerHTML = html;
 }
@@ -121,9 +153,74 @@ function init() {
 	displayUser();
 	displayReimbursements();
 
-	document.querySelector(".plus-sign").addEventListener("click", () => {
-		window.location.href = "./create-reimbursement.html";
+	// // add event listeners to approve buttons
+	// document.querySelectorAll("#yes").forEach(element => {
+	// 	element.addEventListener("click", async event => {
+	// 		document.querySelectorAll(".plus-sign").forEach(element =>
+	// 			element.addEventListener("click", () => {
+	// 				id = element.parentElement.parentElement.dataset.id;
+	// 				console.log(id);
+	// 				approve(id);
+	// 			})
+	// 		);
+	// 	});
+	// });
+
+	// // add event listener to deny button
+	// document.querySelectorAll("#no").forEach(element => {
+	// 	element.addEventListener("click", async event => {
+	// 		document.querySelectorAll(".plus-sign").forEach(element =>
+	// 			element.addEventListener("click", () => {
+	// 				id = element.parentElement.parentElement.dataset.id;
+	// 				console.log(id);
+	// 				deny(id);
+	// 			})
+	// 		);
+	// 	});
+	// });
+}
+
+async function approve(event) {
+	let token = localStorage.getItem("token");
+	let id = event.target.parentElement.parentElement.dataset.id;
+	let response = await fetch(`${reimbursementBaseUrl}/${id}?status=2`, {
+		method: "PUT",
+		headers: {
+			Accept: "*/*",
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			status: 2
+		})
 	});
+
+	if (response.status >= 400) {
+		alert("Error approving reimbursement");
+		return;
+	}
+	displayReimbursements();
+}
+
+async function deny(event) {
+	let token = localStorage.getItem("token");
+	let id = event.target.parentElement.parentElement.dataset.id;
+	let response = await fetch(`${reimbursementBaseUrl}/${id}?status=2`, {
+		method: "PUT",
+		headers: {
+			Accept: "*/*",
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			status: 3
+		})
+	});
+	if (response.status >= 400) {
+		alert("Error denying reimbursement");
+		return;
+	}
+	displayReimbursements();
 }
 
 function changeStatus(event) {

@@ -165,7 +165,7 @@
 				border-radius: 15px;
 				padding: 29px 35px 32px 30px;
 				border: 1px solid var(--dark-blue);
-				cursor: pointer;
+				/* cursor: pointer; */
 			}
 
 			.activity .content:active {
@@ -344,6 +344,10 @@
 							<div class="reimbursement">
 								<p class="total">$0.00</p>
 								<p class="discription">Lorem ipsum dolor sit amet.</p>
+								<p style="display: flex; gap: 5px">
+									<span style="cursor: pointer;" id="yes" onclick="approve()">✅</span
+									><span style="cursor: pointer;" onclick="deny()" id="no">❌</span>
+								</p>
 							</div>
 						</div>
 					</div>
