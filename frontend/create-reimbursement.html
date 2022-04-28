@@ -122,9 +122,10 @@
 			</div>
 		</nav>
 		<div class="main">
-			<h1 style="color: #130f40">Login</h1>
-			<p style="margin-top: 2rem">Have a new Hustle, don't worry,</p>
-			<p style="margin-top: 5px">let it be my Hassle.</p>
+			<p style="font-size: 1.5rem; margin-top: 4rem">
+				Have a new Hustle, don't worry,
+			</p>
+			<p style="font-size: 1.5rem; margin-top: 5px">let it be my Hassle.</p>
 
 			<input
 				style="margin-top: 1rem"
@@ -140,7 +141,11 @@
 				placeholder="Discription"
 			/>
 			<br />
-			<select name="type" id="reimbursementType" style="margin-top: 15px; text-transform: capitalize; color:#333740;" >
+			<select
+				name="type"
+				id="reimbursementType"
+				style="margin-top: 15px; text-transform: capitalize; color: #333740"
+			>
 				<option value="1">travel</option>
 				<option value="4">food</option>
 				<option value="5">lodging</option>
@@ -150,13 +155,23 @@
 			<br />
 
 			<button
-				style="margin-top: 1.5rem; margin-left: -5px; text-transform: uppercase"
+				style="
+					cursor: pointer;
+					margin-top: 1.5rem;
+					margin-left: -5px;
+					text-transform: uppercase;
+				"
 				onclick="submitReimbursement()"
 			>
 				Submit
 			</button>
 			<button
-				style="margin-top: 1.5rem; margin-left: 20px; text-transform: uppercase"
+				style="
+					cursor: pointer;
+					margin-top: 1.5rem;
+					margin-left: 20px;
+					text-transform: uppercase;
+				"
 				onclick="clearForm()"
 			>
 				cancel

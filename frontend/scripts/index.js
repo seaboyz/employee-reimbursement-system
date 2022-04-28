@@ -3,9 +3,10 @@ const reimbursementHtml = (id, amount, discription) => `
 		<p class="total">$${amount}</p>
 		<p class="discription">${discription}</p>
 		<p style="display: flex; gap: 5px">
-									<span style="cursor: pointer;" id="yes" onclick="approve(event)">✅</span
-									><span style="cursor: pointer;" onclick="deny(event)" id="no">❌</span>
-								</p>
+									<span style="cursor: pointer;" id="yes" onclick="approve(event)">✅</span>
+									<span style="cursor: pointer;" onclick="deny(event)" id="no">❌</span>
+		</p>
+		<p style="cursor: pointer; font-size:3rem;" onclick="remove(event)" id="delete">-</p>
 </div>
 `;
 
@@ -147,6 +148,8 @@ async function displayReimbursements() {
 		document
 			.querySelectorAll(".plus-sign")
 			.forEach(element => element.remove());
+		// remove delete button
+		document.querySelectorAll("#delete").forEach(element => element.remove());
 	} else {
 		document.querySelector("#username").innerText =
 			user.firstname + " " + user.lastname;
@@ -222,7 +225,7 @@ async function approve(event) {
 async function deny(event) {
 	let token = localStorage.getItem("token");
 	let id = event.target.parentElement.parentElement.dataset.id;
-	let response = await fetch(`${reimbursementBaseUrl}/${id}?status=2`, {
+	let response = await fetch(`${reimbursementBaseUrl}/${id}?status=3`, {
 		method: "PUT",
 		headers: {
 			Accept: "*/*",
@@ -235,6 +238,24 @@ async function deny(event) {
 	});
 	if (response.status >= 400) {
 		alert("Error denying reimbursement");
+		return;
+	}
+	displayReimbursements();
+}
+
+async function remove(event) {
+	let token = localStorage.getItem("token");
+	let id = event.target.parentElement.dataset.id;
+	let response = await fetch(`${reimbursementBaseUrl}/${id}`, {
+		method: "DELETE",
+		headers: {
+			Accept: "*/*",
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
+		}
+	});
+	if (response.status >= 400) {
+		alert("Error deleting reimbursement");
 		return;
 	}
 	displayReimbursements();
