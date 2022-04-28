@@ -1,15 +1,15 @@
-const reimbursementHtml = (amount, discription, submitDate) => `
+const reimbursementHtml = (amount, discription) => `
 	<div class="reimbursement">
-		<p class="total">${amount}</p>
+		<p class="total">$${amount}</p>
 		<p class="discription">${discription}</p>
-		<p>${submitDate}</p>
 </div>
 `;
 
 const getStatus = () => {
 	const statusString = document
-		.querySelector(".status.selected")
+		.querySelector(".selected")
 		.innerText.toLowerCase();
+
 	if (statusString === "pending") {
 		return 1;
 	}
@@ -21,16 +21,17 @@ const getStatus = () => {
 	}
 };
 
+const reimbursementBaseUrl = "http://localhost:8080/api/reimbursements";
+
 const getReimbursementsByStatus = async status => {
-	const response = await fetch(
-		`http://localhost:8080/reimbursements?status=${status}`,
-		{
-			method: "GET",
-			headers: {
-				Authorizaiton: `Bearer ${token}`
-			}
+	const token = localStorage.getItem("token");
+	const response = await fetch(`${reimbursementBaseUrl}?status=${status}`, {
+		method: "GET",
+		headers: {
+			Accept: "*/*",
+			Authorization: `Bearer ${token}`
 		}
-	);
+	});
 
 	if (response.status >= 400) {
 		alert("Error loading reimbursements");
@@ -84,57 +85,49 @@ async function displayReimbursements() {
 
 	let html = "";
 	food.forEach(reimbursement => {
-		html += reimbursementHtml(
-			reimbursement.amount,
-			reimbursement.description,
-			reimbursement.submitDate
-		);
+		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
 	});
-	document.querySelector(".food").innerHTML = html;
+	document.querySelector(".food .reimbursementList").innerHTML = html;
 	html = "";
 	lodging.forEach(reimbursement => {
-		html += reimbursementHtml(
-			reimbursement.amount,
-			reimbursement.description,
-			reimbursement.submitDate
-		);
+		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
 	});
-	document.querySelector(".lodging").innerHTML = html;
+	document.querySelector(".lodging .reimbursementList").innerHTML = html;
 	html = "";
 	travel.forEach(reimbursement => {
-		html += reimbursementHtml(
-			reimbursement.amount,
-			reimbursement.description,
-			reimbursement.submitDate
-		);
+		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
 	});
-	document.querySelector(".travel").innerHTML = html;
+	document.querySelector(".travel .reimbursementList").innerHTML = html;
 	html = "";
 	training.forEach(reimbursement => {
-		html += reimbursementHtml(
-			reimbursement.amount,
-			reimbursement.description,
-			reimbursement.submitDate
-		);
+		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
 	});
-	document.querySelector(".training").innerHTML = html;
+	document.querySelector(".training .reimbursementList").innerHTML = html;
 
 	html = "";
 	other.forEach(reimbursement => {
-		html += reimbursementHtml(
-			reimbursement.amount,
-			reimbursement.description,
-			reimbursement.submitDate
-		);
+		html += reimbursementHtml(reimbursement.amount, reimbursement.description);
 	});
-	document.querySelector(".other").innerHTML = html;
+	document.querySelector(".other .reimbursementList").innerHTML = html;
 }
 
-let token = localStorage.getItem("token");
+function init() {
+	let token = localStorage.getItem("token");
 
-if (!token) {
-	window.location.href = "./login.html";
+	if (!token) {
+		window.location.href = "./login.html";
+	}
+
+	displayUser();
+	displayReimbursements();
 }
 
-displayUser();
-displayReimbursements();
+function changeStatus(event) {
+	console.log(event.target.innerText);
+	document.querySelector(".selected").classList.remove("selected");
+	event.target.classList.add("selected");
+
+	displayReimbursements();
+}
+
+init();

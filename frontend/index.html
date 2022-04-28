@@ -328,9 +328,11 @@
 					</div>
 					<div class="content">
 						<ul>
-							<li class="status selected">Pending</li>
-							<li class="status">Approved</li>
-							<li class="status">Denied</li>
+							<li class="pending selected" onclick="changeStatus(event)">
+								Pending
+							</li>
+							<li class="approve" onclick="changeStatus(event)">Approved</li>
+							<li class="deny" onclick="changeStatus(event)">Denied</li>
 						</ul>
 					</div>
 				</div>
@@ -338,10 +340,11 @@
 				<div class="activity food card">
 					<div class="content">
 						<h1>Food<span class="plus-sign">+</span></h1>
-						<div class="reimbursement">
-							<p class="total">$0.00</p>
-							<p class="discription">Lorem ipsum dolor sit amet.</p>
-							<p>04-22-2022</p>
+						<div class="reimbursementList">
+							<div class="reimbursement">
+								<p class="total">$0.00</p>
+								<p class="discription">Lorem ipsum dolor sit amet.</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -349,24 +352,28 @@
 				<div class="activity travel card">
 					<div class="content">
 						<h1>Travel<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
 					</div>
 				</div>
 
 				<div class="activity lodging card">
 					<div class="content">
 						<h1>Lodging<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
 					</div>
 				</div>
 
 				<div class="activity training card">
 					<div class="content">
 						<h1>Training<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
 					</div>
 				</div>
 
 				<div class="activity other card">
 					<div class="content">
 						<h1>Other<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
 					</div>
 				</div>
 			</div>
