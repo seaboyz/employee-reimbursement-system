@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- displays site properly based on user's device -->
+
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./images/favicon-32x32.png"
+		/>
+		<link rel="stylesheet" href="/css/index.css" />
+		<title>Reimbursement</title>
+	</head>
+	<body
+		style="
+			background-color: #130f40;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			max-height: 100vh;
+		"
+	>
+		<nav
+			style="
+				width: 90%;
+				margin-top: 1rem;
+				font-family: Rubik, sans-serif;
+				font-weight: 300;
+			"
+		>
+			<div>
+				<div style="display: flex">
+					<div style="margin-right: auto">
+						<a
+							style="
+								color: #bdc3c7;
+								font-family: Poppins, sans-serif;
+								font-size: 3rem;
+								font-weight: 800;
+								color: #0f9;
+							"
+							href="index.html"
+							>H&H</a
+						>
+					</div>
+					<ul
+						style="
+							display: flex;
+							align-items: center;
+							gap: 1rem;
+							font-size: 1.5rem;
+						"
+					>
+						<li>
+							<a
+								onclick="logout()"
+								style="color: #bdc3c7; font-size: 1.2rem; cursor: pointer"
+								href="./index.html"
+								>Logout</a
+							>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<main>
+			<div class="container">
+				<div class="user card">
+					<div style="background-color: #273c75" class="header">
+						<img
+							src="/resource/image/male-placeholder-image-400x400.jpeg"
+							alt=""
+							class="hero"
+						/>
+						<div class="name">
+							<h1 id="username" style="text-transform: capitalize">John Doe</h1>
+						</div>
+					</div>
+					<div class="content">
+						<ul>
+							<li class="pending selected" onclick="changeStatus(event)">
+								Pending
+							</li>
+							<li class="approve" onclick="changeStatus(event)">Approved</li>
+							<li class="deny" onclick="changeStatus(event)">Denied</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="activity food card">
+					<div class="content">
+						<h1>Food<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList">
+							<div class="reimbursement">
+								<p class="total">$0.00</p>
+								<p class="discription">Lorem ipsum dolor sit amet.</p>
+								<p style="display: flex; gap: 5px">
+									<span style="cursor: pointer" id="yes" onclick="approve()"
+										>✅</span
+									><span style="cursor: pointer" onclick="deny()" id="no"
+										>❌</span
+									>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="activity travel card">
+					<div class="content">
+						<h1>Travel<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
+					</div>
+				</div>
+
+				<div class="activity lodging card">
+					<div class="content">
+						<h1>Lodging<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
+					</div>
+				</div>
+
+				<div class="activity training card">
+					<div class="content">
+						<h1>Training<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
+					</div>
+				</div>
+
+				<div class="activity other card">
+					<div class="content">
+						<h1>Other<span class="plus-sign">+</span></h1>
+						<div class="reimbursementList"></div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<script src="../js/userConnection.js"></script>
+		<script src="../js/index.js"></script>
+	</body>
+</html>

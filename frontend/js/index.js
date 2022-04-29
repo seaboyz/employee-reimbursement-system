@@ -3,13 +3,32 @@ const reimbursementHtml = (id, amount, discription) => `
 		<p class="total">$${amount}</p>
 		<p class="discription">${discription}</p>
 		<p style="display: flex; gap: 5px">
-									<span style="cursor: pointer;" id="yes" onclick="approve(event)">✅</span
-									><span style="cursor: pointer;" onclick="deny(event)" id="no">❌</span>
-								</p>
+			<span style="cursor: pointer;" id="yes" onclick="approve(event)">✅</span>
+			<span style="cursor: pointer;" onclick="deny(event)" id="no">❌</span>
+		</p>
 </div>
 `;
+const URL = "http://localhost:8080/api/reimbursements";
 
-const getStatus = () => {
+init();
+
+function init() {
+	verifyToken();
+
+	displayUser();
+
+	displayReimbursements();
+}
+
+function verifyToken() {
+	let token = localStorage.getItem("token");
+
+	if (!token) {
+		window.location.href = "./login.html";
+	}
+}
+
+function filterReimburseStatus() {
 	const statusString = document
 		.querySelector(".selected")
 		.innerText.toLowerCase();
@@ -23,13 +42,11 @@ const getStatus = () => {
 	if (statusString === "denied") {
 		return 3;
 	}
-};
+}
 
-const reimbursementBaseUrl = "http://localhost:8080/api/reimbursements";
-
-const getReimbursementsByStatus = async status => {
+async function getReimbursementsByStatus(status) {
 	const token = localStorage.getItem("token");
-	const response = await fetch(`${reimbursementBaseUrl}?status=${status}`, {
+	const response = await fetch(`${URL}?status=${status}`, {
 		method: "GET",
 		headers: {
 			Accept: "*/*",
@@ -65,7 +82,7 @@ const getReimbursementsByStatus = async status => {
 		training,
 		other
 	};
-};
+}
 
 function logout() {
 	//We remove the authToken from localStorage
@@ -91,7 +108,7 @@ async function displayUser() {
 }
 
 async function displayReimbursements() {
-	let status = getStatus();
+	let status = filterReimburseStatus();
 	let { food, training, travel, other, lodging } =
 		await getReimbursementsByStatus(status);
 
@@ -143,47 +160,10 @@ async function displayReimbursements() {
 	document.querySelector(".other .reimbursementList").innerHTML = html;
 }
 
-function init() {
-	let token = localStorage.getItem("token");
-
-	if (!token) {
-		window.location.href = "./login.html";
-	}
-
-	displayUser();
-	displayReimbursements();
-
-	// // add event listeners to approve buttons
-	// document.querySelectorAll("#yes").forEach(element => {
-	// 	element.addEventListener("click", async event => {
-	// 		document.querySelectorAll(".plus-sign").forEach(element =>
-	// 			element.addEventListener("click", () => {
-	// 				id = element.parentElement.parentElement.dataset.id;
-	// 				console.log(id);
-	// 				approve(id);
-	// 			})
-	// 		);
-	// 	});
-	// });
-
-	// // add event listener to deny button
-	// document.querySelectorAll("#no").forEach(element => {
-	// 	element.addEventListener("click", async event => {
-	// 		document.querySelectorAll(".plus-sign").forEach(element =>
-	// 			element.addEventListener("click", () => {
-	// 				id = element.parentElement.parentElement.dataset.id;
-	// 				console.log(id);
-	// 				deny(id);
-	// 			})
-	// 		);
-	// 	});
-	// });
-}
-
 async function approve(event) {
 	let token = localStorage.getItem("token");
 	let id = event.target.parentElement.parentElement.dataset.id;
-	let response = await fetch(`${reimbursementBaseUrl}/${id}?status=2`, {
+	let response = await fetch(`${URL}/${id}?status=2`, {
 		method: "PUT",
 		headers: {
 			Accept: "*/*",
@@ -205,7 +185,7 @@ async function approve(event) {
 async function deny(event) {
 	let token = localStorage.getItem("token");
 	let id = event.target.parentElement.parentElement.dataset.id;
-	let response = await fetch(`${reimbursementBaseUrl}/${id}?status=2`, {
+	let response = await fetch(`${URL}/${id}?status=2`, {
 		method: "PUT",
 		headers: {
 			Accept: "*/*",
@@ -230,5 +210,3 @@ function changeStatus(event) {
 
 	displayReimbursements();
 }
-
-init();
