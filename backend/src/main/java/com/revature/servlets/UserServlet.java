@@ -82,7 +82,7 @@ public class UserServlet extends HttpServlet {
     // login
     // /users
     // token is empty
-    // TODO use RequestDispatcher to redirect to login servlet
+    // TODO use RequestDispatcher to fowward to login servlet
     if (userId == -1 && token == null) {
       String[] credentialsArray = Util.getCredentails(req);
       String username = credentialsArray[0];
@@ -114,7 +114,7 @@ public class UserServlet extends HttpServlet {
       return;
     }
 
-    // TODO use RequestDispatcher to redirect to user servlet
+    // TODO use RequestDispatcher to fowward to user servlet
     // /users
     // as admin
     boolean isAdmin = authService.isAdmin(token);
@@ -131,7 +131,7 @@ public class UserServlet extends HttpServlet {
       }
     }
 
-    // TODO use RequestDispatcher to redirect to admin servlet
+    // TODO use RequestDispatcher to fowward to admin servlet
     // users/:id
     if (isAdmin && userId != -1) {
       // get any user by id as admin including self
@@ -151,7 +151,7 @@ public class UserServlet extends HttpServlet {
       }
     }
 
-    // TODO use RequestDispatcher to redirect to user servlet
+    // TODO use RequestDispatcher to fowward to user servlet
     // as user
     // @users/:id
     // user can only get their own user info
