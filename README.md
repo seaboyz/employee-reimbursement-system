@@ -40,20 +40,7 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 * Use jwt to create a session token for the user.
 
 
-#### Guest:
-- As a guest, I can register for a new account
-- As a guest, I can log into my account
 
-#### User:
-- As a user, I can submit a request for reimbursement
-- As a user, I can cancel a pending request for reimbursement
-- As a user, I can view my pending and completed past requests for reimbursement
-- As a user, I can edit my pending requests for reimbursement
-
-#### Admin/Finance Manager:
-- As an admin, I can approve expense reimbursements
-- As an admin, I can deny expense reimbursements
-- As an admin, I can filter requests by status
 
 ### Back-end:
 #### Architecture and Entity-Relationship Diagram
@@ -71,6 +58,8 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 * The server follow a  controller-service-repository architecture.
 * The client and server communicate in a RESTful manner.
 * The server is stateless.
+* The Authentication layer uses JWT to create a session token for the user.
+* The Encription layer uses bcrypt to hash the password.
 
 #### Restful API
 ##### Employee
@@ -89,6 +78,22 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 
 ##### Admin
 * POST /reimbursements/{id}?status_id={id}
+
+## User Story
+#### Guest:
+- As a guest, I can register for a new account
+- As a guest, I can log into my account
+
+#### User:
+- As a user, I can submit a request for reimbursement
+- As a user, I can cancel a pending request for reimbursement
+- As a user, I can view my pending and completed past requests for reimbursement
+- As a user, I can edit my pending requests for reimbursement
+
+#### Admin/Finance Manager:
+- As an admin, I can approve expense reimbursements
+- As an admin, I can deny expense reimbursements
+- As an admin, I can filter requests by status
 
 
 
@@ -111,6 +116,9 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 **Activity Diagram**
 
 ![](./imgs/activity.jpg)
+
+## Futuae Goals
+* as a admin,I can change the user role.
 
 
 
