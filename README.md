@@ -1,7 +1,5 @@
 # Project 1 - Employee Reimbursment System (ERS)
 
-![](./Screen%20Shot%202022-04-27%20at%202.37.31%20AM.png)
-![](./Screen%20Shot%202022-04-27%20at%202.37.41%20AM.png)
 
 ## Executive Summary
 
@@ -20,22 +18,25 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 - JavaScript
 - AJAX / Fetch API
 
-# Functional Requirements
+## Achievements
 
-- Domain objects persisted in relational database
-- Database should be in 3NF
-- CRUD functionality for all domain objects
-- All CRUD functionality accessible via RESTful API
-- Functional web UI to consume RESTful API
-- Workflows to complete all user stories
-- Validate all user input
-- Unit test coverage for service-layer classes
+### Front-end:
+#### UI/UX
+##### Homepage
+![](imgs/frontend/landing-page.png)
+##### Login Page
+![](imgs/frontend/login-page.png)
+##### register page
+![](imgs/frontend/register-page.png)
+##### new reimbursement page
+![](imgs/frontend/new-imbursement.png)
+##### view all reimbursements page
+![](imgs/frontend/reimbursement-page.png)
+##### approve reimbursement page
+![](/imgs/frontend/approved-reimbursement.png)
+* Use HTML, CSS, and JavaScript to create a front-end for the application.
+* Use jwt to create a session token for the user.
 
-The persistence-layer system shall use JDBC to connect to a Postgres database. The API-layer shall utilize Java servlets to expose a public interface. The front-end view shall use HTML/CSS/JavaScript to make an application that can call server-side components in a generally RESTful manner. The middle tier shall follow proper layered architecture, and have reasonable JUnit test coverage of the service layer. Webpages shall be styled to be functional and readable.
-
-# User Stories
-
-### Requirements:
 
 #### Guest:
 
