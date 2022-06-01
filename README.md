@@ -23,13 +23,13 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 ### Front-end:
 #### UI/UX
 ##### Homepage
-![](imgs/frontend/landing-page.png)
+![](/imgs/frontend/landing-page.png)
 ##### Login Page
 ![](imgs/frontend/login-page.png)
 ##### Register page
 ![](imgs/frontend/register-page.png)
 ##### New reimbursement page
-![](imgs/frontend/new-imbursement.png)
+![](/imgs/frontend/new-imbursement.png)
 ##### View all reimbursements page
 ![](imgs/frontend/reimbursement-page.png)
 ##### Approved reimbursement page
