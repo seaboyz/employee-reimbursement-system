@@ -118,7 +118,7 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 ![](./imgs/activity.jpg)
 
 ## Futuae Goals
-* as a admin,I can change the user role.
+* As the admin,I can change the user role.
 
 
 
